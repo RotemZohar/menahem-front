@@ -22,7 +22,7 @@ function PostsPage() {
 
   useEffect(() => {
     if (tag) {
-      fetch(`http://localhost:4000/posts/byTag/${tag}`, {
+      fetch(`http://localhost:4000/posts/${tag}`, {
         method: "GET",
       }).then((res) => {
         res.json().then((data) => setPosts(data));

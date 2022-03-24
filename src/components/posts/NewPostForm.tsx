@@ -56,7 +56,7 @@ const NewPostForm = (props: {
     e.preventDefault();
     const image = imgUrl || defaultImageUrl;
 
-    fetch("http://localhost:4000/posts/add", {
+    fetch("http://localhost:4000/posts", {
       method: "POST",
       headers: {
         Accept: "application/json",
