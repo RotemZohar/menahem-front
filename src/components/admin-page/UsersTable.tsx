@@ -13,7 +13,7 @@ export default function UsersTable() {
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/users/getAll`, {
+    fetch(`http://localhost:4000/users`, {
       method: "GET",
     }).then((res) => {
       res.json().then((data) => {

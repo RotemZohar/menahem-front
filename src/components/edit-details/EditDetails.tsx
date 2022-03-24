@@ -63,10 +63,7 @@ const EditDetailsPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, password: confirmPassword }),
       };
-      fetch(
-        `http://localhost:4000/users/updateDetails/${userId}`,
-        requestOptions
-      )
+      fetch(`http://localhost:4000/users/${userId}`, requestOptions)
         .then((res) => res.json())
         .then(() => {
           dispatch(setUsername(name));
