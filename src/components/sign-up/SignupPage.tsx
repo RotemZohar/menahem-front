@@ -29,7 +29,7 @@ const SingupPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetch("http://localhost:4000/hobbies/getAll", {
+    fetch("http://localhost:4000/hobbies", {
       method: "GET",
     })
       .then((res) => {
