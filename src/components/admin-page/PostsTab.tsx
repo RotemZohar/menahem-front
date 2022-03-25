@@ -16,7 +16,7 @@ function PostsTab() {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    fetch(`http://localhost:4000/posts/getAll`, {
+    fetch(`http://localhost:4000/posts`, {
       method: "GET",
     }).then((res) => {
       res.json().then((data) => {

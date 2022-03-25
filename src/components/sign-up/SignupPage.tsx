@@ -29,7 +29,7 @@ const SingupPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetch("http://localhost:4000/hobbies/getAll", {
+    fetch("http://localhost:4000/hobbies", {
       method: "GET",
     })
       .then((res) => {
@@ -53,7 +53,7 @@ const SingupPage = () => {
     if (!email || !password || !currHobbyId || !name) {
       alert("Please insert all fields!");
     } else {
-      fetch("http://localhost:4000/users/add", {
+      fetch("http://localhost:4000/users", {
         method: "POST",
         headers: {
           Accept: "application/json",

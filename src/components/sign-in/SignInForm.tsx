@@ -30,7 +30,7 @@ function SignInForm() {
       showError("Please insert all fields!");
     } else {
       axios
-        .get("http://localhost:4000/users/validateUser", {
+        .get("http://localhost:4000/users/validate", {
           params: {
             user: userDetails,
           },
