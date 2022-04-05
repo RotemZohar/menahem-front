@@ -10,7 +10,6 @@ import { persistor, store } from "./redux/store";
 
 const BACK_API = process.env.REACT_APP_BACK_API;
 
-console.log(BACK_API);
 ReactDOM.render(
   <React.StrictMode>
     <ReduxProvider store={store}>
