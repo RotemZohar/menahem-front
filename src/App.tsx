@@ -7,6 +7,7 @@ import LandingPage from "./components/landing-page/LandingPage";
 import { useAppSelector } from "./redux/store";
 import AdminPage from "./components/admin-page/AdminPage";
 import PostsPage from "./components/posts/PostsPage";
+import PetDetails from "./components/pet-details/PetDetails";
 
 const App = () => (
   <div className="App">
