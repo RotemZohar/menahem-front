@@ -20,16 +20,15 @@ export const tokens = {
 // But it is maybe more messy
 // Either way, uncomment or delete before it gets into dev
 
+const getAccessToken = () => localStorage.getItem("accessToken");
+const deleteAccessToken = () => localStorage.removeItem("accessToken");
 const setAccessToken = (token: string) =>
   localStorage.setItem("accessToken", token);
+
+const getRefreshToken = () => localStorage.getItem("refreshToken");
+const deleteRefreshToken = () => localStorage.removeItem("refreshToken");
 const setRefreshToken = (token: string) =>
   localStorage.setItem("refreshToken", token);
-
-const deleteAccessToken = () => localStorage.removeItem("accessToken");
-const deleteRefreshToken = () => localStorage.removeItem("refreshToken");
-
-const getAccessToken = () => localStorage.getItem("accessToken");
-const getRefreshToken = () => localStorage.getItem("refreshToken");
 */
 
 // Client-side token verification
