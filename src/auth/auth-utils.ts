@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 
-const tokens = {
+export const tokens = {
   access: {
     set: (token: string) => localStorage.setItem("accessToken", token),
     get: () => localStorage.getItem("accessToken"),
@@ -16,7 +16,8 @@ const tokens = {
 
 /*
 // Is this more readable than what we have now? (tokens object)
-// If so, change back to this
+// This way we have more control about what is exported,
+// But it is maybe more messy
 // Either way, uncomment or delete before it gets into dev
 
 const setAccessToken = (token: string) =>
