@@ -72,8 +72,7 @@ export const acquireToken = async () => {
   }
 
   // Refresh the tokens
-  // TODO: Rotem, where is the url stored?
-  const API_URL = "http://localhost:4000";
+  const API_URL = process.env.REACT_APP_BACK_API;
   const refreshResponse = await fetch(`${API_URL}/auth/refresh-token`, {
     method: "POST",
     headers: {
