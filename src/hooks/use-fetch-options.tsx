@@ -1,6 +1,5 @@
 import { CachePolicies, IncomingOptions } from "use-http";
 import { acquireToken } from "../auth/auth-utils";
-import { useAppDispatch } from "../redux/store";
 
 const useFetchOptions = () => {
   const fetchOptions: IncomingOptions = {

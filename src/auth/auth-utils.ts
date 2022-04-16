@@ -14,30 +14,7 @@ export const tokens = {
   },
 };
 
-/*
-// Is this more readable than what we have now? (tokens object)
-// This way we have more control about what is exported,
-// But it is maybe more messy
-// Either way, uncomment or delete before it gets into dev
-
-const getAccessToken = () => localStorage.getItem("accessToken");
-const deleteAccessToken = () => localStorage.removeItem("accessToken");
-const setAccessToken = (token: string) =>
-  localStorage.setItem("accessToken", token);
-
-const getRefreshToken = () => localStorage.getItem("refreshToken");
-const deleteRefreshToken = () => localStorage.removeItem("refreshToken");
-const setRefreshToken = (token: string) =>
-  localStorage.setItem("refreshToken", token);
-*/
-
 // Client-side token verification
-
-// This is not the best solution
-// I couldn't find a way to elegentally perform passive token
-// refresh (server sends 401, refresh token, try again) with useFetch
-
-// We can maybe switch to react-query, but for now this will do
 
 interface Token {
   userId: string;
