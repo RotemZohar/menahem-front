@@ -7,6 +7,7 @@ import LandingPage from "./components/landing-page/LandingPage";
 import { useAppSelector } from "./redux/store";
 import AdminPage from "./components/admin-page/AdminPage";
 import PostsPage from "./components/posts/PostsPage";
+import CalendarPage from "./components/calendar/CalendarPage";
 
 const App = () => (
   <div className="App">
@@ -16,6 +17,7 @@ const App = () => (
       <Route path="posts" element={<PostsPage />} />
       <Route path="editDetails" element={<EditDetailsPage />} />
       <Route path="admin" element={<AdminPage />} />
+      <Route path="calendar" element={<CalendarPage />} />
     </Routes>
   </div>
 );
