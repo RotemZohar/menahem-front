@@ -4,7 +4,7 @@ import { routes } from "../../routes";
 
 const PrivateRoute: React.FC<RouteProps> = () => {
   // TODO: check if logged in, if not then redirect. need the JWT PR for that
-  if (true) {
+  if (false) {
     return <Navigate to={routes.signin} replace />;
   }
 
