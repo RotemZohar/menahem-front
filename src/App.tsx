@@ -11,7 +11,7 @@ import PrivateRoute from "./components/private-route/PrivateRoute";
 import Navbar from "./components/navbar/Navbar";
 
 const App = () => (
-  <>
+  <div className="App">
     <Navbar />
     <Routes>
       <Route path="" element={<LandingPage />} />
@@ -23,7 +23,7 @@ const App = () => (
         <Route path="admin" element={<AdminPage />} />
       </Route>
     </Routes>
-  </>
+  </div>
 );
 
 export default App;
