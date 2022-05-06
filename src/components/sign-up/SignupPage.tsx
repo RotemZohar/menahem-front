@@ -25,7 +25,7 @@ const SignUpPage = () => {
   const [hasNumber, setHasNumber] = useState(false);
   const [upperCase, setUpperCase] = useState(false);
   const [lowerCase, setLowerCase] = useState(false);
-  const [match, setMatch] = useState(false);
+  const [match, setMatch] = useState(true);
   const [color, setColor] = useState("");
   const [strengthBar, setStrengthBar] = useState(0);
   const [requiredLength, setRequiredLength] = useState(8);
@@ -37,7 +37,7 @@ const SignUpPage = () => {
     setUpperCase(password.toLowerCase() !== password);
     setLowerCase(password.toUpperCase() !== password);
     setHasNumber(/\d/.test(password));
-    setMatch(!!password && password === confirmPassword);
+    // setMatch(!!password && password === confirmPassword);
   }, [password, requiredLength, confirmPassword]);
 
   const onSubmit = (e: any) => {
@@ -109,9 +109,9 @@ const SignUpPage = () => {
             label="Confirm Password"
             type="password"
             onChange={(e) => setConfirmPassword(e.target.value)}
-            // onBlur={() => setMatch(!!password && password === confirmPassword)}
+            onBlur={() => setMatch(!!password && password === confirmPassword)}
           />
-          {match && <Alert severity="error">Passwords do not match</Alert>}
+          {!match && <Alert severity="error">Passwords do not match</Alert>}
         </Grid>
         <Grid item margin={1} xs={12}>
           <Button type="submit">Create user</Button>
