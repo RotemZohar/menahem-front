@@ -26,8 +26,7 @@ const SignUpPage = () => {
   const [upperCase, setUpperCase] = useState(false);
   const [lowerCase, setLowerCase] = useState(false);
   const [match, setMatch] = useState(true);
-  const [color, setColor] = useState("");
-  const [strengthBar, setStrengthBar] = useState(0);
+  const [isStrong, setIsStrong] = useState(true);
   const [requiredLength, setRequiredLength] = useState(8);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,7 +36,6 @@ const SignUpPage = () => {
     setUpperCase(password.toLowerCase() !== password);
     setLowerCase(password.toUpperCase() !== password);
     setHasNumber(/\d/.test(password));
-    // setMatch(!!password && password === confirmPassword);
   }, [password, requiredLength, confirmPassword]);
 
   const onSubmit = (e: any) => {
@@ -100,7 +98,17 @@ const SignUpPage = () => {
             label="Password"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
+            onBlur={() =>
+              setIsStrong(validLength && hasNumber && upperCase && lowerCase)
+            }
           />
+          {!isStrong && (
+            <Alert severity="error">
+              Your password is not strong enough. Passwords must be at least 8
+              characters long, include at least one number, include both lower
+              and upper case characters.
+            </Alert>
+          )}
         </Grid>
         <Grid item margin={1} xs={12}>
           <TextField
@@ -111,7 +119,7 @@ const SignUpPage = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             onBlur={() => setMatch(!!password && password === confirmPassword)}
           />
-          {!match && <Alert severity="error">Passwords do not match</Alert>}
+          {!match && <Alert severity="error">Passwords do not match!</Alert>}
         </Grid>
         <Grid item margin={1} xs={12}>
           <Button type="submit">Create user</Button>
