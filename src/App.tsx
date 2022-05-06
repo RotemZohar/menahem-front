@@ -8,18 +8,22 @@ import AdminPage from "./components/admin-page/AdminPage";
 import PostsPage from "./components/posts/PostsPage";
 import { routes } from "./routes";
 import PrivateRoute from "./components/private-route/PrivateRoute";
+import Navbar from "./components/navbar/Navbar";
 
 const App = () => (
-  <Routes>
-    <Route path="" element={<LandingPage />} />
-    <Route path={routes.signup} element={<SingupPage />} />
-    {/* Everything that's inside private route is accessible only after logging in */}
-    <Route element={<PrivateRoute />}>
-      <Route path="posts" element={<PostsPage />} />
-      <Route path="editDetails" element={<EditDetailsPage />} />
-      <Route path="admin" element={<AdminPage />} />
-    </Route>
-  </Routes>
+  <>
+    <Navbar />
+    <Routes>
+      <Route path="" element={<LandingPage />} />
+      <Route path={routes.signup} element={<SingupPage />} />
+      {/* Everything that's inside private route is accessible only after logging in */}
+      <Route element={<PrivateRoute />}>
+        <Route path="posts" element={<PostsPage />} />
+        <Route path="editDetails" element={<EditDetailsPage />} />
+        <Route path="admin" element={<AdminPage />} />
+      </Route>
+    </Routes>
+  </>
 );
 
 export default App;
