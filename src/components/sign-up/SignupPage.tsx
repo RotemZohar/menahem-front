@@ -1,56 +1,48 @@
 import {
+  Alert,
   Box,
   Button,
   FormControl,
   Grid,
   InputLabel,
+  LinearProgress,
   MenuItem,
   Select,
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
+import { count } from "console";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setHobbyId } from "../../redux/slices/userSlice";
 
-interface Hobby {
-  name: string;
-  _id: string;
-}
-
-const SingupPage = () => {
+const SignUpPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [currHobbyId, setCurrHobbyId] = useState("");
-  const [hobbies, setHobbies] = useState<Hobby[]>([]);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [validLength, setValidLength] = useState(false);
+  const [hasNumber, setHasNumber] = useState(false);
+  const [upperCase, setUpperCase] = useState(false);
+  const [lowerCase, setLowerCase] = useState(false);
+  const [match, setMatch] = useState(false);
+  const [color, setColor] = useState("");
+  const [strengthBar, setStrengthBar] = useState(0);
+  const [requiredLength, setRequiredLength] = useState(8);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetch("http://localhost:4000/hobbies", {
-      method: "GET",
-    })
-      .then((res) => {
-        res.json().then((data) => setHobbies(data));
-      })
-      .catch((err: any) => console.error(err));
-  }, []);
-
-  const list = useMemo(
-    () =>
-      hobbies.map((hobby) => (
-        <MenuItem value={hobby._id} key={hobby._id}>
-          {hobby.name}
-        </MenuItem>
-      )),
-    [hobbies]
-  );
+    setValidLength(password.length >= requiredLength);
+    setUpperCase(password.toLowerCase() !== password);
+    setLowerCase(password.toUpperCase() !== password);
+    setHasNumber(/\d/.test(password));
+    setMatch(!!password && password === confirmPassword);
+  }, [password, requiredLength, confirmPassword]);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    if (!email || !password || !currHobbyId || !name) {
+    if (!email || !password || !name) {
       alert("Please insert all fields!");
     } else {
       fetch("http://localhost:4000/users", {
@@ -63,7 +55,6 @@ const SingupPage = () => {
           email,
           password,
           name,
-          hobbyId: currHobbyId,
           isConnected: false,
         }),
       })
@@ -72,9 +63,6 @@ const SingupPage = () => {
             if (res.status === 500) {
               alert("Email already exists!");
             } else {
-              res.json().then((data) => {
-                dispatch(setHobbyId(currHobbyId));
-              });
               navigate("/");
             }
           }
@@ -83,10 +71,6 @@ const SingupPage = () => {
           console.error(err);
         });
     }
-  };
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setCurrHobbyId(event.target.value);
   };
 
   return (
@@ -118,20 +102,17 @@ const SingupPage = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Grid>
-        <Grid item margin={1}>
-          <FormControl sx={{ m: 1, minWidth: 225 }}>
-            <InputLabel>Hobby</InputLabel>
-            <Select
-              value={currHobbyId}
-              onChange={handleChange}
-              autoWidth
-              required
-            >
-              {list}
-            </Select>
-          </FormControl>
+        <Grid item margin={1} xs={12}>
+          <TextField
+            required
+            value={confirmPassword}
+            label="Confirm Password"
+            type="password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            // onBlur={() => setMatch(!!password && password === confirmPassword)}
+          />
+          {match && <Alert severity="error">Passwords do not match</Alert>}
         </Grid>
-
         <Grid item margin={1} xs={12}>
           <Button type="submit">Create user</Button>
         </Grid>
@@ -140,4 +121,4 @@ const SingupPage = () => {
   );
 };
 
-export default SingupPage;
+export default SignUpPage;

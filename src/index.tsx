@@ -7,7 +7,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider as UseFetchProvider } from "use-http";
 import App from "./App";
 import { persistor, store } from "./redux/store";
-import "./i18n";
+// import "./i18n";
 
 const BACK_API = process.env.REACT_APP_BACK_API;
 
