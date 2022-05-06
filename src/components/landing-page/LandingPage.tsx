@@ -5,6 +5,7 @@ import "../../App.css";
 import { useTranslation } from "react-i18next";
 import useFetch from "use-http";
 import { routes } from "../../routes";
+import { tokens } from "../../auth/auth-utils";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -17,11 +18,11 @@ const LandingPage = () => {
   const { post, response, error } = useFetch("/auth");
 
   const signin = async () => {
-    const tokens = await post("/login", { email, password });
+    const resTokens = await post("/login", { email, password });
     // TODO: get user data and save in redux?
-    // TODO: save JWT
     if (response.ok) {
-      console.log(tokens);
+      tokens.access.set(resTokens.accessToken);
+      tokens.refresh.set(resTokens.refreshToken);
       navigate(routes.home);
     } else {
       setErrorMessage("Username or password are incorrect!");
