@@ -8,13 +8,14 @@ import { Provider as UseFetchProvider } from "use-http";
 import App from "./App";
 import { persistor, store } from "./redux/store";
 import "./i18n";
+import useFetchOptions from "./hooks/use-fetch-options";
 
 const BACK_API = process.env.REACT_APP_BACK_API;
 
 ReactDOM.render(
   <React.StrictMode>
     <ReduxProvider store={store}>
-      <UseFetchProvider url={BACK_API}>
+      <UseFetchProvider url={BACK_API} options={useFetchOptions()}>
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
             <App />
