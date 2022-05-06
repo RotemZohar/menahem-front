@@ -6,17 +6,19 @@ import { acquireToken } from "../../auth/auth-utils";
 import { routes } from "../../routes";
 
 const PrivateRoute: React.FC<RouteProps> = () => {
-  const [tokens, setTokens] = useState<string | null | undefined>(undefined);
+  const [isConnected, setIsConnected] = useState<boolean | undefined>(
+    undefined
+  );
 
   useEffect(() => {
-    acquireToken().then((value) => setTokens(value));
+    acquireToken().then((value) => setIsConnected(!!value));
   }, []);
 
-  if (tokens === undefined) {
+  if (isConnected === undefined) {
     return <CircularProgress />;
   }
 
-  if (tokens === null) {
+  if (!isConnected) {
     return <Navigate to={routes.signin} replace />;
   }
 
