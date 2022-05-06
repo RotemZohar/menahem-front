@@ -9,21 +9,26 @@ import PostsPage from "./components/posts/PostsPage";
 import { routes } from "./routes";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Navbar from "./components/navbar/Navbar";
+import { useAppSelector } from "./redux/store";
 
-const App = () => (
-  <div className="App">
-    <Navbar />
-    <Routes>
-      <Route path="" element={<LandingPage />} />
-      <Route path={routes.signup} element={<SingupPage />} />
-      {/* Everything that's inside private route is accessible only after logging in */}
-      <Route element={<PrivateRoute />}>
-        <Route path="posts" element={<PostsPage />} />
-        <Route path="editDetails" element={<EditDetailsPage />} />
-        <Route path="admin" element={<AdminPage />} />
-      </Route>
-    </Routes>
-  </div>
-);
+const App = () => {
+  const showNavbar = useAppSelector((state) => state.navbarReducer);
+
+  return (
+    <div className="App">
+      {showNavbar && <Navbar />}
+      <Routes>
+        <Route path="" element={<LandingPage />} />
+        <Route path={routes.signup} element={<SingupPage />} />
+        {/* Everything that's inside private route is accessible only after logging in */}
+        <Route element={<PrivateRoute />}>
+          <Route path="posts" element={<PostsPage />} />
+          <Route path="editDetails" element={<EditDetailsPage />} />
+          <Route path="admin" element={<AdminPage />} />
+        </Route>
+      </Routes>
+    </div>
+  );
+};
 
 export default App;
