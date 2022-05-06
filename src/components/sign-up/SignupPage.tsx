@@ -2,7 +2,6 @@ import {
   Alert,
   Box,
   Button,
-  FormControl,
   Grid,
   InputLabel,
   LinearProgress,
@@ -15,6 +14,7 @@ import { count } from "console";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import useFetch from "use-http";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -30,6 +30,7 @@ const SignUpPage = () => {
   const [requiredLength, setRequiredLength] = useState(8);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { post } = useFetch("/auth");
 
   useEffect(() => {
     setValidLength(password.length >= requiredLength);
@@ -43,26 +44,12 @@ const SignUpPage = () => {
     if (!email || !password || !name) {
       alert("Please insert all fields!");
     } else {
-      fetch("http://localhost:4000/users", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          name,
-          isConnected: false,
-        }),
-      })
+      post("/signup", { email, password, name })
         .then((res) => {
-          if (res.body) {
-            if (res.status === 500) {
-              alert("Email already exists!");
-            } else {
-              navigate("/");
-            }
+          if (res === "Created") {
+            navigate("/");
+          } else {
+            alert("Email already exists!");
           }
         })
         .catch((err) => {
