@@ -1,5 +1,6 @@
 import {
   Alert,
+  AlertTitle,
   Box,
   Button,
   Grid,
@@ -9,6 +10,7 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { count } from "console";
 import React, { useEffect, useMemo, useState } from "react";
@@ -79,23 +81,25 @@ const SignUpPage = () => {
           />
         </Grid>
         <Grid item margin={1} xs={12}>
-          <TextField
-            required
-            value={password}
-            label="Password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={() =>
-              setIsStrong(validLength && hasNumber && upperCase && lowerCase)
-            }
-          />
-          {!isStrong && (
-            <Alert severity="error">
-              Your password is not strong enough. Passwords must be at least 8
-              characters long, include at least one number, include both lower
-              and upper case characters.
-            </Alert>
-          )}
+          <Tooltip
+            title="Passwords must be at least 8 characters long, include at least one number, and include both lower and upper case characters."
+            placement="right"
+            arrow
+          >
+            <TextField
+              sx={{ width: "260" }}
+              required
+              value={password}
+              label="Password"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={() =>
+                setIsStrong(validLength && hasNumber && upperCase && lowerCase)
+              }
+              error={!isStrong}
+              helperText={isStrong ? "" : "Your password is not strong enough."}
+            />
+          </Tooltip>
         </Grid>
         <Grid item margin={1} xs={12}>
           <TextField
@@ -105,8 +109,9 @@ const SignUpPage = () => {
             type="password"
             onChange={(e) => setConfirmPassword(e.target.value)}
             onBlur={() => setMatch(!!password && password === confirmPassword)}
+            error={!match}
+            helperText={match ? "" : "Passwords must match!"}
           />
-          {!match && <Alert severity="error">Passwords do not match!</Alert>}
         </Grid>
         <Grid item margin={1} xs={12}>
           <Button type="submit">Create user</Button>
