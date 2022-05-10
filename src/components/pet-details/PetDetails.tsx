@@ -127,18 +127,14 @@ const PetDetails = () => {
                         variant="fullWidth"
                     >
                         <Tab label="Tasks" sx={{ borderRight: 1 }} />
-                        <Tab label="Carers" sx={{ borderRight: 1 }} />
-                        <Tab label="Gallery" />
+                        <Tab label="Carers" />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
                     <PetTasks tasks={details.tasks} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <PetCarers />
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    <PetGallery />
+                    <PetCarers carers={details.members} />
                 </TabPanel>
             </Box>
         </Container>

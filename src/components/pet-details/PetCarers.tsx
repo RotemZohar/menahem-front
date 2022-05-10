@@ -1,9 +1,12 @@
 import React from "react";
 
-const PetCarers = () => (
-    <div>
-        <h1>b</h1>
-    </div>
-);
+const PetCarers = (props: { carers: any[] }) => {
+    const { carers } = props;
+    return (
+        <div>
+            <h1>b</h1>
+        </div>
+    );
+};
 
 export default PetCarers;

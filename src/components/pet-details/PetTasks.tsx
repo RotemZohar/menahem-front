@@ -16,8 +16,6 @@ const PetTasks = (props: { tasks: any[] }) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const rows = tasks;
-
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -42,7 +40,7 @@ const PetTasks = (props: { tasks: any[] }) => {
         return `${hours}:${minutes} ${day}.${month}.${year}`;
     };
 
-    if (!rows.length) {
+    if (!tasks.length) {
         return (
             <div>
                 <Typography sx={{ fontSize: "26px" }}>
@@ -65,7 +63,7 @@ const PetTasks = (props: { tasks: any[] }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {tasks
                             .slice(
                                 page * rowsPerPage,
                                 page * rowsPerPage + rowsPerPage
@@ -105,7 +103,7 @@ const PetTasks = (props: { tasks: any[] }) => {
             <TablePagination
                 rowsPerPageOptions={[5, 10]}
                 component="div"
-                count={rows.length}
+                count={tasks.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
