@@ -17,6 +17,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useFetch from "use-http";
+import { useHideNavbar } from "../../hooks/use-hide-navbar";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -33,6 +34,7 @@ const SignUpPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { post } = useFetch("/auth");
+  useHideNavbar();
 
   useEffect(() => {
     setValidLength(password.length >= requiredLength);
