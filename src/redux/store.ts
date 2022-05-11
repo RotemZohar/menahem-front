@@ -4,8 +4,13 @@ import { persistStore, persistReducer } from "redux-persist";
 import storageSession from "redux-persist/lib/storage/session";
 import userReducer from "./slices/userSlice";
 import postsReducer from "./slices/postsSlice";
+import navbarReducer from "./slices/navbarSlice";
 
-const rootReducer = combineReducers({ userReducer, postsReducer });
+const rootReducer = combineReducers({
+  userReducer,
+  postsReducer,
+  navbarReducer,
+});
 
 const persistConfig = {
   key: "root",
