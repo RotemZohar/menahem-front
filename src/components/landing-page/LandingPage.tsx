@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../../App.css";
@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import useFetch from "use-http";
 import { routes } from "../../routes";
 import { tokens } from "../../auth/auth-utils";
+import { useHideNavbar } from "../../hooks/use-hide-navbar";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const LandingPage = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const { post, response, error } = useFetch("/auth");
+
+  useHideNavbar();
 
   const signin = async () => {
     const resTokens = await post("/login", { email, password });
