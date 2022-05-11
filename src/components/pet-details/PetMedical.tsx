@@ -11,8 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 
-const PetTasks = (props: { tasks: any[] }) => {
-  const { tasks } = props;
+const PetMedical = (props: { medical: any[] }) => {
+  const { medical } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -36,10 +36,10 @@ const PetTasks = (props: { tasks: any[] }) => {
 
     const [, year, month, day, hours, minutes, seconds, , millseconds] = match;
 
-    return `${hours}:${minutes} ${day}.${month}.${year}`;
+    return `${day}.${month}.${year}`;
   };
 
-  if (!tasks.length) {
+  if (!medical.length) {
     return (
       <div>
         <Typography sx={{ fontSize: "26px" }}>
@@ -55,14 +55,12 @@ const PetTasks = (props: { tasks: any[] }) => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">Title</TableCell>
-              <TableCell align="center">Description</TableCell>
-              <TableCell align="center">End Time</TableCell>
-              <TableCell align="center">Status</TableCell>
+              <TableCell align="center">Treatments</TableCell>
+              <TableCell align="center">Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks
+            {medical
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow
@@ -74,13 +72,9 @@ const PetTasks = (props: { tasks: any[] }) => {
                   }}
                 >
                   <TableCell align="center" component="th" scope="row">
-                    {row.title}
+                    {row.treatment}
                   </TableCell>
-                  <TableCell align="center">{row.description}</TableCell>
-                  <TableCell align="center">{dateFormat(row.dateTo)}</TableCell>
-                  <TableCell align="center">
-                    {row.isCompleted ? "Completed" : "Not Completed"}
-                  </TableCell>
+                  <TableCell align="center">{dateFormat(row.date)}</TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -89,7 +83,7 @@ const PetTasks = (props: { tasks: any[] }) => {
       <TablePagination
         rowsPerPageOptions={[5, 10]}
         component="div"
-        count={tasks.length}
+        count={medical.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -99,4 +93,4 @@ const PetTasks = (props: { tasks: any[] }) => {
   );
 };
 
-export default PetTasks;
+export default PetMedical;
