@@ -21,12 +21,12 @@ const App = () => {
             <Routes>
                 <Route path="" element={<LandingPage />} />
                 <Route path={routes.signup} element={<SignupPage />} />
+                <Route path="pet" element={<PetDetails />} />
                 {/* Everything that's inside private route is accessible only after logging in */}
                 <Route element={<PrivateRoute />}>
                     <Route path="posts" element={<PostsPage />} />
                     <Route path="editDetails" element={<EditDetailsPage />} />
                     <Route path="admin" element={<AdminPage />} />
-                    <Route path="pet" element={<PetDetails />} />
                 </Route>
             </Routes>
         </div>

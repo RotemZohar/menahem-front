@@ -39,114 +39,85 @@ function getAge(birthdate: Date) {
 }
 
 const PetDetails = () => {
-    const { get } = useFetch("/auth");
+    const { get, loading, error } = useFetch("/auth");
     const [value, setValue] = useState(0);
-    const [loaded, setLoaded] = useState(false);
-    const [details, setDetails] = useState<petDetails>({
-        _id: "",
-        name: "",
-        medical: [
-            {
-                _id: "",
-                treatment: "",
-                date: new Date(),
-            },
-        ],
-        members: [
-            {
-                _id: "",
-                isAdmin: false,
-            },
-        ],
-        tasks: [
-            {
-                _id: "",
-                title: "",
-                description: "",
-                dateFrom: new Date(),
-                dateTo: new Date(),
-                isCompleted: false,
-            },
-        ],
-        birthdate: new Date(),
-        breed: "",
-        height: "",
-        weight: "",
-        imgUrl: "",
-    });
+    const [details, setDetails] = useState<petDetails>();
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
     useEffect(() => {
-        // Change _id to parameter when able to recieve
+        // TODO: Change _id to parameter when able to recieve
         get("/pet?_id=627403102576b2374e417745")
-            .then((res) => {
-                setDetails(res);
-                setLoaded(true);
+            .then((pet) => {
+                setDetails(pet);
             })
             .catch((err) => {
                 console.log(err);
             });
     }, []);
 
-    if (!loaded)
-        return (
-            <div>
-                <h1> Loading... </h1>
-            </div>
-        );
-
     return (
-        <Container>
-            <Box padding={3} sx={{ border: 2, borderBottom: 1 }} mt={4} mx={20}>
-                <Box display="flex">
-                    <Avatar
-                        src={details.imgUrl}
-                        sx={{ width: 160, height: 160, border: 2 }}
-                    />
-                    <Box mx={3} mt={3}>
-                        <Typography variant="h2" align="left">
-                            {details.name}
-                        </Typography>
-                        <Typography variant="h5" align="left">
-                            {details.breed}, {getAge(details.birthdate)}
-                        </Typography>
-                    </Box>
-                </Box>
-                <Box display="flex" mt={1}>
-                    <Typography variant="h6" align="left" ml={3}>
-                        height: {details.height}cm
-                    </Typography>
-                    <Typography variant="h6" align="left" ml={5}>
-                        weight: {details.weight}kg
-                    </Typography>
-                </Box>
-            </Box>
-            <Box sx={{ border: 2, borderTop: 0 }} mx={20}>
-                <Box sx={{ borderBottom: 1 }}>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        variant="fullWidth"
+        <>
+            {error && error.message}
+            {loading && "Loading..."}
+            {details && (
+                <Container>
+                    <Box
+                        padding={3}
+                        sx={{ border: 2, borderBottom: 1 }}
+                        mt={4}
+                        mx={20}
                     >
-                        <Tab label="Medical" sx={{ borderRight: 1 }} />
-                        <Tab label="Carers" sx={{ borderRight: 1 }} />
-                        <Tab label="Tasks" />
-                    </Tabs>
-                </Box>
-                <TabPanel value={value} index={0}>
-                    <PetMedical medical={details.medical} />
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <PetCarers carers={details.members} />
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    <PetTasks tasks={details.tasks} />
-                </TabPanel>
-            </Box>
-        </Container>
+                        <Box display="flex">
+                            <Avatar
+                                src={details.imgUrl}
+                                sx={{ width: 160, height: 160, border: 2 }}
+                            />
+                            <Box mx={3} mt={3}>
+                                <Typography variant="h2" align="left">
+                                    {details.name}
+                                </Typography>
+                                <Typography variant="h5" align="left">
+                                    {details.breed}, {getAge(details.birthdate)}
+                                </Typography>
+                            </Box>
+                        </Box>
+                        <Box display="flex" mt={1}>
+                            <Typography variant="h6" align="left" ml={3}>
+                                height: {details.height}cm
+                            </Typography>
+                            <Typography variant="h6" align="left" ml={5}>
+                                weight: {details.weight}kg
+                            </Typography>
+                        </Box>
+                    </Box>
+                    <Box sx={{ border: 2, borderTop: 0 }} mx={20}>
+                        <Box sx={{ borderBottom: 1 }}>
+                            <Tabs
+                                value={value}
+                                onChange={handleChange}
+                                variant="fullWidth"
+                            >
+                                <Tab label="Medical" sx={{ borderRight: 1 }} />
+                                <Tab label="Carers" sx={{ borderRight: 1 }} />
+                                <Tab label="Tasks" />
+                            </Tabs>
+                        </Box>
+                        <TabPanel value={value} index={0}>
+                            <PetMedical medical={details.medical} />
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                            <PetCarers carers={details.members} />
+                        </TabPanel>
+                        <TabPanel value={value} index={2}>
+                            <PetTasks tasks={details.tasks} />
+                        </TabPanel>
+                    </Box>
+                </Container>
+            )}
+        </>
     );
 };
 
