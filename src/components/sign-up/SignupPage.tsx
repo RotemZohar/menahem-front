@@ -1,92 +1,63 @@
 import {
+  Alert,
+  AlertTitle,
   Box,
   Button,
-  FormControl,
   Grid,
   InputLabel,
+  LinearProgress,
   MenuItem,
   Select,
   SelectChangeEvent,
   TextField,
+  Tooltip,
 } from "@mui/material";
+import { count } from "console";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setHobbyId } from "../../redux/slices/userSlice";
+import useFetch from "use-http";
 
-interface Hobby {
-  name: string;
-  _id: string;
-}
-
-const SingupPage = () => {
+const SignUpPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [currHobbyId, setCurrHobbyId] = useState("");
-  const [hobbies, setHobbies] = useState<Hobby[]>([]);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [validLength, setValidLength] = useState(false);
+  const [hasNumber, setHasNumber] = useState(false);
+  const [upperCase, setUpperCase] = useState(false);
+  const [lowerCase, setLowerCase] = useState(false);
+  const [match, setMatch] = useState(true);
+  const [isStrong, setIsStrong] = useState(true);
+  const [requiredLength, setRequiredLength] = useState(8);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { post } = useFetch("/auth");
 
   useEffect(() => {
-    fetch("http://localhost:4000/hobbies", {
-      method: "GET",
-    })
-      .then((res) => {
-        res.json().then((data) => setHobbies(data));
-      })
-      .catch((err: any) => console.error(err));
-  }, []);
-
-  const list = useMemo(
-    () =>
-      hobbies.map((hobby) => (
-        <MenuItem value={hobby._id} key={hobby._id}>
-          {hobby.name}
-        </MenuItem>
-      )),
-    [hobbies]
-  );
+    setValidLength(password.length >= requiredLength);
+    setUpperCase(password.toLowerCase() !== password);
+    setLowerCase(password.toUpperCase() !== password);
+    setHasNumber(/\d/.test(password));
+  }, [password, requiredLength, confirmPassword]);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    if (!email || !password || !currHobbyId || !name) {
+    if (!email || !password || !name) {
       alert("Please insert all fields!");
     } else {
-      fetch("http://localhost:4000/users", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          name,
-          hobbyId: currHobbyId,
-          isConnected: false,
-        }),
-      })
+      post("/signup", { email, password, name })
         .then((res) => {
-          if (res.body) {
-            if (res.status === 500) {
-              alert("Email already exists!");
-            } else {
-              res.json().then((data) => {
-                dispatch(setHobbyId(currHobbyId));
-              });
-              navigate("/");
-            }
+          if (res === "Created") {
+            navigate("/");
+          } else {
+            alert("Email already exists!");
           }
         })
         .catch((err) => {
           console.error(err);
         });
     }
-  };
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setCurrHobbyId(event.target.value);
   };
 
   return (
@@ -110,28 +81,38 @@ const SingupPage = () => {
           />
         </Grid>
         <Grid item margin={1} xs={12}>
+          <Tooltip
+            title="Passwords must be at least 8 characters long, include at least one number, and include both lower and upper case characters."
+            placement="right"
+            arrow
+          >
+            <TextField
+              sx={{ width: "260" }}
+              required
+              value={password}
+              label="Password"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={() =>
+                setIsStrong(validLength && hasNumber && upperCase && lowerCase)
+              }
+              error={!isStrong}
+              helperText={isStrong ? "" : "Your password is not strong enough."}
+            />
+          </Tooltip>
+        </Grid>
+        <Grid item margin={1} xs={12}>
           <TextField
             required
-            value={password}
-            label="Password"
+            value={confirmPassword}
+            label="Confirm Password"
             type="password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onBlur={() => setMatch(!!password && password === confirmPassword)}
+            error={!match}
+            helperText={match ? "" : "Passwords must match!"}
           />
         </Grid>
-        <Grid item margin={1}>
-          <FormControl sx={{ m: 1, minWidth: 225 }}>
-            <InputLabel>Hobby</InputLabel>
-            <Select
-              value={currHobbyId}
-              onChange={handleChange}
-              autoWidth
-              required
-            >
-              {list}
-            </Select>
-          </FormControl>
-        </Grid>
-
         <Grid item margin={1} xs={12}>
           <Button type="submit">Create user</Button>
         </Grid>
@@ -140,4 +121,4 @@ const SingupPage = () => {
   );
 };
 
-export default SingupPage;
+export default SignUpPage;
