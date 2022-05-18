@@ -26,7 +26,7 @@ const App = () => {
           <Route path="posts" element={<PostsPage />} />
           <Route path="editDetails" element={<EditDetailsPage />} />
           <Route path="admin" element={<AdminPage />} />
-          <Route path="calendar" element={<CalendarPage />} />
+          <Route path={routes.calendar} element={<CalendarPage />} />
         </Route>
       </Routes>
     </div>

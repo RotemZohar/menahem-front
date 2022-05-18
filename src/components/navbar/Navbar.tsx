@@ -1,13 +1,16 @@
 import { Button, Grid, Menu, MenuItem } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import calendarPng from "../../assets/calendar.png";
 import petPng from "../../assets/pawprint.png";
 import myPetsPng from "../../assets/leash.png";
 import groupsPng from "../../assets/veterinary.png";
+import { routes } from "../../routes";
 
 function Navbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -37,7 +40,7 @@ function Navbar() {
         </Button>
       </Grid>
       <Grid item>
-        <Button>
+        <Button onClick={() => navigate(routes.calendar)}>
           <img src={calendarPng} height="50" width="50" alt="calendar" />
         </Button>
       </Grid>
