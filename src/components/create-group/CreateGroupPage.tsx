@@ -1,7 +1,7 @@
 import React from "react";
 
-function CreateGroup() {
+function CreateGroupPage() {
   return <div>CreateGroup</div>;
 }
 
-export default CreateGroup;
+export default CreateGroupPage;
