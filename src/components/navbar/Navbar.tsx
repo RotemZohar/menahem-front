@@ -18,7 +18,13 @@ function Navbar() {
   };
 
   return (
-    <Grid container justifyContent="space-around">
+    <Grid
+      container
+      justifyContent="space-around"
+      pb={1}
+      mb={1}
+      style={{ backgroundColor: "#ddd" }}
+    >
       <Grid item>
         <Button onClick={handleClick}>
           {/* TODO: put the user's profile picture */}
