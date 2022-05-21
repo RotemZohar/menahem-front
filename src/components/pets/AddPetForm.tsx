@@ -4,10 +4,8 @@ import {
   Button,
   Card,
   Grid,
-  CardMedia,
   InputAdornment,
   TextField,
-  Typography,
   MenuItem,
   Avatar,
   CardHeader,
@@ -86,6 +84,33 @@ const AddPetForm = () => {
       setImage(URL.createObjectURL(event.target.files[0]));
     }
   };
+
+  useEffect(() => {
+    switch (species) {
+      case "Dog":
+        setCurrentBreedList(dogList);
+        setBreed(dogList[0]);
+        break;
+      case "Cat":
+        setCurrentBreedList(catList);
+        setBreed(catList[0]);
+        break;
+      case "Bird":
+        setCurrentBreedList(birdList);
+        setBreed(birdList[0]);
+        break;
+      case "Rodent":
+        setCurrentBreedList(rodentList);
+        setBreed(rodentList[0]);
+        break;
+      case "Reptile":
+        setCurrentBreedList(reptileList);
+        setBreed(reptileList[0]);
+        break;
+      default:
+        break;
+    }
+  }, [species, breed, currentBreedList]);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -171,9 +196,7 @@ const AddPetForm = () => {
                 onChange={(e) => setSpecies(e.target.value)}
               >
                 {speciesList.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
+                  <MenuItem value={option}>{option}</MenuItem>
                 ))}
               </TextField>
             </Grid>
@@ -186,8 +209,8 @@ const AddPetForm = () => {
                 required
                 onChange={(e) => setBreed(e.target.value)}
               >
-                {dogList.map((option) => (
-                  <MenuItem key={option} value={option}>
+                {currentBreedList.map((option) => (
+                  <MenuItem key={option as string} value={option as string}>
                     {option}
                   </MenuItem>
                 ))}
