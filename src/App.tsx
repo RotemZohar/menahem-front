@@ -10,6 +10,7 @@ import PrivateRoute from "./components/private-route/PrivateRoute";
 import Navbar from "./components/navbar/Navbar";
 import { useAppSelector } from "./redux/store";
 import SignupPage from "./components/sign-up/SignupPage";
+import AddPetForm from "./components/pets/AddPetForm";
 
 const App = () => {
   const showNavbar = useAppSelector((state) => state.navbarReducer);
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="posts" element={<PostsPage />} />
           <Route path="editDetails" element={<EditDetailsPage />} />
           <Route path="admin" element={<AdminPage />} />
+          <Route path="pets/new" element={<AddPetForm />} />
         </Route>
       </Routes>
     </div>
