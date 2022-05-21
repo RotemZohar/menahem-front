@@ -77,6 +77,11 @@ const AddPetForm = () => {
     "https://cdn2.iconfinder.com/data/icons/veterinary-12/512/Veterinary_Icons-24-512.png"
   );
 
+  const [nameError, setNameError] = useState(false);
+  const [weightError, setWeightError] = useState(false);
+  const [heightError, setHeightError] = useState(false);
+  const [dateError, setDateError] = useState(false);
+
   const onUploadPicture = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
       setImage(URL.createObjectURL(event.target.files[0]));
@@ -87,11 +92,11 @@ const AddPetForm = () => {
     e.preventDefault();
     if (
       !name ||
-      !birthDate ||
+      moment(birthDate).isAfter(new Date()) ||
       !species ||
       !breed ||
-      weight !== 0 ||
-      height !== 0
+      weight === 0 ||
+      height === 0
     ) {
       alert("Please insert all fields!");
     } else {
@@ -135,9 +140,12 @@ const AddPetForm = () => {
                 label="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                onBlur={() => setNameError(!name)}
                 fullWidth
                 required
                 InputLabelProps={{ shrink: true }}
+                helperText={nameError ? "Please insert name" : ""}
+                error={nameError}
               />
             </Grid>
             <Grid item margin={1} xs={5}>
@@ -146,9 +154,14 @@ const AddPetForm = () => {
                 type="date"
                 value={birthDate}
                 onChange={(e) => setBirthDate(moment().format(e.target.value))}
+                onBlur={() =>
+                  setDateError(moment(birthDate).isAfter(new Date()))
+                }
                 fullWidth
                 required
                 InputLabelProps={{ shrink: true }}
+                helperText={dateError ? "Birthdate cannot be after today!" : ""}
+                error={dateError}
               />
             </Grid>
             <Grid item margin={1} xs={5}>
@@ -191,7 +204,9 @@ const AddPetForm = () => {
                 required
                 value={height}
                 onChange={(e) => setHeight(Number(e.target.value))}
-                InputLabelProps={{ shrink: true }}
+                onBlur={() => setHeightError(height === 0)}
+                error={heightError}
+                helperText={heightError ? "Height cannot be 0 cm!" : ""}
                 InputProps={{
                   inputProps: { min: 0, max: 200 },
                   endAdornment: (
@@ -208,7 +223,9 @@ const AddPetForm = () => {
                 required
                 value={weight}
                 onChange={(e) => setWeight(Number(e.target.value))}
-                InputLabelProps={{ shrink: true }}
+                onBlur={() => setWeightError(height === 0)}
+                error={weightError}
+                helperText={weightError ? "Weight cannot be 0 kg!" : ""}
                 InputProps={{
                   inputProps: { min: 0, max: 200 },
                   endAdornment: (
