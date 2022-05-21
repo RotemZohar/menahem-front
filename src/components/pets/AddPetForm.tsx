@@ -80,7 +80,6 @@ const AddPetForm = () => {
   const [nameError, setNameError] = useState(false);
   const [weightError, setWeightError] = useState(false);
   const [heightError, setHeightError] = useState(false);
-  const [dateError, setDateError] = useState(false);
 
   const onUploadPicture = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
@@ -100,7 +99,7 @@ const AddPetForm = () => {
     ) {
       alert("Please insert all fields!");
     } else {
-      post("/pet/new", {
+      post("/pets/new", {
         name,
         birthDate,
         species,
@@ -111,7 +110,7 @@ const AddPetForm = () => {
       })
         .then((res) => {
           if (res === "Created") {
-            navigate("/pet");
+            navigate("/pets");
           } else {
             alert("Something went wrong :(");
           }
@@ -154,14 +153,12 @@ const AddPetForm = () => {
                 type="date"
                 value={birthDate}
                 onChange={(e) => setBirthDate(moment().format(e.target.value))}
-                onBlur={() =>
-                  setDateError(moment(birthDate).isAfter(new Date()))
-                }
                 fullWidth
                 required
                 InputLabelProps={{ shrink: true }}
-                helperText={dateError ? "Birthdate cannot be after today!" : ""}
-                error={dateError}
+                InputProps={{
+                  inputProps: { max: moment(new Date()).format("YYYY-MM-DD") },
+                }}
               />
             </Grid>
             <Grid item margin={1} xs={5}>
