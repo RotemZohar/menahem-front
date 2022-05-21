@@ -15,6 +15,7 @@ import {
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useNavigate } from "react-router-dom";
 import useFetch from "use-http";
+import moment from "moment";
 
 const speciesList = ["Dog", "Cat", "Rodent", "Bird", "Reptile"];
 const dogList = [
@@ -65,7 +66,9 @@ const AddPetForm = () => {
 
   const [currentBreedList, setCurrentBreedList] = useState<String[]>(dogList);
   const [name, setName] = useState("");
-  const [birthDate, setBirthDate] = useState("");
+  const [birthDate, setBirthDate] = useState(
+    moment(new Date()).format("YYYY-MM-DD")
+  );
   const [species, setSpecies] = useState(speciesList[0]);
   const [breed, setBreed] = useState(currentBreedList[0]);
   const [weight, setWeight] = useState(0);
@@ -142,7 +145,7 @@ const AddPetForm = () => {
                 label="Birth Date"
                 type="date"
                 value={birthDate}
-                onChange={(e) => setBirthDate(e.target.value)}
+                onChange={(e) => setBirthDate(moment().format(e.target.value))}
                 fullWidth
                 required
                 InputLabelProps={{ shrink: true }}
