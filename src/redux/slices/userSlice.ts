@@ -4,14 +4,12 @@ export interface UserState {
   _id: string;
   name: string;
   email: string;
-  hobbyId: string;
 }
 
 const initialState: UserState = {
   _id: "",
   name: "",
   email: "",
-  hobbyId: "",
 };
 
 export const userSlice = createSlice({
@@ -20,9 +18,6 @@ export const userSlice = createSlice({
   reducers: {
     setUserEmail: (state, action: PayloadAction<string>) => {
       state.email = action.payload;
-    },
-    setHobbyId: (state, action: PayloadAction<string>) => {
-      state.hobbyId = action.payload;
     },
     setUserId: (state, action: PayloadAction<string>) => {
       state._id = action.payload;
@@ -34,12 +29,11 @@ export const userSlice = createSlice({
       _id: action.payload._id,
       name: action.payload.name,
       email: action.payload.email,
-      hobbyId: action.payload.hobbyId,
     }),
   },
 });
 
-export const { setUserEmail, setHobbyId, setUser, setUserId, setUsername } =
+export const { setUserEmail, setUser, setUserId, setUsername } =
   userSlice.actions;
 
 export default userSlice.reducer;
