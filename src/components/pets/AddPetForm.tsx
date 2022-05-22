@@ -89,23 +89,18 @@ const AddPetForm = () => {
     switch (species) {
       case "Dog":
         setCurrentBreedList(dogList);
-        setBreed(dogList[0]);
         break;
       case "Cat":
         setCurrentBreedList(catList);
-        setBreed(catList[0]);
         break;
       case "Bird":
         setCurrentBreedList(birdList);
-        setBreed(birdList[0]);
         break;
       case "Rodent":
         setCurrentBreedList(rodentList);
-        setBreed(rodentList[0]);
         break;
       case "Reptile":
         setCurrentBreedList(reptileList);
-        setBreed(reptileList[0]);
         break;
       default:
         break;
