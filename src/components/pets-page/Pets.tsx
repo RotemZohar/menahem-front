@@ -28,7 +28,7 @@ const PetsPage = () => {
   }, []);
 
   const navToPet = (pet: Pet) => {
-    console.log("Navigating to pet:");
+    console.log("Navigating to pet");
   };
 
   const addPet = () => {
