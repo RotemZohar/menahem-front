@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import "../../App.css";
 import { useTranslation } from "react-i18next";
 import useFetch from "use-http";
+import { useDispatch } from "react-redux";
 import { routes } from "../../routes";
 import { tokens } from "../../auth/auth-utils";
 import { useHideNavbar } from "../../hooks/use-hide-navbar";
+import { setUserId } from "../../redux/slices/userSlice";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -17,15 +19,16 @@ const LandingPage = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const { post, response, error } = useFetch("/auth");
+  const dispatch = useDispatch();
 
   useHideNavbar();
 
   const signin = async () => {
     const resTokens = await post("/login", { email, password });
-    // TODO: get user data and save in redux?
     if (response.ok) {
       tokens.access.set(resTokens.accessToken);
       tokens.refresh.set(resTokens.refreshToken);
+      dispatch(setUserId(resTokens.userId));
       navigate(routes.home);
     } else {
       setErrorMessage("Username or password are incorrect!");
