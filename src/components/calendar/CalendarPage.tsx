@@ -4,6 +4,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import useFetch from "use-http";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import CalendarEvent from "./CalendarEvent";
 
 interface Task {
@@ -47,19 +49,19 @@ function renderEventContent(eventInfo: EventInput) {
 function CalendarPage() {  
   const [petTasks, setPetTasks] = useState<{ imgUrl: string, tasks: Task[] }[]>([]);
   const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
-  const user = "62878b66e98c4817164204da"; // TODO: Temporary - delete!
+  const userId = useSelector((state: RootState) => state.userReducer._id);
 
   const { get, response, error } = useFetch("/task");
 
   useEffect(() => {
-    get(`/${user}`).then((res) => {
+    get(`/${userId}`).then((res) => {
       setPetTasks(res?.petTasks);
       setCalendarEvents(convertTaskToCalendarEvent(res?.petTasks));
     })
     .catch((err) => {
       console.error(err);
     });
-  }, []);
+  }, [petTasks]);
 
     return (
         <div style={{ padding: "2rem" }}>
