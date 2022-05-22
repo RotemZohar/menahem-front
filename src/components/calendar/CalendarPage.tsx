@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
-import FullCalendar from '@fullcalendar/react';
+import FullCalendar, { EventInput } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import useFetch from "use-http";
 import CalendarEvent from "./CalendarEvent";
 
-function convertTaskToCalendarEvent(petTasks: { imgUrl: string, tasks: any[] }[]) {
-    const events: any[] = [];
+interface Task {
+  title: string;
+  description: string;
+  dateFrom: Date;
+  dateTo: Date;
+  isCompleted: boolean;
+}
+
+function convertTaskToCalendarEvent(petTasks: { imgUrl: string, tasks: Task[] }[]) {
+    const events: EventInput[] = [];
     petTasks.forEach(pet => {
       pet.tasks.forEach(task => {
-        let backgroundColor = '#3788d8';
+        let backgroundColor = '#3788d8'; // blue
         if ((new Date(task.dateTo)).getTime() < Date.now()) {
-          backgroundColor = task.isCompleted ? 'darkred' : 'darkgreen'
+          backgroundColor = task.isCompleted ? 'darkgreen' : 'darkred'
         }
         events.push({
             title: task.title,
@@ -30,26 +38,23 @@ function convertTaskToCalendarEvent(petTasks: { imgUrl: string, tasks: any[] }[]
     return events;
 }
 
-function renderEventContent(eventInfo: any) {   
+function renderEventContent(eventInfo: EventInput) {   
   return (
     <CalendarEvent eventInfo={eventInfo} />
   );
 }
 
 function CalendarPage() {  
-  const [petTasks, setPetTasks] = useState<any[]>([]);
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
-  const user = ""; // TODO: Temporary - delete!
+  const [petTasks, setPetTasks] = useState<{ imgUrl: string, tasks: Task[] }[]>([]);
+  const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
+  const user = "62878b66e98c4817164204da"; // TODO: Temporary - delete!
 
-//   const { post, response, error } = useFetch("/task");
   const { get, response, error } = useFetch("/task");
 
   useEffect(() => {
-    get(`/`).then((res) => {
-      setPetTasks(res.petTasks);
-      setCalendarEvents(convertTaskToCalendarEvent(res.petTasks));
-      console.log(res);
+    get(`/${user}`).then((res) => {
+      setPetTasks(res?.petTasks);
+      setCalendarEvents(convertTaskToCalendarEvent(res?.petTasks));
     })
     .catch((err) => {
       console.error(err);
