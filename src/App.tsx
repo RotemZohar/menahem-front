@@ -9,6 +9,7 @@ import PrivateRoute from "./components/private-route/PrivateRoute";
 import Navbar from "./components/navbar/Navbar";
 import { useAppSelector } from "./redux/store";
 import SignupPage from "./components/sign-up/SignupPage";
+import GroupsPage from "./components/groups-page/Groups";
 
 const App = () => {
   const showNavbar = useAppSelector((state) => state.navbarReducer);
@@ -23,6 +24,7 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="editDetails" element={<EditDetailsPage />} />
           <Route path="admin" element={<AdminPage />} />
+          <Route path="groups" element={<GroupsPage />} />
         </Route>
       </Routes>
     </div>
