@@ -15,10 +15,10 @@ import { RootState } from "../../redux/store";
 const PetsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const [pets, setPets] = useState<Pet[]>([]);
-  const { get } = useFetch("/auth");
+  const { get } = useFetch("/user");
 
   useEffect(() => {
-    get(`/user/pets?id=${userId}`)
+    get(`/${userId}/pets`)
       .then((data) => {
         setPets(data);
       })

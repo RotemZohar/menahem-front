@@ -15,11 +15,10 @@ import { RootState } from "../../redux/store";
 const GroupsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const [groups, setGroups] = useState<Group[]>([]);
-  const { get } = useFetch("/auth");
+  const { get } = useFetch("/user");
 
   useEffect(() => {
-    console.log(userId);
-    get(`/user/groups?id=${userId}`)
+    get(`/${userId}/groups`)
       .then((data) => {
         setGroups(data);
       })
