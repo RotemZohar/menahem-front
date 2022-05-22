@@ -9,37 +9,36 @@ import useFetch from "use-http";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
-import { Group } from "../../types/group";
+import { Pet } from "../../types/pet";
 import { RootState } from "../../redux/store";
 
-const GroupsPage = () => {
+const PetsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
-  const [groups, setGroups] = useState<Group[]>([]);
+  const [pets, setPets] = useState<Pet[]>([]);
   const { get } = useFetch("/auth");
 
   useEffect(() => {
-    console.log(userId);
-    get(`/user/groups?id=${userId}`)
+    get(`/user/pets?id=${userId}`)
       .then((data) => {
-        setGroups(data);
+        setPets(data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  const navToGroup = (group: Group) => {
-    console.log("Navigating to group");
+  const navToPet = (pet: Pet) => {
+    console.log("Navigating to pet:");
   };
 
-  const addGroup = () => {
-    console.log("add group");
+  const addPet = () => {
+    console.log("add pet");
   };
 
-  const groupsCards = useMemo(
+  const petsCards = useMemo(
     () =>
-      groups.map((group) => (
-        <CardActionArea onClick={() => navToGroup(group)}>
+      pets.map((pet) => (
+        <CardActionArea onClick={() => navToPet(pet)}>
           <Card variant="outlined" sx={{ minWidth: 275 }}>
             <CardContent>
               <Typography
@@ -47,25 +46,25 @@ const GroupsPage = () => {
                 color="text.secondary"
                 gutterBottom
               >
-                {group.name}
+                {pet.name}
               </Typography>
             </CardContent>
           </Card>
         </CardActionArea>
       )),
-    [groups]
+    [pets]
   );
 
   return (
     <Box>
       <Typography variant="h2" gutterBottom>
-        My groups
+        My pets
       </Typography>
-      {groupsCards}
-      <Fab onClick={addGroup} color="primary" aria-label="add">
+      {petsCards}
+      <Fab onClick={addPet} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
     </Box>
   );
 };
-export default GroupsPage;
+export default PetsPage;

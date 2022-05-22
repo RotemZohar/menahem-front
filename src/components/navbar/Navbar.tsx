@@ -24,6 +24,10 @@ function Navbar() {
     navigate(routes.groups);
   };
 
+  const navToPets = () => {
+    navigate(routes.pets);
+  };
+
   return (
     <Grid container justifyContent="space-around">
       <Grid item>
@@ -39,7 +43,7 @@ function Navbar() {
         </Menu>
       </Grid>
       <Grid item>
-        <Button>
+        <Button onClick={navToPets}>
           <img src={myPetsPng} height="50" width="50" alt="calendar" />
         </Button>
       </Grid>

@@ -10,6 +10,7 @@ import Navbar from "./components/navbar/Navbar";
 import { useAppSelector } from "./redux/store";
 import SignupPage from "./components/sign-up/SignupPage";
 import GroupsPage from "./components/groups-page/Groups";
+import PetsPage from "./components/pets-page/Pets";
 
 const App = () => {
   const showNavbar = useAppSelector((state) => state.navbarReducer);
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="editDetails" element={<EditDetailsPage />} />
           <Route path="admin" element={<AdminPage />} />
           <Route path="groups" element={<GroupsPage />} />
+          <Route path="pets" element={<PetsPage />} />
         </Route>
       </Routes>
     </div>
