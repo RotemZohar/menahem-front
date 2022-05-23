@@ -31,8 +31,6 @@ const PetDetails = () => {
   };
 
   useEffect(() => {
-    console.log(petId);
-    // TODO: Change _id to parameter when able to recieve
     get(`/${petId}`)
       .then((pet) => {
         setDetails(pet);
