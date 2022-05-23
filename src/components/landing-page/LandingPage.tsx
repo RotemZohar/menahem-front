@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../../App.css";
 import { useTranslation } from "react-i18next";
@@ -9,6 +17,7 @@ import { routes } from "../../routes";
 import { tokens } from "../../auth/auth-utils";
 import { useHideNavbar } from "../../hooks/use-hide-navbar";
 import { setUserId } from "../../redux/slices/userSlice";
+import mainLogo from "../../assets/main-logo.png";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -47,61 +56,66 @@ const LandingPage = () => {
   };
 
   return (
-    <>
-      <Typography variant="h1">Menahem</Typography>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{
-          display: "grid",
-          gridTemplateRows: "repeat(4, 1fr)",
-          p: 1,
-          columnGap: 3,
-          rowGap: 1,
-          justifyContent: "center",
-        }}
-      >
-        <TextField
-          label="Email"
-          type="email"
-          error={emailError}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            if (emailError) {
-              setEmailError(false);
-            }
-          }}
-        />
-        <TextField
-          label="Password"
-          type="password"
-          error={passwordError}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            if (passwordError) {
-              setPasswordError(false);
-            }
-          }}
-        />
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{ textTransform: "none" }}
-        >
-          Sign In
-        </Button>
-      </Box>
-
-      <Button
-        variant="text"
-        onClick={() => navigate(routes.signup)}
-        style={{ textTransform: "none" }}
-      >
-        Not a member yet? Sign up here!
-      </Button>
-
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-    </>
+    <Grid container justifyContent="center">
+      <Card sx={{ minWidth: 300, width: 700, m: 4 }}>
+        <Grid container direction="column" justifyContent="center" margin={2}>
+          <Grid item>
+            <img src={mainLogo} alt="logo" width="450" />
+          </Grid>
+          <Grid item>
+            <Box component="form" onSubmit={handleSubmit}>
+              <Grid container direction="column">
+                <Grid item mt={1} xs={12}>
+                  <TextField
+                    label="Email"
+                    type="email"
+                    error={emailError}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (emailError) {
+                        setEmailError(false);
+                      }
+                    }}
+                  />
+                </Grid>
+                <Grid item margin={1} xs={12}>
+                  <TextField
+                    label="Password"
+                    type="password"
+                    error={passwordError}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (passwordError) {
+                        setPasswordError(false);
+                      }
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} alignSelf="center">
+                  {errorMessage && (
+                    <Alert severity="error">{errorMessage}</Alert>
+                  )}
+                </Grid>
+                <Grid item margin={1} xs={12}>
+                  <Button variant="contained" type="submit">
+                    Sign In
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </Grid>
+          <Grid item margin={1} xs={12}>
+            <Button
+              variant="text"
+              onClick={() => navigate(routes.signup)}
+              style={{ textTransform: "none" }}
+            >
+              Not a member yet? Sign up here!
+            </Button>
+          </Grid>
+        </Grid>
+      </Card>
+    </Grid>
   );
 };
 
