@@ -1,4 +1,4 @@
-export interface PetDetails {
+export interface Pet {
     _id: string;
     name: string;
     medical: Treatment[];
