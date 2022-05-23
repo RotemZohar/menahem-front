@@ -118,7 +118,7 @@ const AddPetForm = () => {
     ) {
       alert("Please insert all fields!");
     } else {
-      post("/pets/new", {
+      post("/", {
         name,
         birthDate,
         species,
@@ -218,7 +218,7 @@ const AddPetForm = () => {
                 required
                 value={height}
                 onChange={(e) => setHeight(Number(e.target.value))}
-                onBlur={() => setHeightError(height === 0)}
+                onBlur={() => setHeightError(height <= 0)}
                 error={heightError}
                 helperText={heightError ? "Height cannot be 0 cm!" : ""}
                 InputProps={{
@@ -237,7 +237,7 @@ const AddPetForm = () => {
                 required
                 value={weight}
                 onChange={(e) => setWeight(Number(e.target.value))}
-                onBlur={() => setWeightError(height === 0)}
+                onBlur={() => setWeightError(height <= 0)}
                 error={weightError}
                 helperText={weightError ? "Weight cannot be 0 kg!" : ""}
                 InputProps={{
