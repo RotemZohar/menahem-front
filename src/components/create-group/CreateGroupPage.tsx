@@ -9,12 +9,13 @@ function CreateGroupPage() {
   const [description, setDescription] = useState("");
   const [users, setUsers] = useState<string[]>([]);
   const [stage, setStage] = useState(0);
+  const [selectedPets, setSelectedPets] = useState<string[]>([]);
+
   const { post } = useFetch("/group");
   const { data: petsList, loading } = useFetch("/user/pets", {}, []);
-  const [selectedArr, setSelectedArr] = useState<string[]>([]);
 
   const onSubmit = () => {
-    post("/", { name, description, users });
+    post("/", { name, description, users, pets: selectedPets });
   };
 
   if (loading) {
@@ -54,8 +55,8 @@ function CreateGroupPage() {
           {petsList && (
             <MultipleSelect
               selectOptions={petsList}
-              selectedArr={selectedArr}
-              setSelectedArr={setSelectedArr}
+              selectedArr={selectedPets}
+              setSelectedArr={setSelectedPets}
               label="Select Pets"
             />
           )}
