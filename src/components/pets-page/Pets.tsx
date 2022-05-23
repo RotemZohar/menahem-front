@@ -35,25 +35,22 @@ const PetsPage = () => {
     console.log("add pet");
   };
 
-  const petsCards = useMemo(
-    () =>
-      pets.map((pet) => (
-        <CardActionArea onClick={() => navToPet(pet)}>
-          <Card variant="outlined" sx={{ minWidth: 275 }}>
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {pet.name}
-              </Typography>
-            </CardContent>
-          </Card>
-        </CardActionArea>
-      )),
-    [pets]
-  );
+  const petsCards = () =>
+    pets.map((pet) => (
+      <CardActionArea onClick={() => navToPet(pet)}>
+        <Card variant="outlined" sx={{ minWidth: 275 }}>
+          <CardContent>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {pet.name}
+            </Typography>
+          </CardContent>
+        </Card>
+      </CardActionArea>
+    ));
 
   return (
     <Box>

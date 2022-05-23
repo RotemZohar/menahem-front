@@ -35,25 +35,22 @@ const GroupsPage = () => {
     console.log("add group");
   };
 
-  const groupsCards = useMemo(
-    () =>
-      groups.map((group) => (
-        <CardActionArea onClick={() => navToGroup(group)}>
-          <Card variant="outlined" sx={{ minWidth: 275 }}>
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                {group.name}
-              </Typography>
-            </CardContent>
-          </Card>
-        </CardActionArea>
-      )),
-    [groups]
-  );
+  const groupsCards = () =>
+    groups.map((group) => (
+      <CardActionArea onClick={() => navToGroup(group)}>
+        <Card variant="outlined" sx={{ minWidth: 275 }}>
+          <CardContent>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {group.name}
+            </Typography>
+          </CardContent>
+        </Card>
+      </CardActionArea>
+    ));
 
   return (
     <Box>
