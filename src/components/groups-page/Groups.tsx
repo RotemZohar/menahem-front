@@ -14,18 +14,19 @@ import { RootState } from "../../redux/store";
 
 const GroupsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
-  const [groups, setGroups] = useState<Group[]>([]);
-  const { get } = useFetch(`/user/${userId}`);
+  // const [groups, setGroups] = useState<Group[]>([]);
+  const options = {};
+  const { data = [] } = useFetch(`/user/${userId}/groups`, options, [userId]);
 
-  useEffect(() => {
-    get(`/groups`)
-      .then((data) => {
-        setGroups(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   get(`/${userId}/groups`)
+  //     .then((data) => {
+  //       setGroups(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   const navToGroup = (group: Group) => {
     console.log("Navigating to group");
@@ -35,29 +36,43 @@ const GroupsPage = () => {
     console.log("add group");
   };
 
-  const groupsCards = () =>
-    groups.map((group) => (
-      <CardActionArea onClick={() => navToGroup(group)}>
-        <Card variant="outlined" sx={{ minWidth: 275 }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              {group.name}
-            </Typography>
-          </CardContent>
-        </Card>
-      </CardActionArea>
-    ));
+  // const groupsCards = () =>
+  //   data.map((group: Group) => (
+  //     <CardActionArea onClick={() => navToGroup(group)}>
+  //       <Card variant="outlined" sx={{ minWidth: 275 }}>
+  //         <CardContent>
+  //           <Typography
+  //             sx={{ fontSize: 14 }}
+  //             color="text.secondary"
+  //             gutterBottom
+  //           >
+  //             {group.name}
+  //           </Typography>
+  //         </CardContent>
+  //       </Card>
+  //     </CardActionArea>
+  //   ));
 
   return (
     <Box>
       <Typography variant="h2" gutterBottom>
         My groups
       </Typography>
-      {groupsCards}
+      {data.map((group: Group) => (
+        <CardActionArea onClick={() => navToGroup(group)}>
+          <Card variant="outlined" sx={{ minWidth: 275 }}>
+            <CardContent>
+              <Typography
+                sx={{ fontSize: 14 }}
+                color="text.secondary"
+                gutterBottom
+              >
+                {group.name}
+              </Typography>
+            </CardContent>
+          </Card>
+        </CardActionArea>
+      ))}
       <Fab onClick={addGroup} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
