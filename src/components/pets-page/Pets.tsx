@@ -14,18 +14,10 @@ import { RootState } from "../../redux/store";
 
 const PetsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
-  const [pets, setPets] = useState<Pet[]>([]);
-  const { get } = useFetch(`/user/${userId}`);
-
-  useEffect(() => {
-    get(`/pets`)
-      .then((data) => {
-        setPets(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const options = {};
+  const { data: pets = [] } = useFetch(`/user/${userId}/pets`, options, [
+    userId,
+  ]);
 
   const navToPet = (pet: Pet) => {
     console.log("Navigating to pet");
@@ -35,29 +27,26 @@ const PetsPage = () => {
     console.log("add pet");
   };
 
-  const petsCards = () =>
-    pets.map((pet) => (
-      <CardActionArea onClick={() => navToPet(pet)}>
-        <Card variant="outlined" sx={{ minWidth: 275 }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              {pet.name}
-            </Typography>
-          </CardContent>
-        </Card>
-      </CardActionArea>
-    ));
-
   return (
     <Box>
       <Typography variant="h2" gutterBottom>
         My pets
       </Typography>
-      {petsCards}
+      {pets.map((pet: Pet) => (
+        <CardActionArea onClick={() => navToPet(pet)}>
+          <Card variant="outlined" sx={{ minWidth: 275 }}>
+            <CardContent>
+              <Typography
+                sx={{ fontSize: 14 }}
+                color="text.secondary"
+                gutterBottom
+              >
+                {pet.name}
+              </Typography>
+            </CardContent>
+          </Card>
+        </CardActionArea>
+      ))}
       <Fab onClick={addPet} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
