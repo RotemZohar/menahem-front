@@ -1,8 +1,8 @@
-import { Label } from "@mui/icons-material";
-import { Button, InputLabel, TextField, Typography } from "@mui/material";
-import React, { FormEvent, useState } from "react";
+import { Button, CircularProgress, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
 import useFetch from "use-http";
 import AddUsers from "../add-users/AddUsers";
+import MultipleSelect from "../multiple-select/MultipleSelect";
 
 function CreateGroupPage() {
   const [name, setGroupName] = useState("");
@@ -10,10 +10,16 @@ function CreateGroupPage() {
   const [users, setUsers] = useState<string[]>([]);
   const [stage, setStage] = useState(0);
   const { post } = useFetch("/group");
+  const { data: petsList, loading } = useFetch("/user/pets", {}, []);
+  const [selectedArr, setSelectedArr] = useState<string[]>([]);
 
   const onSubmit = () => {
     post("/", { name, description, users });
   };
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   return (
     <main>
@@ -45,6 +51,14 @@ function CreateGroupPage() {
             onChange={(e) => setDescription(e.target.value)}
             label="Description"
           />
+          {petsList && (
+            <MultipleSelect
+              selectOptions={petsList}
+              selectedArr={selectedArr}
+              setSelectedArr={setSelectedArr}
+              label="Select Pets"
+            />
+          )}
           <Button
             onClick={() => {
               setStage(1);
