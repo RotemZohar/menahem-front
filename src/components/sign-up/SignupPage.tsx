@@ -1,23 +1,11 @@
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Button,
-  Grid,
-  InputLabel,
-  LinearProgress,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { Box, Button, Card, Grid, TextField, Tooltip } from "@mui/material";
 import { count } from "console";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useFetch from "use-http";
 import { useHideNavbar } from "../../hooks/use-hide-navbar";
+import signupLogo from "../../assets/signup-logo.png";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -63,63 +51,81 @@ const SignUpPage = () => {
   };
 
   return (
-    <Box component="form" onSubmit={onSubmit}>
-      <Grid container direction="column">
-        <Grid item margin={1} xs={12}>
-          <TextField
-            required
-            value={name}
-            label="Name"
-            onChange={(e) => setName(e.target.value)}
-          />
+    <Grid container justifyContent="center">
+      <Card sx={{ minWidth: 300, width: 700, m: 4 }}>
+        <Grid container direction="column" justifyContent="center" margin={2}>
+          <Grid item>
+            <img src={signupLogo} alt="logo" width="400" />
+          </Grid>
+          <Grid item>
+            <Box component="form" onSubmit={onSubmit}>
+              <Grid container direction="column">
+                <Grid item mt={1} xs={12}>
+                  <TextField
+                    required
+                    value={name}
+                    label="Name"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </Grid>
+                <Grid item mt={1} xs={12}>
+                  <TextField
+                    required
+                    value={email}
+                    label="Email"
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Grid>
+                <Grid item mt={1} xs={12}>
+                  <Tooltip
+                    title="Passwords must be at least 8 characters long, include at least one number, and include both lower and upper case characters."
+                    placement="right"
+                    arrow
+                  >
+                    <TextField
+                      required
+                      value={password}
+                      label="Password"
+                      type="password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      onBlur={() =>
+                        setIsStrong(
+                          validLength && hasNumber && upperCase && lowerCase
+                        )
+                      }
+                      error={!isStrong}
+                      helperText={
+                        isStrong ? "" : "Password is not strong enough."
+                      }
+                    />
+                  </Tooltip>
+                </Grid>
+                <Grid item margin={1} xs={12}>
+                  <TextField
+                    required
+                    value={confirmPassword}
+                    label="Confirm Password"
+                    type="password"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onBlur={() =>
+                      setMatch(!!password && password === confirmPassword)
+                    }
+                    error={!match}
+                    helperText={match ? "" : "Passwords must match!"}
+                  />
+                </Grid>
+                <Grid item margin={1} xs={12}>
+                  <Button variant="contained" type="submit">
+                    Create user
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item margin={1} xs={12}>
-          <TextField
-            required
-            value={email}
-            label="Email"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Grid>
-        <Grid item margin={1} xs={12}>
-          <Tooltip
-            title="Passwords must be at least 8 characters long, include at least one number, and include both lower and upper case characters."
-            placement="right"
-            arrow
-          >
-            <TextField
-              sx={{ width: "260" }}
-              required
-              value={password}
-              label="Password"
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={() =>
-                setIsStrong(validLength && hasNumber && upperCase && lowerCase)
-              }
-              error={!isStrong}
-              helperText={isStrong ? "" : "Your password is not strong enough."}
-            />
-          </Tooltip>
-        </Grid>
-        <Grid item margin={1} xs={12}>
-          <TextField
-            required
-            value={confirmPassword}
-            label="Confirm Password"
-            type="password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            onBlur={() => setMatch(!!password && password === confirmPassword)}
-            error={!match}
-            helperText={match ? "" : "Passwords must match!"}
-          />
-        </Grid>
-        <Grid item margin={1} xs={12}>
-          <Button type="submit">Create user</Button>
-        </Grid>
-      </Grid>
-    </Box>
+      </Card>
+    </Grid>
   );
 };
 
