@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  background: url("./assets/bg2.png");
+  height: 100vh;
 }
 
 .App-logo {
