@@ -6,28 +6,9 @@ import { Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
 import PetMedical from "./PetMedical";
+import TabPanel from "../tab-panel/TabPanel";
 
-function TabPanel(props: { index: number; value: number; children: any }) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function getAge(birthdate: Date) {
+const getAge = (birthdate: Date) => {
   const today = new Date();
   birthdate = new Date(birthdate);
   let age = today.getFullYear() - birthdate.getFullYear();
@@ -36,7 +17,7 @@ function getAge(birthdate: Date) {
     age -= 1;
   }
   return age;
-}
+};
 
 const PetDetails = () => {
   const { get, loading, error } = useFetch("/pet");
