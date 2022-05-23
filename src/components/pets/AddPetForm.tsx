@@ -113,8 +113,8 @@ const AddPetForm = () => {
       moment(birthDate).isAfter(new Date()) ||
       !species ||
       !breed ||
-      weight === 0 ||
-      height === 0
+      !weight ||
+      !height
     ) {
       alert("Please insert all fields!");
     } else {
