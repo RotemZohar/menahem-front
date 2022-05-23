@@ -4,4 +4,5 @@ export const routes = {
   signup: "/signup",
   groups: "/groups",
   pets: "/pets",
+  pet: "/pet/:petId",
 };
