@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "use-http";
 import moment from "moment";
 import defaultPetPic from "../../assets/pet-pic.png";
+import { routes } from "../../routes";
 
 const speciesList = ["Dog", "Cat", "Rodent", "Bird", "Reptile"];
 const dogList = [
@@ -106,7 +107,7 @@ const AddPetForm = () => {
     }
   }, [species, breed, currentBreedList]);
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
       !name ||
@@ -129,7 +130,7 @@ const AddPetForm = () => {
       })
         .then((res) => {
           if (res === "Created") {
-            navigate("/pets");
+            navigate(routes.pets);
           } else {
             alert("Something went wrong :(");
           }
