@@ -30,7 +30,7 @@ const PetDetails = () => {
 
   useEffect(() => {
     // TODO: Change _id to parameter when able to recieve
-    get("/627403102576b2374e417745")
+    get("/628b8f6078cd76992fcac032")
       .then((pet) => {
         setDetails(pet);
       })
