@@ -14,24 +14,25 @@ import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
 
 const App = () => {
-    const showNavbar = useAppSelector((state) => state.navbarReducer);
+  const showNavbar = useAppSelector((state) => state.navbarReducer);
 
-    return (
-        <div className="App">
-            {showNavbar && <Navbar />}
-            <Routes>
-                <Route path="" element={<LandingPage />} />
-                <Route path={routes.signup} element={<SignupPage />} />
-                {/* Everything that's inside private route is accessible only after logging in */}
-                <Route element={<PrivateRoute />}>
-                    <Route path="editDetails" element={<EditDetailsPage />} />
-                    <Route path="admin" element={<AdminPage />} />
-                    <Route path={routes.groups} element={<GroupsPage />} />
-                    <Route path={routes.pets} element={<PetsPage />} />
-                </Route>
-            </Routes>
-        </div>
-    );
+  return (
+    <div className="App">
+      {showNavbar && <Navbar />}
+      <Routes>
+        <Route path="" element={<LandingPage />} />
+        <Route path={routes.signup} element={<SignupPage />} />
+        {/* Everything that's inside private route is accessible only after logging in */}
+        <Route element={<PrivateRoute />}>
+          <Route path="editDetails" element={<EditDetailsPage />} />
+          <Route path="admin" element={<AdminPage />} />
+          <Route path={routes.groups} element={<GroupsPage />} />
+          <Route path={routes.pets} element={<PetsPage />} />
+          <Route path={routes.pet} element={<PetDetails />} />
+        </Route>
+      </Routes>
+    </div>
+  );
 };
 
 export default App;
