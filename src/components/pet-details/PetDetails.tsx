@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import { Box, Tab, Tabs, Typography, Container } from "@mui/material";
 import useFetch from "use-http";
+import { useParams } from "react-router-dom";
 import { Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
@@ -23,14 +24,16 @@ const PetDetails = () => {
   const { get, loading, error } = useFetch("/pet");
   const [value, setValue] = useState(0);
   const [details, setDetails] = useState<petDetails>();
+  const { petId } = useParams();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   useEffect(() => {
+    console.log(petId);
     // TODO: Change _id to parameter when able to recieve
-    get("/628b8f6078cd76992fcac032")
+    get(`/${petId}`)
       .then((pet) => {
         setDetails(pet);
       })
