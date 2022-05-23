@@ -25,8 +25,8 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="editDetails" element={<EditDetailsPage />} />
           <Route path="admin" element={<AdminPage />} />
-          <Route path="groups" element={<GroupsPage />} />
-          <Route path="pets" element={<PetsPage />} />
+          <Route path={routes.groups} element={<GroupsPage />} />
+          <Route path={routes.pets} element={<PetsPage />} />
         </Route>
       </Routes>
     </div>
