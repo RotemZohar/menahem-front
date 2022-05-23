@@ -8,21 +8,23 @@ import {
   MenuItem,
   MenuList,
   Toolbar,
-  Tooltip,
 } from "@mui/material";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import calendarPng from "../../assets/calendar.png";
 import userPng from "../../assets/user.png";
 import myPetsPng from "../../assets/leash.png";
 import groupsPng from "../../assets/veterinary.png";
+import { routes } from "../../routes";
 import logoPng from "../../assets/logo.png";
 
 function Navbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -30,6 +32,14 @@ function Navbar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const navToGroups = () => {
+    navigate(routes.groups);
+  };
+
+  const navToPets = () => {
+    navigate(routes.pets);
   };
 
   return (
@@ -47,12 +57,12 @@ function Navbar() {
                 </IconButton>
               </Grid>
               <Grid item>
-                <IconButton>
+                <IconButton onClick={navToPets}>
                   <img src={myPetsPng} height="40" alt="pets" />
                 </IconButton>
               </Grid>
               <Grid item>
-                <IconButton>
+                <IconButton onClick={navToGroups}>
                   <img src={groupsPng} height="40" alt="groups" />
                 </IconButton>
               </Grid>
