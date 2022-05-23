@@ -17,9 +17,13 @@ import {
   TextField,
   DialogActions,
   Button,
+  TextFieldProps,
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 
 const PetMedical = (props: { medical: any[] }) => {
   const { medical } = props;
@@ -27,7 +31,7 @@ const PetMedical = (props: { medical: any[] }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [open, setOpen] = React.useState(false);
   const [treatment, setTreatmnet] = useState("");
-  const [treatmentDate, setTreatmentDate] = useState("");
+  const [treatmentDate, setTreatmentDate] = useState<Date | null>(new Date());
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -73,9 +77,13 @@ const PetMedical = (props: { medical: any[] }) => {
 
   const addTreatment = () => {
     setOpen(false);
-    console.log(treatment);
-    console.log(treatmentDate);
+
+    // medical.push({ treatment, date: treatmentDate });
     console.log("add treatment");
+  };
+
+  const handleDateChange = (newValue: Date | null) => {
+    setTreatmentDate(newValue);
   };
 
   return (
@@ -138,18 +146,17 @@ const PetMedical = (props: { medical: any[] }) => {
               setTreatmnet(e.target.value);
             }}
           />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Date"
-            type="date"
-            fullWidth
-            variant="standard"
-            onChange={(e) => {
-              setTreatmentDate(e.target.value);
-            }}
-          />
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DesktopDatePicker
+              label="Date desktop"
+              inputFormat="MM/dd/yyyy"
+              value={treatmentDate}
+              onChange={handleDateChange}
+              renderInput={(
+                params: JSX.IntrinsicAttributes & TextFieldProps
+              ) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
