@@ -61,7 +61,7 @@ const reptileList = [
 
 const AddPetForm = () => {
   const navigate = useNavigate();
-  const { post } = useFetch("/auth");
+  const { post } = useFetch("/pet");
 
   const [currentBreedList, setCurrentBreedList] = useState<String[]>(dogList);
   const [name, setName] = useState("");
