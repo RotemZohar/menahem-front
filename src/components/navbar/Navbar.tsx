@@ -8,7 +8,6 @@ import {
   MenuItem,
   MenuList,
   Toolbar,
-  Tooltip,
 } from "@mui/material";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SettingsIcon from "@mui/icons-material/Settings";
