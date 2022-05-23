@@ -14,6 +14,7 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useNavigate } from "react-router-dom";
 import useFetch from "use-http";
 import moment from "moment";
+import defaultPetPic from "../../assets/pet-pic.png";
 
 const speciesList = ["Dog", "Cat", "Rodent", "Bird", "Reptile"];
 const dogList = [
@@ -71,9 +72,7 @@ const AddPetForm = () => {
   const [breed, setBreed] = useState(currentBreedList[0]);
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
-  const [image, setImage] = useState(
-    "https://cdn2.iconfinder.com/data/icons/veterinary-12/512/Veterinary_Icons-24-512.png"
-  );
+  const [image, setImage] = useState(defaultPetPic);
 
   const [nameError, setNameError] = useState(false);
   const [weightError, setWeightError] = useState(false);
@@ -255,7 +254,9 @@ const AddPetForm = () => {
                 <input type="file" hidden onChange={onUploadPicture} />
               </Button>
             </Grid>
-            <Grid item margin={3} xs={12}>
+          </Grid>
+          <Grid container justifyContent="flex-end">
+            <Grid item margin={3}>
               <Button variant="contained" type="submit">
                 Add Pet
               </Button>
