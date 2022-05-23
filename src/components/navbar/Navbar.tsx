@@ -33,66 +33,64 @@ function Navbar() {
   };
 
   return (
-    <Grid mb={8}>
-      <AppBar position="absolute">
-        <Toolbar variant="dense">
-          <Grid container justifyContent="space-between" alignItems="center">
-            <Grid item>
-              <img src={logoPng} height="40" alt="logo" />
-            </Grid>
-            <Grid item>
-              <Grid container justifyContent="space-around">
-                <Grid item>
-                  <IconButton>
-                    <img src={calendarPng} height="40" alt="calendar" />
-                  </IconButton>
-                </Grid>
-                <Grid item>
-                  <IconButton>
-                    <img src={myPetsPng} height="40" alt="pets" />
-                  </IconButton>
-                </Grid>
-                <Grid item>
-                  <IconButton>
-                    <img src={groupsPng} height="40" alt="groups" />
-                  </IconButton>
-                </Grid>
-                <Grid item>
-                  <IconButton onClick={handleClick}>
-                    {/* TODO: put the user's profile picture */}
-                    <img src={userPng} height="40" alt="general" />
-                  </IconButton>
-                  {/* TODO: redirect to the right pages */}
-                  <Menu open={open} onClose={handleClose} anchorEl={anchorEl}>
-                    <MenuList dense>
-                      <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <FormatListBulletedIcon />
-                        </ListItemIcon>
-                        Today&apos;s Tasks
-                      </MenuItem>
-                      <Divider />
-                      <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <SettingsIcon />
-                        </ListItemIcon>
-                        Update Profile
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <PowerSettingsNewIcon fontSize="small" />
-                        </ListItemIcon>
-                        Logout
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-                </Grid>
+    <AppBar position="absolute">
+      <Toolbar variant="dense">
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Grid item>
+            <img src={logoPng} height="40" alt="logo" />
+          </Grid>
+          <Grid item>
+            <Grid container justifyContent="space-around">
+              <Grid item>
+                <IconButton>
+                  <img src={calendarPng} height="40" alt="calendar" />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <IconButton>
+                  <img src={myPetsPng} height="40" alt="pets" />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <IconButton>
+                  <img src={groupsPng} height="40" alt="groups" />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <IconButton onClick={handleClick}>
+                  {/* TODO: put the user's profile picture */}
+                  <img src={userPng} height="40" alt="general" />
+                </IconButton>
+                {/* TODO: redirect to the right pages */}
+                <Menu open={open} onClose={handleClose} anchorEl={anchorEl}>
+                  <MenuList dense>
+                    <MenuItem onClick={handleClose}>
+                      <ListItemIcon>
+                        <FormatListBulletedIcon />
+                      </ListItemIcon>
+                      Today&apos;s Tasks
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={handleClose}>
+                      <ListItemIcon>
+                        <SettingsIcon />
+                      </ListItemIcon>
+                      Update Profile
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <ListItemIcon>
+                        <PowerSettingsNewIcon fontSize="small" />
+                      </ListItemIcon>
+                      Logout
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
               </Grid>
             </Grid>
           </Grid>
-        </Toolbar>
-      </AppBar>
-    </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
   );
 }
 
