@@ -8,8 +8,10 @@ import useFetch from "use-http";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Pet } from "../../types/pet";
 import { RootState } from "../../redux/store";
+import { routes } from "../../routes";
 
 const PetsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
@@ -17,13 +19,14 @@ const PetsPage = () => {
   const { data: pets = [] } = useFetch(`/user/${userId}/pets`, options, [
     userId,
   ]);
+  const navigate = useNavigate();
 
   const navToPet = (pet: Pet) => {
     console.log("Navigating to pet");
   };
 
   const addPet = () => {
-    console.log("add pet");
+    navigate(routes.newpet);
   };
 
   return (
