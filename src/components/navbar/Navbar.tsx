@@ -42,6 +42,10 @@ function Navbar() {
     navigate(routes.pets);
   };
 
+  const navToEditDetails = () => {
+    navigate(routes.editDetals);
+  };
+
   return (
     <AppBar position="absolute">
       <Toolbar variant="dense">
@@ -81,7 +85,7 @@ function Navbar() {
                       Today&apos;s Tasks
                     </MenuItem>
                     <Divider />
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={navToEditDetails}>
                       <ListItemIcon>
                         <SettingsIcon />
                       </ListItemIcon>
