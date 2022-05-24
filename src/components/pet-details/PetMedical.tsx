@@ -19,9 +19,12 @@ import {
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import QrIcon from "@mui/icons-material/QrCode";
 import moment from "moment";
 import useFetch from "use-http";
 import { useParams } from "react-router-dom";
+import ReactDOM from "react-dom";
+import QRcode from "qrcode.react";
 import { Treatment } from "../../types/pet";
 
 const PetMedical = (props: { medical: Treatment[] }) => {
@@ -29,11 +32,13 @@ const PetMedical = (props: { medical: Treatment[] }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [addTreatmentOpen, setTreatmentOpen] = React.useState(false);
+  const [showQrOpen, setShowQrOpen] = React.useState(false);
   const [treatment, setTreatment] = useState("");
   const [treatmentDate, setTreatmentDate] = useState("");
   const [medicalTreatments, setMedicalTreatments] = useState<Treatment[]>([]);
   const { petId } = useParams();
-  const { post, response, error } = useFetch("/pet");
+  const [qr] = useState(`${window.location.origin}/${petId}/medical/guests`);
+  const { post } = useFetch("/pet");
 
   useEffect(() => {
     setMedicalTreatments(medical);
@@ -45,6 +50,14 @@ const PetMedical = (props: { medical: Treatment[] }) => {
 
   const handleAddTreatmentClose = () => {
     setTreatmentOpen(false);
+  };
+
+  const handleShowQrOpen = () => {
+    setShowQrOpen(true);
+  };
+
+  const handleShowQrClose = () => {
+    setShowQrOpen(false);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -128,9 +141,25 @@ const PetMedical = (props: { medical: Treatment[] }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
       <Fab onClick={handleAddTreatmentOpen} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
+
+      <Fab onClick={handleShowQrOpen} color="primary" aria-label="add">
+        <QrIcon />
+      </Fab>
+
+      <Dialog open={showQrOpen} onClose={handleShowQrClose}>
+        <DialogTitle>Pet medical page for guests</DialogTitle>
+        <DialogContent>
+          <QRcode id="petMedicalQr" value={qr} size={260} includeMargin />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleShowQrClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={addTreatmentOpen} onClose={handleAddTreatmentClose}>
         <DialogTitle>Add treatment</DialogTitle>
         <DialogContent>
