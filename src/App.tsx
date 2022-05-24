@@ -12,6 +12,7 @@ import GroupsPage from "./components/groups-page/Groups";
 import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
 import Navbar from "./components/navbar/Navbar";
+import PetMedicalPageGuests from "./components/pet-medical-page-guests/petMedicalPageGuests";
 
 const App = () => {
   const showNavbar = useAppSelector((state) => state.navbarReducer);
@@ -22,6 +23,10 @@ const App = () => {
       <Routes>
         <Route path="" element={<LandingPage />} />
         <Route path={routes.signup} element={<SignupPage />} />
+        <Route
+          path={routes.petMedicalGuests}
+          element={<PetMedicalPageGuests />}
+        />
         {/* Everything that's inside private route is accessible only after logging in */}
         <Route element={<PrivateRoute />}>
           <Route path="admin" element={<AdminPage />} />

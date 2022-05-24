@@ -71,7 +71,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
   const addTreatment = async () => {
     setTreatmentOpen(false);
 
-    const date = moment(treatmentDate, "YYYY-MM-DD").toDate();
+    const date = moment(treatmentDate, "DD-MM-YYYY").toDate();
 
     const newTreatment = await post(`/${petId}/addTreatment`, {
       treatment,
@@ -111,7 +111,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
                       {row.treatment}
                     </TableCell>
                     <TableCell align="center">
-                      {moment(row.date).format("YYYY-MM-DD")}
+                      {moment(row.date).format("DD-MM-YYYY")}
                     </TableCell>
                   </TableRow>
                 ))}
