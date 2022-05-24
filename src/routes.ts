@@ -3,4 +3,7 @@ export const routes = {
   home: "/home",
   signup: "/signup",
   calendar: "/calendar",
+  groups: "/groups",
+  pets: "/pets",
+  pet: "/pet/:petId",
 };
