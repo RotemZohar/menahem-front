@@ -42,6 +42,10 @@ function Navbar() {
     navigate(routes.pets);
   };
 
+  const navToCalendar = () => {
+    navigate(routes.calendar);
+  };
+
   return (
     <AppBar position="absolute">
       <Toolbar variant="dense">
@@ -52,7 +56,7 @@ function Navbar() {
           <Grid item>
             <Grid container justifyContent="space-around">
               <Grid item>
-                <IconButton>
+                <IconButton onClick={navToCalendar}>
                   <img src={calendarPng} height="40" alt="calendar" />
                 </IconButton>
               </Grid>
