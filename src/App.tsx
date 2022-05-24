@@ -6,10 +6,13 @@ import LandingPage from "./components/landing-page/LandingPage";
 import AdminPage from "./components/admin-page/AdminPage";
 import { routes } from "./routes";
 import PrivateRoute from "./components/private-route/PrivateRoute";
-import Navbar from "./components/navbar/Navbar";
 import { useAppSelector } from "./redux/store";
 import SignupPage from "./components/sign-up/SignupPage";
 import CreateGroupPage from "./components/create-group/CreateGroupPage";
+import GroupsPage from "./components/groups-page/Groups";
+import PetsPage from "./components/pets-page/Pets";
+import PetDetails from "./components/pet-details/PetDetails";
+import Navbar from "./components/navbar/Navbar";
 
 const App = () => {
   const showNavbar = useAppSelector((state) => state.navbarReducer);
@@ -25,6 +28,9 @@ const App = () => {
           <Route path="editDetails" element={<EditDetailsPage />} />
           <Route path="admin" element={<AdminPage />} />
           <Route path={routes.createGroup} element={<CreateGroupPage />} />
+          <Route path={routes.groups} element={<GroupsPage />} />
+          <Route path={routes.pets} element={<PetsPage />} />
+          <Route path={routes.pet} element={<PetDetails />} />
         </Route>
       </Routes>
     </div>
