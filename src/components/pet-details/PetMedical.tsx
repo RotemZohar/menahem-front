@@ -13,32 +13,38 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   TextField,
   DialogActions,
   Button,
-  TextFieldProps,
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import moment from "moment";
+import useFetch from "use-http";
+import { useParams } from "react-router-dom";
+import { Treatment } from "../../types/pet";
 
-const PetMedical = (props: { medical: any[] }) => {
+const PetMedical = (props: { medical: Treatment[] }) => {
   const { medical } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [open, setOpen] = React.useState(false);
-  const [treatment, setTreatmnet] = useState("");
-  const [treatmentDate, setTreatmentDate] = useState<Date | null>(new Date());
+  const [addTreatmentOpen, setTreatmentOpen] = React.useState(false);
+  const [treatment, setTreatment] = useState("");
+  const [treatmentDate, setTreatmentDate] = useState("");
+  const [medicalTreatments, setMedicalTreatments] = useState<Treatment[]>([]);
+  const { petId } = useParams();
+  const { post, response, error } = useFetch("/pet");
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  useEffect(() => {
+    setMedicalTreatments(medical);
+  }, [medical]);
+
+  const handleAddTreatmentOpen = () => {
+    setTreatmentOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleAddTreatmentClose = () => {
+    setTreatmentOpen(false);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -52,19 +58,6 @@ const PetMedical = (props: { medical: any[] }) => {
     setPage(0);
   };
 
-  // TODO: Use moment
-  const dateFormat = (date: string) => {
-    const match = date.match(
-      /(\d{4})-(\d{2})-(\d{2})[\sT](\d{2}):(\d{2}):(\d{2})(.(\d+))?/
-    );
-
-    if (!match) return null;
-
-    const [, year, month, day, hours, minutes, seconds, , millseconds] = match;
-
-    return `${day}.${month}.${year}`;
-  };
-
   if (!medical) {
     return (
       <div>
@@ -75,15 +68,20 @@ const PetMedical = (props: { medical: any[] }) => {
     );
   }
 
-  const addTreatment = () => {
-    setOpen(false);
+  const addTreatment = async () => {
+    setTreatmentOpen(false);
 
-    // medical.push({ treatment, date: treatmentDate });
-    console.log("add treatment");
-  };
+    const date = moment(treatmentDate, "YYYY-MM-DD").toDate();
 
-  const handleDateChange = (newValue: Date | null) => {
-    setTreatmentDate(newValue);
+    const newTreatment = await post(`/${petId}/addTreatment`, {
+      treatment,
+      date,
+    }).then((newTreatmentResponse) => {
+      setMedicalTreatments((prevState) => [
+        ...prevState,
+        { _id: newTreatmentResponse, treatment, date },
+      ]);
+    });
   };
 
   return (
@@ -98,11 +96,11 @@ const PetMedical = (props: { medical: any[] }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {medical
+              {medicalTreatments
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
                   <TableRow
-                    key={row.id}
+                    key={row._id}
                     sx={{
                       "&:last-child td, &:last-child th": {
                         border: 0,
@@ -112,7 +110,9 @@ const PetMedical = (props: { medical: any[] }) => {
                     <TableCell align="center" component="th" scope="row">
                       {row.treatment}
                     </TableCell>
-                    <TableCell align="center">{dateFormat(row.date)}</TableCell>
+                    <TableCell align="center">
+                      {moment(row.date).format("YYYY-MM-DD")}
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -128,10 +128,10 @@ const PetMedical = (props: { medical: any[] }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <Fab onClick={handleClickOpen} color="primary" aria-label="add">
+      <Fab onClick={handleAddTreatmentOpen} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={addTreatmentOpen} onClose={handleAddTreatmentClose}>
         <DialogTitle>Add treatment</DialogTitle>
         <DialogContent>
           <TextField
@@ -143,23 +143,24 @@ const PetMedical = (props: { medical: any[] }) => {
             fullWidth
             variant="standard"
             onChange={(e) => {
-              setTreatmnet(e.target.value);
+              setTreatment(e.target.value);
             }}
           />
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DesktopDatePicker
-              label="Date desktop"
-              inputFormat="MM/dd/yyyy"
-              value={treatmentDate}
-              onChange={handleDateChange}
-              renderInput={(
-                params: JSX.IntrinsicAttributes & TextFieldProps
-              ) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="date"
+            label="TreatmentDate"
+            type="date"
+            fullWidth
+            variant="standard"
+            onChange={(e) => {
+              setTreatmentDate(e.target.value);
+            }}
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleAddTreatmentClose}>Cancel</Button>
           <Button onClick={addTreatment}>Add</Button>
         </DialogActions>
       </Dialog>
