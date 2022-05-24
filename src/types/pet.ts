@@ -3,6 +3,7 @@ export interface Pet {
   name: string;
   medical: Treatment[];
   members: Member[];
+  groups: Group[];
   tasks: Task[];
   birthdate: Date;
   breed: string;
@@ -15,6 +16,14 @@ export interface Treatment {
   _id: string;
   treatment: string;
   date: Date;
+}
+
+export interface Group {
+  _id: string;
+  name: string;
+  description: string;
+  members: any[];
+  pets: Pet[];
 }
 
 interface Member {
