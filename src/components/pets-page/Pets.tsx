@@ -26,7 +26,7 @@ const PetsPage = () => {
   };
 
   const addPet = () => {
-    console.log("add pet");
+    navigate(routes.newpet);
   };
 
   return (

@@ -9,6 +9,7 @@ import { routes } from "./routes";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import { useAppSelector } from "./redux/store";
 import SignupPage from "./components/sign-up/SignupPage";
+import AddPetForm from "./components/pets/AddPetForm";
 import GroupsPage from "./components/groups-page/Groups";
 import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
@@ -27,6 +28,7 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="editDetails" element={<EditDetailsPage />} />
           <Route path="admin" element={<AdminPage />} />
+          <Route path={routes.newpet} element={<AddPetForm />} />
           <Route path={routes.calendar} element={<CalendarPage />} />
           <Route path={routes.groups} element={<GroupsPage />} />
           <Route path={routes.pets} element={<PetsPage />} />
