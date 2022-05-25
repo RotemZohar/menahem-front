@@ -45,9 +45,12 @@ function Navbar() {
   const navToEditDetails = () => {
     navigate(routes.editDetals);
   };
+  const navToCalendar = () => {
+    navigate(routes.calendar);
+  };
 
   return (
-    <AppBar position="absolute">
+    <AppBar position="static">
       <Toolbar variant="dense">
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>
@@ -56,7 +59,7 @@ function Navbar() {
           <Grid item>
             <Grid container justifyContent="space-around">
               <Grid item>
-                <IconButton>
+                <IconButton onClick={navToCalendar}>
                   <img src={calendarPng} height="40" alt="calendar" />
                 </IconButton>
               </Grid>

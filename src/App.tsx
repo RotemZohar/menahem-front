@@ -4,6 +4,7 @@ import "./App.css";
 import EditDetailsPage from "./components/edit-details/EditDetails";
 import LandingPage from "./components/landing-page/LandingPage";
 import AdminPage from "./components/admin-page/AdminPage";
+import CalendarPage from "./components/calendar/CalendarPage";
 import { routes } from "./routes";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import { useAppSelector } from "./redux/store";
@@ -30,6 +31,7 @@ const App = () => {
         {/* Everything that's inside private route is accessible only after logging in */}
         <Route element={<PrivateRoute />}>
           <Route path="admin" element={<AdminPage />} />
+          <Route path={routes.calendar} element={<CalendarPage />} />
           <Route path={routes.groups} element={<GroupsPage />} />
           <Route path={routes.pets} element={<PetsPage />} />
           <Route path={routes.pet} element={<PetDetails />} />
