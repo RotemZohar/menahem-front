@@ -92,7 +92,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
 
     const date = moment(treatmentDate, "DD-MM-YYYY").toDate();
 
-    const newTreatment = await post(`/${petId}/addTreatment`, {
+    const newTreatment = await post(`/${petId}/add-treatment`, {
       treatment,
       date,
     }).then((newTreatmentResponse) => {

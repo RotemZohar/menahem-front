@@ -59,7 +59,7 @@ const EditDetailsPage = () => {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     if (checkPasswordsMatch() === true) {
-      const editedDetails = await put(`/${userId}/editDetails`, {
+      const editedDetails = await put(`/${userId}/edit`, {
         name,
         password,
       });
