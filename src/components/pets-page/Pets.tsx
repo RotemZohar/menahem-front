@@ -20,7 +20,6 @@ const PetsPage = () => {
   const { data: pets = [] } = useFetch(`/user/${userId}/pets`, options, [
     userId,
   ]);
-  const navigate = useNavigate();
 
   const navToPet = (pet: Pet) => {
     navigate(`/pet/${pet._id}`);
