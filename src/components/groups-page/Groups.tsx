@@ -8,8 +8,10 @@ import useFetch from "use-http";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Group } from "../../types/group";
 import { RootState } from "../../redux/store";
+import { routes } from "../../routes";
 
 const GroupsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
@@ -17,13 +19,14 @@ const GroupsPage = () => {
   const { data: groups = [] } = useFetch(`/user/${userId}/groups`, options, [
     userId,
   ]);
+  const navigate = useNavigate();
 
   const navToGroup = (group: Group) => {
     console.log("Navigating to group");
   };
 
   const addGroup = () => {
-    console.log("add group");
+    navigate(routes.createGroup);
   };
 
   return (
