@@ -8,6 +8,7 @@ import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
 import PetMedical from "./PetMedical";
 import TabPanel from "../tab-panel/TabPanel";
+import PetGroups from "./petGroups";
 
 const getAge = (birthdate: Date) => {
   const today = new Date();
@@ -75,7 +76,8 @@ const PetDetails = () => {
               <Tabs value={value} onChange={handleChange} variant="fullWidth">
                 <Tab label="Medical" sx={{ borderRight: 1 }} />
                 <Tab label="Carers" sx={{ borderRight: 1 }} />
-                <Tab label="Tasks" />
+                <Tab label="Tasks" sx={{ borderRight: 1 }} />
+                <Tab label="Groups" />
               </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
@@ -86,6 +88,9 @@ const PetDetails = () => {
             </TabPanel>
             <TabPanel value={value} index={2}>
               <PetTasks tasks={details.tasks} />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <PetGroups groups={details.groups} />
             </TabPanel>
           </Box>
         </Container>
