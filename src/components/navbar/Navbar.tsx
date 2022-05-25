@@ -45,6 +45,9 @@ function Navbar() {
     navigate(routes.pets);
   };
 
+  const navToEditDetails = () => {
+    navigate(routes.editDetals);
+  };
   const navToCalendar = () => {
     navigate(routes.calendar);
   };
@@ -101,7 +104,7 @@ function Navbar() {
                       Today&apos;s Tasks
                     </MenuItem>
                     <Divider />
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={navToEditDetails}>
                       <ListItemIcon>
                         <SettingsIcon />
                       </ListItemIcon>

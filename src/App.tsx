@@ -14,6 +14,7 @@ import GroupsPage from "./components/groups-page/Groups";
 import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
 import Navbar from "./components/navbar/Navbar";
+import PetMedicalPageGuests from "./components/pet-medical-page-guests/petMedicalPageGuests";
 
 const App = () => {
   const showNavbar = useAppSelector((state) => state.navbarReducer);
@@ -24,16 +25,20 @@ const App = () => {
       <Routes>
         <Route path="" element={<LandingPage />} />
         <Route path={routes.signup} element={<SignupPage />} />
+        <Route
+          path={routes.petMedicalGuests}
+          element={<PetMedicalPageGuests />}
+        />
         {/* Everything that's inside private route is accessible only after logging in */}
         <Route element={<PrivateRoute />}>
           <Route path={routes.home} element={<div>Home page</div>} />
-          <Route path="editDetails" element={<EditDetailsPage />} />
           <Route path={routes.createGroup} element={<CreateGroupPage />} />
           <Route path={routes.newpet} element={<AddPetForm />} />
           <Route path={routes.calendar} element={<CalendarPage />} />
           <Route path={routes.groups} element={<GroupsPage />} />
           <Route path={routes.pets} element={<PetsPage />} />
           <Route path={routes.pet} element={<PetDetails />} />
+          <Route path={routes.editDetals} element={<EditDetailsPage />} />
         </Route>
         <Route path="*" element={<Navigate to={routes.home} />} />
       </Routes>

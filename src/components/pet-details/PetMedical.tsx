@@ -19,21 +19,28 @@ import {
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import QrIcon from "@mui/icons-material/QrCode";
 import moment from "moment";
 import useFetch from "use-http";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
+import ReactDOM from "react-dom";
+import QRcode from "qrcode.react";
 import { Treatment } from "../../types/pet";
 
 const PetMedical = (props: { medical: Treatment[] }) => {
+  const navigate = useNavigate();
   const { medical } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [addTreatmentOpen, setTreatmentOpen] = React.useState(false);
+  const [showQrOpen, setShowQrOpen] = React.useState(false);
   const [treatment, setTreatment] = useState("");
   const [treatmentDate, setTreatmentDate] = useState("");
   const [medicalTreatments, setMedicalTreatments] = useState<Treatment[]>([]);
   const { petId } = useParams();
-  const { post, response, error } = useFetch("/pet");
+  const [qr] = useState(`${petId}/medical/guests`);
+  const { post } = useFetch("/pet");
 
   useEffect(() => {
     setMedicalTreatments(medical);
@@ -47,8 +54,20 @@ const PetMedical = (props: { medical: Treatment[] }) => {
     setTreatmentOpen(false);
   };
 
+  const handleShowQrOpen = () => {
+    setShowQrOpen(true);
+  };
+
+  const handleShowQrClose = () => {
+    setShowQrOpen(false);
+  };
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+  };
+
+  const navPetMedicalPage = () => {
+    navigate(`../${qr}`, { replace: true });
   };
 
   const handleChangeRowsPerPage = (
@@ -71,7 +90,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
   const addTreatment = async () => {
     setTreatmentOpen(false);
 
-    const date = moment(treatmentDate, "YYYY-MM-DD").toDate();
+    const date = moment(treatmentDate, "DD-MM-YYYY").toDate();
 
     const newTreatment = await post(`/${petId}/addTreatment`, {
       treatment,
@@ -111,7 +130,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
                       {row.treatment}
                     </TableCell>
                     <TableCell align="center">
-                      {moment(row.date).format("YYYY-MM-DD")}
+                      {moment(row.date).format("DD-MM-YYYY")}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -128,9 +147,31 @@ const PetMedical = (props: { medical: Treatment[] }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
       <Fab onClick={handleAddTreatmentOpen} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
+
+      <Fab onClick={handleShowQrOpen} color="primary" aria-label="add">
+        <QrIcon />
+      </Fab>
+
+      <Dialog open={showQrOpen} onClose={handleShowQrClose}>
+        <DialogTitle>Pet medical page for guests</DialogTitle>
+        <DialogContent>
+          <QRcode
+            id="petMedicalQrGuests"
+            value={`${window.location.origin}/${qr}`}
+            size={260}
+            includeMargin
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={navPetMedicalPage}>GO</Button>
+          <Button onClick={handleShowQrClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={addTreatmentOpen} onClose={handleAddTreatmentClose}>
         <DialogTitle>Add treatment</DialogTitle>
         <DialogContent>
