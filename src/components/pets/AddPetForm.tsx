@@ -117,6 +117,7 @@ const AddPetForm = () => {
       !weight ||
       !height
     ) {
+      // TODO: change alert
       alert("Please insert all fields!");
     } else {
       post("/", {
@@ -129,6 +130,7 @@ const AddPetForm = () => {
         image,
       })
         .then((res) => {
+          // TODO: recieve pet id & redirect to pet page
           if (res === "Created") {
             navigate(routes.pets);
           } else {
