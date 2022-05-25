@@ -61,7 +61,7 @@ function CalendarPage() {
     .catch((err) => {
       console.error(err);
     });
-  }, [petTasks]);
+  }, []);
 
     return (
         <div style={{ padding: "2rem" }}>
