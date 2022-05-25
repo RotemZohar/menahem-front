@@ -1,14 +1,15 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import EditDetailsPage from "./components/edit-details/EditDetails";
 import LandingPage from "./components/landing-page/LandingPage";
-import AdminPage from "./components/admin-page/AdminPage";
 import CalendarPage from "./components/calendar/CalendarPage";
 import { routes } from "./routes";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import { useAppSelector } from "./redux/store";
 import SignupPage from "./components/sign-up/SignupPage";
+import CreateGroupPage from "./components/create-group/CreateGroupPage";
+import AddPetForm from "./components/pets/AddPetForm";
 import GroupsPage from "./components/groups-page/Groups";
 import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
@@ -30,13 +31,16 @@ const App = () => {
         />
         {/* Everything that's inside private route is accessible only after logging in */}
         <Route element={<PrivateRoute />}>
-          <Route path="admin" element={<AdminPage />} />
+          <Route path={routes.home} element={<div>Home page</div>} />
+          <Route path={routes.createGroup} element={<CreateGroupPage />} />
+          <Route path={routes.newpet} element={<AddPetForm />} />
           <Route path={routes.calendar} element={<CalendarPage />} />
           <Route path={routes.groups} element={<GroupsPage />} />
           <Route path={routes.pets} element={<PetsPage />} />
           <Route path={routes.pet} element={<PetDetails />} />
           <Route path={routes.editDetals} element={<EditDetailsPage />} />
         </Route>
+        <Route path="*" element={<Navigate to={routes.home} />} />
       </Routes>
     </div>
   );
