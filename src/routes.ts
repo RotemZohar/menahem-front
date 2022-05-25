@@ -9,5 +9,6 @@ export const routes = {
   pets: "/pets",
   pet: "/pet/:petId",
   editDetals: "/editDetails",
+  petEdit: "/pet/:petId/edit",
   petMedicalGuests: "/:petId/medical/guests",
 };
