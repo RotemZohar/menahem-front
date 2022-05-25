@@ -53,7 +53,6 @@ const PetDetails = () => {
   }, []);
 
   const navToEdit = () => {
-    console.log("fdfd");
     navigate(`/pet/${petId}/edit`);
   };
 

@@ -7,11 +7,12 @@ import useFetch from "use-http";
 import { useParams } from "react-router-dom";
 
 const petEditPage = () => {
-  const { put } = useFetch("/pet");
+  const { put, response } = useFetch("/pet");
   const { petId } = useParams();
   const [name, setName] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [snackMessage, setSnackMessage] = useState("");
   const [openSnack, setSnackOpen] = React.useState(false);
 
   const handleSnackClick = () => {
@@ -47,7 +48,14 @@ const petEditPage = () => {
       height,
       weight,
     });
-    handleSnackClick();
+
+    if (response.data === "Edited") {
+      setSnackMessage("Details changed");
+      handleSnackClick();
+    } else {
+      setSnackMessage("Error occurred");
+      handleSnackClick();
+    }
   };
 
   return (
@@ -55,7 +63,6 @@ const petEditPage = () => {
       <Grid container direction="column">
         <Grid item margin={1} xs={12}>
           <TextField
-            required
             value={name}
             label="Name"
             type="string"
@@ -64,7 +71,6 @@ const petEditPage = () => {
         </Grid>
         <Grid item margin={1} xs={12}>
           <TextField
-            required
             value={height}
             label="Height"
             type="string"
@@ -73,7 +79,6 @@ const petEditPage = () => {
         </Grid>
         <Grid item margin={1} xs={12}>
           <TextField
-            required
             value={weight}
             label="Weight"
             type="string"
@@ -87,7 +92,7 @@ const petEditPage = () => {
           <Snackbar
             open={openSnack}
             autoHideDuration={3000}
-            message="Details changed"
+            message={snackMessage}
             onClose={handleSnackClose}
             action={action}
           />
