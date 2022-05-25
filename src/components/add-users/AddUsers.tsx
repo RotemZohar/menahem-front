@@ -31,10 +31,6 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
     }
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <>
       <Typography variant="h5">Add Users</Typography>
