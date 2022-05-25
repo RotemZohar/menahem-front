@@ -105,7 +105,7 @@ const AddPetForm = () => {
       default:
         break;
     }
-  }, [species, breed, currentBreedList]);
+  }, [species]);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
