@@ -47,7 +47,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="absolute">
+    <AppBar position="static">
       <Toolbar variant="dense">
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item>
