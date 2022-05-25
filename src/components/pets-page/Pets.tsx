@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { Pet } from "../../types/pet";
 import { RootState } from "../../redux/store";
 import { routes } from "../../routes";
+import Loader from "../loader/Loader";
 
 const PetsPage = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const PetsPage = () => {
   };
 
   if (loading) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   return (

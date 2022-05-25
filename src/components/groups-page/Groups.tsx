@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { Group } from "../../types/group";
 import { RootState } from "../../redux/store";
 import { routes } from "../../routes";
+import Loader from "../loader/Loader";
 
 const GroupsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
@@ -32,7 +33,7 @@ const GroupsPage = () => {
   };
 
   if (loading) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   return (

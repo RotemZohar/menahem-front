@@ -6,6 +6,7 @@ import useFetch from "use-http";
 import { routes } from "../../routes";
 import { User } from "../../types/user";
 import AddUsers from "../add-users/AddUsers";
+import Loader from "../loader/Loader";
 import MultipleSelect from "../multiple-select/MultipleSelect";
 
 function CreateGroupPage() {
@@ -40,7 +41,7 @@ function CreateGroupPage() {
   };
 
   if (loading) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   return (
