@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import { CardActionArea, CircularProgress } from "@mui/material";
 import useFetch from "use-http";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
@@ -17,9 +17,11 @@ const PetsPage = () => {
   const navigate = useNavigate();
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const options = {};
-  const { data: pets = [] } = useFetch(`/user/${userId}/pets`, options, [
-    userId,
-  ]);
+  const { data: pets = [], loading } = useFetch(
+    `/user/${userId}/pets`,
+    options,
+    [userId]
+  );
 
   const navToPet = (pet: Pet) => {
     navigate(`/pet/${pet._id}`);
@@ -28,6 +30,10 @@ const PetsPage = () => {
   const addPet = () => {
     navigate(routes.newpet);
   };
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   return (
     <Box>

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import { CardActionArea, CircularProgress } from "@mui/material";
 import useFetch from "use-http";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
@@ -16,9 +16,11 @@ import { routes } from "../../routes";
 const GroupsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const options = {};
-  const { data: groups = [] } = useFetch(`/user/${userId}/groups`, options, [
-    userId,
-  ]);
+  const { data: groups = [], loading } = useFetch(
+    `/user/${userId}/groups`,
+    options,
+    [userId]
+  );
   const navigate = useNavigate();
 
   const navToGroup = (group: Group) => {
@@ -28,6 +30,10 @@ const GroupsPage = () => {
   const addGroup = () => {
     navigate(routes.createGroup);
   };
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   return (
     <Box>
