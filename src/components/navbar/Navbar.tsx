@@ -61,7 +61,7 @@ function Navbar() {
     <AppBar position="static">
       <Toolbar variant="dense">
         <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item>
+          <Grid item onClick={() => navigate(routes.home)}>
             <img src={logoPng} height="40" alt="logo" />
           </Grid>
           <Grid item>
@@ -89,7 +89,12 @@ function Navbar() {
                 {/* TODO: redirect to the right pages */}
                 <Menu open={open} onClose={handleClose} anchorEl={anchorEl}>
                   <MenuList dense>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem
+                      onClick={() => {
+                        navigate(routes.home);
+                        handleClose();
+                      }}
+                    >
                       <ListItemIcon>
                         <FormatListBulletedIcon />
                       </ListItemIcon>
