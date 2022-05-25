@@ -32,7 +32,10 @@ function CreateGroupPage() {
         .then(() => {
           navigate(routes.groups);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          alert("Something went wrong with saving the group");
+        });
     }
   };
 
