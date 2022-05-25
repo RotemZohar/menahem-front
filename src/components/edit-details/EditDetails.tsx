@@ -62,10 +62,9 @@ const EditDetailsPage = () => {
       const editedDetails = await put(`/${userId}/editDetails`, {
         name,
         password,
-      }).then(() => {
-        dispatch(setUsername(name));
-        handleSnackClick();
       });
+      dispatch(setUsername(name));
+      handleSnackClick();
     }
   };
 
