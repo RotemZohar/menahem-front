@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import { Box, Tab, Tabs, Typography, Container } from "@mui/material";
 import useFetch from "use-http";
+import { useParams } from "react-router-dom";
 import { Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
 import PetMedical from "./PetMedical";
 import TabPanel from "../tab-panel/TabPanel";
+import PetGroups from "./petGroups";
 
 const getAge = (birthdate: Date) => {
   const today = new Date();
@@ -23,14 +25,14 @@ const PetDetails = () => {
   const { get, loading, error } = useFetch("/pet");
   const [value, setValue] = useState(0);
   const [details, setDetails] = useState<petDetails>();
+  const { petId } = useParams();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   useEffect(() => {
-    // TODO: Change _id to parameter when able to recieve
-    get("/628b8f6078cd76992fcac032")
+    get(`/${petId}`)
       .then((pet) => {
         setDetails(pet);
       })
@@ -74,7 +76,8 @@ const PetDetails = () => {
               <Tabs value={value} onChange={handleChange} variant="fullWidth">
                 <Tab label="Medical" sx={{ borderRight: 1 }} />
                 <Tab label="Carers" sx={{ borderRight: 1 }} />
-                <Tab label="Tasks" />
+                <Tab label="Tasks" sx={{ borderRight: 1 }} />
+                <Tab label="Groups" />
               </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
@@ -85,6 +88,9 @@ const PetDetails = () => {
             </TabPanel>
             <TabPanel value={value} index={2}>
               <PetTasks tasks={details.tasks} />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <PetGroups groups={details.groups} />
             </TabPanel>
           </Box>
         </Container>

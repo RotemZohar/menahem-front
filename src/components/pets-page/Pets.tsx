@@ -14,6 +14,7 @@ import { RootState } from "../../redux/store";
 import { routes } from "../../routes";
 
 const PetsPage = () => {
+  const navigate = useNavigate();
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const options = {};
   const { data: pets = [] } = useFetch(`/user/${userId}/pets`, options, [
@@ -22,7 +23,7 @@ const PetsPage = () => {
   const navigate = useNavigate();
 
   const navToPet = (pet: Pet) => {
-    console.log("Navigating to pet");
+    navigate(`/pet/${pet._id}`);
   };
 
   const addPet = () => {

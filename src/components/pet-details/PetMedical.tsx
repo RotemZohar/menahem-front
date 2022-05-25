@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -9,12 +9,43 @@ import {
   TablePagination,
   Paper,
   Typography,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
+  Button,
 } from "@mui/material";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import moment from "moment";
+import useFetch from "use-http";
+import { useParams } from "react-router-dom";
+import { Treatment } from "../../types/pet";
 
-const PetMedical = (props: { medical: any[] }) => {
+const PetMedical = (props: { medical: Treatment[] }) => {
   const { medical } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [addTreatmentOpen, setTreatmentOpen] = React.useState(false);
+  const [treatment, setTreatment] = useState("");
+  const [treatmentDate, setTreatmentDate] = useState("");
+  const [medicalTreatments, setMedicalTreatments] = useState<Treatment[]>([]);
+  const { petId } = useParams();
+  const { post, response, error } = useFetch("/pet");
+
+  useEffect(() => {
+    setMedicalTreatments(medical);
+  }, [medical]);
+
+  const handleAddTreatmentOpen = () => {
+    setTreatmentOpen(true);
+  };
+
+  const handleAddTreatmentClose = () => {
+    setTreatmentOpen(false);
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -27,19 +58,6 @@ const PetMedical = (props: { medical: any[] }) => {
     setPage(0);
   };
 
-  // TODO: Use moment
-  const dateFormat = (date: string) => {
-    const match = date.match(
-      /(\d{4})-(\d{2})-(\d{2})[\sT](\d{2}):(\d{2}):(\d{2})(.(\d+))?/
-    );
-
-    if (!match) return null;
-
-    const [, year, month, day, hours, minutes, seconds, , millseconds] = match;
-
-    return `${day}.${month}.${year}`;
-  };
-
   if (!medical) {
     return (
       <div>
@@ -50,47 +68,103 @@ const PetMedical = (props: { medical: any[] }) => {
     );
   }
 
+  const addTreatment = async () => {
+    setTreatmentOpen(false);
+
+    const date = moment(treatmentDate, "YYYY-MM-DD").toDate();
+
+    const newTreatment = await post(`/${petId}/addTreatment`, {
+      treatment,
+      date,
+    }).then((newTreatmentResponse) => {
+      setMedicalTreatments((prevState) => [
+        ...prevState,
+        { _id: newTreatmentResponse, treatment, date },
+      ]);
+    });
+  };
+
   return (
-    <Paper sx={{ width: "100%" }}>
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Treatments</TableCell>
-              <TableCell align="center">Date</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {medical
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{
-                    "&:last-child td, &:last-child th": {
-                      border: 0,
-                    },
-                  }}
-                >
-                  <TableCell align="center" component="th" scope="row">
-                    {row.treatment}
-                  </TableCell>
-                  <TableCell align="center">{dateFormat(row.date)}</TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10]}
-        component="div"
-        count={medical.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+    <Box>
+      <Paper sx={{ width: "100%" }}>
+        <TableContainer>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Treatments</TableCell>
+                <TableCell align="center">Date</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {medicalTreatments
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow
+                    key={row._id}
+                    sx={{
+                      "&:last-child td, &:last-child th": {
+                        border: 0,
+                      },
+                    }}
+                  >
+                    <TableCell align="center" component="th" scope="row">
+                      {row.treatment}
+                    </TableCell>
+                    <TableCell align="center">
+                      {moment(row.date).format("YYYY-MM-DD")}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10]}
+          component="div"
+          count={medical.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+      <Fab onClick={handleAddTreatmentOpen} color="primary" aria-label="add">
+        <AddIcon />
+      </Fab>
+      <Dialog open={addTreatmentOpen} onClose={handleAddTreatmentClose}>
+        <DialogTitle>Add treatment</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Treatment"
+            type="string"
+            fullWidth
+            variant="standard"
+            onChange={(e) => {
+              setTreatment(e.target.value);
+            }}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="date"
+            label="TreatmentDate"
+            type="date"
+            fullWidth
+            variant="standard"
+            onChange={(e) => {
+              setTreatmentDate(e.target.value);
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddTreatmentClose}>Cancel</Button>
+          <Button onClick={addTreatment}>Add</Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 
