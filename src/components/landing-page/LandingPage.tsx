@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, Button, Card, Grid, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../../App.css";
 import { useTranslation } from "react-i18next";
 import useFetch from "use-http";
 import { useDispatch } from "react-redux";
 import { routes } from "../../routes";
-import { tokens } from "../../auth/auth-utils";
+import { acquireToken, tokens } from "../../auth/auth-utils";
 import { useHideNavbar } from "../../hooks/use-hide-navbar";
 import { setUserId } from "../../redux/slices/userSlice";
 import mainLogo from "../../assets/main-logo.png";
@@ -27,10 +19,16 @@ const LandingPage = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const { post, response, error } = useFetch("/auth");
+  const { post, response } = useFetch("/auth");
   const dispatch = useDispatch();
 
   useHideNavbar();
+
+  useEffect(() => {
+    acquireToken().then((value) => {
+      if (value) navigate(routes.home);
+    });
+  }, []);
 
   const signin = async () => {
     const resTokens = await post("/login", { email, password });
