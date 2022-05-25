@@ -14,17 +14,20 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useFetch from "use-http";
 import calendarPng from "../../assets/calendar.png";
 import userPng from "../../assets/user.png";
 import myPetsPng from "../../assets/leash.png";
 import groupsPng from "../../assets/veterinary.png";
 import { routes } from "../../routes";
 import logoPng from "../../assets/logo.png";
+import { tokens } from "../../auth/auth-utils";
 
 function Navbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { post } = useFetch("/auth");
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -44,6 +47,14 @@ function Navbar() {
 
   const navToCalendar = () => {
     navigate(routes.calendar);
+  };
+
+  const logout = () => {
+    post("/logout").then((res) => {
+      tokens.access.delete();
+      tokens.refresh.delete();
+      navigate(routes.signin);
+    });
   };
 
   return (
@@ -91,7 +102,7 @@ function Navbar() {
                       </ListItemIcon>
                       Update Profile
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={logout}>
                       <ListItemIcon>
                         <PowerSettingsNewIcon fontSize="small" />
                       </ListItemIcon>
