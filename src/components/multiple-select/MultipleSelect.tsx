@@ -48,7 +48,6 @@ export default function MultipleSelect({
   label,
 }: MultipleSelectProps) {
   const theme = useTheme();
-  //
 
   const handleChange = (event: any) => {
     const {
@@ -72,9 +71,10 @@ export default function MultipleSelect({
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
+              {selected.map((value) => {
+                const text = selectOptions.find((op) => op._id === value);
+                return <Chip key={value} label={text?.name} />;
+              })}
             </Box>
           )}
           MenuProps={MenuProps}
@@ -82,7 +82,7 @@ export default function MultipleSelect({
           {selectOptions.map((option) => (
             <MenuItem
               key={option._id}
-              value={option.name}
+              value={option._id}
               style={getStyles(option.name, selectedArr, theme)}
             >
               {option.name}
