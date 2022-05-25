@@ -1,4 +1,5 @@
 import {
+  Chip,
   FormControl,
   IconButton,
   Input,
@@ -11,18 +12,15 @@ import {
 import React, { FormEvent, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import useFetch from "use-http";
-
-interface User {
-  _id: string;
-  name: string;
-}
+import { User } from "../../types/user";
 
 interface AddUsersProps {
-  selectedUsers: string[];
-  onAddUser: (userId: string) => void;
+  selectedUsers: User[];
+  onAddUser: (user: User) => void;
+  onDeleteUser: (userId: string) => void;
 }
 
-function AddUsers({ onAddUser, selectedUsers }: AddUsersProps) {
+function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
   const [searchValue, setSearchValue] = useState("");
   const { get, data } = useFetch<User[]>("/user");
 
@@ -40,6 +38,13 @@ function AddUsers({ onAddUser, selectedUsers }: AddUsersProps) {
   return (
     <>
       <Typography variant="h5">Add Users</Typography>
+      {selectedUsers.map((user) => (
+        <Chip
+          key={user._id}
+          label={user.name}
+          onDelete={() => onDeleteUser(user._id)}
+        />
+      ))}
       <form onSubmit={onSubmit}>
         <FormControl>
           <InputLabel>Search User</InputLabel>
@@ -59,10 +64,7 @@ function AddUsers({ onAddUser, selectedUsers }: AddUsersProps) {
         {data && (
           <List>
             {data.map((user) => (
-              <ListItemButton
-                key={user._id}
-                onClick={(event) => onAddUser(user._id)}
-              >
+              <ListItemButton key={user._id} onClick={() => onAddUser(user)}>
                 <ListItem>{user.name}</ListItem>
               </ListItemButton>
             ))}
