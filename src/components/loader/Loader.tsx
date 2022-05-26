@@ -1,5 +1,5 @@
 import React from "react";
-import loadingSrc from "../../assets/loading4.gif";
+import loadingSrc from "../../assets/loading3.gif";
 
 function Loader() {
   return (
