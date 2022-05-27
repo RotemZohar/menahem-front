@@ -1,17 +1,26 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import {
+  Avatar,
+  Fab,
+  Grid,
+  ListItem,
+  ListItemButton,
+  ListItemAvatar,
+  ListItemText,
+  Tooltip,
+  IconButton,
+  Divider,
+  Paper,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import useFetch from "use-http";
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Pet } from "../../types/pet";
 import { RootState } from "../../redux/store";
 import { routes } from "../../routes";
+import petsLogo from "../../assets/mypets.png";
+import addIcon from "../../assets/add-pet.png";
 
 const PetsPage = () => {
   const navigate = useNavigate();
@@ -30,29 +39,60 @@ const PetsPage = () => {
   };
 
   return (
-    <Box>
-      <Typography variant="h2" gutterBottom>
-        My pets
-      </Typography>
-      {pets.map((pet: Pet) => (
-        <CardActionArea onClick={() => navToPet(pet)}>
-          <Card variant="outlined" sx={{ minWidth: 275 }}>
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
+    <Grid container justifyContent="center">
+      <Grid item xs={12} mt={2}>
+        <img src={petsLogo} alt="my pets" width="300" />
+      </Grid>
+      <Paper
+        sx={{
+          width: "100%",
+          maxWidth: 550,
+          maxHeight: 400,
+          bgcolor: "background.paper",
+          overflow: "auto",
+          borderRadius: 5,
+          elevation: 3,
+        }}
+      >
+        {pets.map((pet: Pet) => (
+          <Grid>
+            <ListItem
+              secondaryAction={
+                <IconButton edge="end" aria-label="delete">
+                  <Tooltip title="Delete">
+                    <DeleteIcon />
+                  </Tooltip>
+                </IconButton>
+              }
+              disablePadding
+            >
+              <ListItemButton
+                sx={{ height: 100 }}
+                alignItems="center"
+                onClick={() => navToPet(pet)}
               >
-                {pet.name}
-              </Typography>
-            </CardContent>
-          </Card>
-        </CardActionArea>
-      ))}
-      <Fab onClick={addPet} color="primary" aria-label="add">
-        <AddIcon />
-      </Fab>
-    </Box>
+                <ListItemAvatar>
+                  <Avatar
+                    alt={pet.name}
+                    src={pet.imgUrl}
+                    sx={{ width: 50, height: 50, mr: 2 }}
+                  />
+                </ListItemAvatar>
+                <ListItemText primary={pet.name} secondary={pet.breed} />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+          </Grid>
+        ))}
+      </Paper>
+      <Grid item xs={12} m={2}>
+        <Tooltip arrow title="Add Pet">
+          <Fab onClick={addPet} color="primary" aria-label="add">
+            <img src={addIcon} alt="Add Pet" width="28" />
+          </Fab>
+        </Tooltip>
+      </Grid>
+    </Grid>
   );
 };
 export default PetsPage;
