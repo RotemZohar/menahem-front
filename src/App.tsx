@@ -12,6 +12,7 @@ import GroupsPage from "./components/groups-page/Groups";
 import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
 import Navbar from "./components/navbar/Navbar";
+import HomePage from "./components/home-page/homePage";
 
 const App = () => {
   const showNavbar = useAppSelector((state) => state.navbarReducer);
@@ -26,6 +27,7 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="editDetails" element={<EditDetailsPage />} />
           <Route path="admin" element={<AdminPage />} />
+          <Route path={routes.home} element={<HomePage />} />
           <Route path={routes.groups} element={<GroupsPage />} />
           <Route path={routes.pets} element={<PetsPage />} />
           <Route path={routes.pet} element={<PetDetails />} />
