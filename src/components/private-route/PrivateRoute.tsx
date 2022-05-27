@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { RouteProps, Outlet, Navigate } from "react-router-dom";
 import { acquireToken } from "../../auth/auth-utils";
 import { routes } from "../../routes";
+import Loader from "../loader/Loader";
 
 const PrivateRoute: React.FC<RouteProps> = () => {
   const [isConnected, setIsConnected] = useState<boolean | undefined>(
@@ -15,7 +16,7 @@ const PrivateRoute: React.FC<RouteProps> = () => {
   }, []);
 
   if (isConnected === undefined) {
-    return <CircularProgress />;
+    return <Loader />;
   }
 
   if (!isConnected) {

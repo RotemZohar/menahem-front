@@ -3,28 +3,38 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import { CardActionArea, CircularProgress } from "@mui/material";
 import useFetch from "use-http";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Group } from "../../types/group";
 import { RootState } from "../../redux/store";
+import { routes } from "../../routes";
+import Loader from "../loader/Loader";
 
 const GroupsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const options = {};
-  const { data: groups = [] } = useFetch(`/user/${userId}/groups`, options, [
-    userId,
-  ]);
+  const { data: groups = [], loading } = useFetch(
+    `/user/${userId}/groups`,
+    options,
+    [userId]
+  );
+  const navigate = useNavigate();
 
   const navToGroup = (group: Group) => {
     console.log("Navigating to group");
   };
 
   const addGroup = () => {
-    console.log("add group");
+    navigate(routes.createGroup);
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <Box>
