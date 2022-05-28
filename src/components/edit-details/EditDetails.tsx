@@ -1,6 +1,14 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardHeader,
+  Grid,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
@@ -18,6 +26,20 @@ const EditDetailsPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [openSnack, setSnackOpen] = React.useState(false);
   let passNotMatchText = "";
+
+  const [validLength, setValidLength] = useState(false);
+  const [hasNumber, setHasNumber] = useState(false);
+  const [upperCase, setUpperCase] = useState(false);
+  const [lowerCase, setLowerCase] = useState(false);
+  const [isStrong, setIsStrong] = useState(true);
+  const requiredLength = 8;
+
+  useEffect(() => {
+    setValidLength(password.length >= requiredLength);
+    setUpperCase(password.toLowerCase() !== password);
+    setLowerCase(password.toUpperCase() !== password);
+    setHasNumber(/\d/.test(password));
+  }, [password]);
 
   const handleSnackClick = () => {
     setSnackOpen(true);
@@ -56,6 +78,7 @@ const EditDetailsPage = () => {
       return false;
     }
   };
+
   const onSubmit = async (e: any) => {
     e.preventDefault();
     if (checkPasswordsMatch() === true) {
@@ -64,54 +87,72 @@ const EditDetailsPage = () => {
         password,
       });
       dispatch(setUsername(name));
+      setUsername(name);
       handleSnackClick();
     }
   };
 
   return (
-    <Box component="form" onSubmit={onSubmit}>
-      <Grid container direction="column">
-        <Grid item margin={1} xs={12}>
-          <TextField
-            required
-            value={name}
-            label="Name"
-            type="string"
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Grid>
-        <Grid item margin={1} xs={12}>
-          <TextField
-            value={password}
-            label="Password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Grid>
-        <Grid item margin={1} xs={12}>
-          <TextField
-            value={confirmPassword}
-            label="Confirm password"
-            type="password"
-            error={checkPasswordsMatch() === false}
-            helperText={passNotMatchText}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </Grid>
-        <Grid item margin={1} xs={12}>
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
-          <Snackbar
-            open={openSnack}
-            autoHideDuration={3000}
-            message="Details changed"
-            onClose={handleSnackClose}
-            action={action}
-          />
-        </Grid>
-      </Grid>
-    </Box>
+    <Grid container justifyContent="center">
+      <Card sx={{ minWidth: 300, width: 700, m: 4 }}>
+        <CardHeader title="Update Profile" />
+        <Box component="form" onSubmit={onSubmit} mb={2}>
+          <Grid container direction="column">
+            <Grid item margin={1} xs={12}>
+              <TextField
+                required
+                value={name}
+                label="Name"
+                type="string"
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Grid>
+            <Grid item margin={1} xs={12}>
+              <Tooltip
+                title="Passwords must be at least 8 characters long, include at least one number, and include both lower and upper case characters."
+                arrow
+              >
+                <TextField
+                  value={password}
+                  label="Password"
+                  type="password"
+                  error={!isStrong}
+                  helperText={isStrong ? "" : "Password is not strong enough"}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onBlur={() =>
+                    setIsStrong(
+                      validLength && hasNumber && upperCase && lowerCase
+                    )
+                  }
+                />
+              </Tooltip>
+            </Grid>
+            <Grid item margin={1} xs={12}>
+              <TextField
+                value={confirmPassword}
+                label="Confirm password"
+                type="password"
+                error={checkPasswordsMatch() === false}
+                helperText={passNotMatchText}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </Grid>
+            <Grid item margin={1} xs={12}>
+              <Button variant="contained" type="submit">
+                Submit
+              </Button>
+              <Snackbar
+                open={openSnack}
+                autoHideDuration={3000}
+                message="Details changed"
+                onClose={handleSnackClose}
+                action={action}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      </Card>
+    </Grid>
   );
 };
 
