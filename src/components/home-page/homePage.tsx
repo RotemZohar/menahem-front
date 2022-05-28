@@ -1,125 +1,150 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
-import Snackbar from "@mui/material/Snackbar";
-import React, { useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { useSelector, useDispatch } from "react-redux";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import {
+  Avatar,
+  Button,
+  Checkbox,
+  Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import useFetch from "use-http";
+import { useSelector } from "react-redux";
+import { useEffect, useMemo } from "react";
 import { RootState } from "../../redux/store";
-import { setUsername } from "../../redux/slices/userSlice";
+import Loader from "../loader/Loader";
+import { Pet } from "../../types/pet";
+import TaskItem from "./taskItem";
 
-const homePage = () => {
-  const dispatch = useDispatch();
+const HomePage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
-  const userName = useSelector((state: RootState) => state.userReducer.name);
-
-  const [name, setName] = useState(userName);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [openSnack, setSnackOpen] = React.useState(false);
-  let passNotMatchText = "";
-
-  const handleSnackClick = () => {
-    setSnackOpen(true);
-  };
-
-  const handleSnackClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setSnackOpen(false);
-  };
-
-  const action = (
-    <IconButton
-      size="small"
-      aria-label="close"
-      color="inherit"
-      onClick={handleSnackClose}
-    >
-      <CloseIcon fontSize="small" />
-    </IconButton>
+  const options = {};
+  const { data: todayTasks = [], loading: loadingTasks } = useFetch(
+    `/user/${userId}/tasks`,
+    options,
+    [userId]
   );
+  // const [checked, setChecked] = React.useState([0]);
 
-  const checkPasswordsMatch = () => {
-    if (password === confirmPassword) {
-      passNotMatchText = "";
-      return true;
+  // const handleToggle = (value: string) => () => {
+  //   const currentIndex = checked.indexOf(value);
+  //   const newChecked = [...checked];
 
-      // eslint-disable-next-line no-else-return
-    } else {
-      passNotMatchText = "Passwords must match";
-      return false;
-    }
+  //   if (currentIndex === -1) {
+  //     newChecked.push(value);
+  //   } else {
+  //     newChecked.splice(currentIndex, 1);
+  //   }
+
+  //   setChecked(newChecked);
+  // };
+
+  useEffect(() => {
+    console.log(todayTasks);
+  }, [todayTasks]);
+
+  const handleToggle = (value: string) => () => {
+    todayTasks[0].tasks[0].isCompleted = true;
+    console.log("Fdfd");
   };
-  const onSubmit = (e: any) => {
-    e.preventDefault();
-    if (checkPasswordsMatch() === true) {
-      const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, password: confirmPassword }),
-      };
-      fetch(`http://localhost:4000/users/${userId}`, requestOptions)
-        .then((res) => res.json())
-        .then(() => {
-          dispatch(setUsername(name));
-          handleSnackClick();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+
+  const taskItems = () => {
+    // todayTasks.forEach(  (pet: Pet) => {
+    //     <ListItem key={pet._id} disablePadding>
+    //       <ListItemButton role={undefined} onClick={handleToggle(pet.tasks/>)} dense>
+    //         <ListItemIcon>
+    //           <Checkbox
+    //             edge="start"
+    //             checked={checked.indexOf(value) !== -1}
+    //             tabIndex={-1}
+    //             disableRipple
+    //             inputProps={{ "aria-labelledby": labelId }}
+    //           />
+    //         </ListItemIcon>
+    //         <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+    //       </ListItemButton>
+    //     </ListItem>;
+    //   });
   };
+
+  // const killMe = () => {
+  //   todayTasks.map((pet: Pet) => <Button>{pet.name}</Button>);
+  // };
+  // const list = useMemo(
+  //   () =>
+  //     posts.map((post) => (
+  //       <PostCard
+  //         id={post._id}
+  //         imgUrl={post.imgUrl}
+  //         title={post.title}
+  //         text={post.text}
+  //         tag={post.tag}
+  //         isEdit={false}
+  //         isAdminUser
+  //       />
+  //     )),
+  //   []
+  // );
+
+  if (loadingTasks) {
+    return <Loader />;
+  }
 
   return (
-    <Box component="form" onSubmit={onSubmit}>
+    // <Box sx={{ marginLeft: "33%", marginRight: "33%" }}>
+    <Box sx={{ marginLeft: "33%", marginRight: "33%" }}>
       <Grid container direction="column">
-        <Grid item margin={1} xs={12}>
-          <TextField
-            required
-            value={name}
-            label="Name"
-            type="string"
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Grid>
-        <Grid item margin={1} xs={12}>
-          <TextField
-            value={password}
-            label="Password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Grid>
-        <Grid item margin={1} xs={12}>
-          <TextField
-            value={confirmPassword}
-            label="Confirm password"
-            type="password"
-            error={checkPasswordsMatch() === false}
-            helperText={passNotMatchText}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </Grid>
-        <Grid item margin={1} xs={12}>
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
-          <Snackbar
-            open={openSnack}
-            autoHideDuration={3000}
-            message="Details changed"
-            onClose={handleSnackClose}
-            action={action}
-          />
+        <Grid item margin={1} xs={16}>
+          {/* {todayTasks.map((pet: Pet) =>
+            pet.tasks.map((task) => <Button>{task.title}</Button>)
+          )} */}
+          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+            {todayTasks.map((pet: Pet) =>
+              pet.tasks.map((task) => (
+                <TaskItem pet={pet} task={task} /> // <ListItem
+                //   key={task._id}
+                //   disablePadding
+                //   style={{
+                //     textDecoration: task.isCompleted ? "line-through" : "none",
+                //   }}
+                // >
+                //   <ListItemButton onClick={handleToggle(task._id)} dense>
+                //     {/* <ListItemIcon>
+                //       <Checkbox
+                //         edge="start"
+                //         checked={task.isCompleted}
+                //         tabIndex={-1}
+                //         disableRipple
+                //       />
+                //     </ListItemIcon> */}
+                //     <Checkbox
+                //       edge="start"
+                //       checked={task.isCompleted}
+                //       tabIndex={-1}
+                //       disableRipple
+                //     />
+                //     <ListItemAvatar>
+                //       <Avatar alt={pet._id} src={pet.imgUrl} />
+                //     </ListItemAvatar>
+                //     <ListItemText id={task._id} primary={`${pet.name}`} />
+                //     <ListItemText id={task._id} primary={`${task.title}`} />
+                //     <ListItemText
+                //       id={task._id}
+                //       primary={`${task.description}`}
+                //     />
+                //   </ListItemButton>
+                // </ListItem>
+              ))
+            )}
+          </List>
         </Grid>
       </Grid>
     </Box>
   );
 };
 
-export default homePage;
+export default HomePage;
