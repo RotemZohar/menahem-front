@@ -15,19 +15,13 @@ import {
 import { useDispatch } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import useFetch from "use-http";
 import { Pet, Task } from "../../types/pet";
 
-// interface deleteTodoVariable {
-//   id: number;
-// }
 interface TaskItemProps {
   pet: Pet;
   task: Task;
 }
-
-// interface deleteTodo {
-//   deleteTodo: Boolean;
-// }
 
 // interface toggleTodoVariable {
 //   id: number;
@@ -38,29 +32,15 @@ interface TaskItemProps {
 // }
 
 const TaskItem: React.FC<TaskItemProps> = ({ pet, task }) => {
-  // const TaskItem = () => {
-  // const onDeleteItem = async () => {
-  //   setBackdropStatus(true);
-  //   const deleteResult = await deleteTodo();
-  //   if (deleteResult.data?.deleteTodo) {
-  //     dispatch(deleteItem(index));
-  //   }
-  //   setBackdropStatus(false);
-  // };
+  const { put } = useFetch("/pet");
 
-  const killMe = () => {
-    console.log("fddf");
+  const onCheckedItem = async () => {
+    console.log("toggled");
+    const editStatus = await put(`/${pet._id}/${task._id}/changeStatus`, {
+      isCompleted: !task.isCompleted,
+    });
+    console.log(editStatus);
   };
-
-  //   const onCheckedItem = async () => {
-  //     setBackdropStatus(true);
-  //     const toggleResult = await toggleTodo();
-  //     const toggledTodo = toggleResult.data?.toggleTodo;
-  //     if (toggledTodo) {
-  //       dispatch(checkItem(toggledTodo));
-  //     }
-  //     setBackdropStatus(false);
-  //   };
   return (
     <Box>
       <ListItem
@@ -70,7 +50,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ pet, task }) => {
           textDecoration: task.isCompleted ? "line-through" : "none",
         }}
       >
-        <ListItemButton dense>
+        <ListItemButton onClick={onCheckedItem} dense>
           {/* <ListItemIcon>
                       <Checkbox
                         edge="start"

@@ -24,7 +24,7 @@ const HomePage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const options = {};
   const { data: todayTasks = [], loading: loadingTasks } = useFetch(
-    `/user/${userId}/tasks`,
+    `/user/${userId}/today-tasks`,
     options,
     [userId]
   );
