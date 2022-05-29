@@ -1,6 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { Grid, List } from "@mui/material";
+import { Grid, List, Typography } from "@mui/material";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -39,6 +39,16 @@ const HomePage = () => {
 
   if (loadingTasks) {
     return <Loader />;
+  }
+
+  if (!todayTasks) {
+    return (
+      <div>
+        <Typography sx={{ fontSize: "26px" }}>
+          You have no tasks for today
+        </Typography>
+      </div>
+    );
   }
 
   return (
