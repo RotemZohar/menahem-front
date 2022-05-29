@@ -14,15 +14,18 @@ import { Pet, Task } from "../../types/pet";
 interface TaskItemProps {
   pet: Pet;
   task: Task;
+  toggleTodo: (petId: string, taskId: string, status: boolean) => void;
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ pet, task }) => {
-  const { put } = useFetch("/pet");
+const TaskItem: React.FC<TaskItemProps> = ({ pet, task, toggleTodo }) => {
+  // const { put } = useFetch("/pet");
 
   const onCheckedItem = async () => {
-    const editStatus = await put(`/${pet._id}/${task._id}/changeStatus`, {
-      isCompleted: !task.isCompleted,
-    });
+    toggleTodo(pet._id, task._id, !task.isCompleted);
+    task.isCompleted = !task.isCompleted;
+    // const editStatus = await put(`/${pet._id}/${task._id}/changeStatus`, {
+    //   isCompleted: !task.isCompleted,
+    // });
   };
 
   return (

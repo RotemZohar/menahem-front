@@ -5,7 +5,7 @@ import useFetch from "use-http";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Loader from "../loader/Loader";
-import { Pet } from "../../types/pet";
+import { Pet, Task } from "../../types/pet";
 import TaskItem from "./taskItem";
 
 const HomePage = () => {
@@ -17,6 +17,26 @@ const HomePage = () => {
     [userId]
   );
 
+  const { put } = useFetch("/pet");
+
+  const toggleTodo = async (petId: string, taskId: string, status: boolean) => {
+    // console.log(petId);
+    // console.log(taskId);
+    // console.log(status);
+
+    const editStatus = await put(`/${petId}/${taskId}/changeStatus`, {
+      isCompleted: status,
+    });
+
+    if (editStatus === "Changed") {
+      const currentPet = todayTasks.find((pet: Pet) => pet._id === petId);
+      const currentTask = currentPet.tasks.find(
+        (task: Task) => task._id === taskId
+      );
+      currentTask.isCompleted = status;
+    }
+  };
+
   if (loadingTasks) {
     return <Loader />;
   }
@@ -27,7 +47,9 @@ const HomePage = () => {
         <Grid item margin={1} xs={16}>
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {todayTasks.map((pet: Pet) =>
-              pet.tasks.map((task) => <TaskItem pet={pet} task={task} />)
+              pet.tasks.map((task) => (
+                <TaskItem pet={pet} task={task} toggleTodo={toggleTodo} />
+              ))
             )}
           </List>
         </Grid>
