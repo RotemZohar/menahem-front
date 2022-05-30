@@ -20,10 +20,6 @@ const HomePage = () => {
   const { put } = useFetch("/pet");
 
   const toggleTodo = async (petId: string, taskId: string, status: boolean) => {
-    // console.log(petId);
-    // console.log(taskId);
-    // console.log(status);
-
     const editStatus = await put(`/${petId}/${taskId}/changeStatus`, {
       isCompleted: status,
     });
