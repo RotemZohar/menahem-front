@@ -16,6 +16,7 @@ import {
   TextField,
   DialogActions,
   Button,
+  IconButton,
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
@@ -23,7 +24,7 @@ import QrIcon from "@mui/icons-material/QrCode";
 import moment from "moment";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 import ReactDOM from "react-dom";
 import QRcode from "qrcode.react";
 import { Treatment } from "../../types/pet";
@@ -103,6 +104,8 @@ const PetMedical = (props: { medical: Treatment[] }) => {
     });
   };
 
+  const deleteMedical = (id: string) => {};
+
   return (
     <Box>
       <Paper sx={{ width: "100%" }}>
@@ -131,6 +134,16 @@ const PetMedical = (props: { medical: Treatment[] }) => {
                     </TableCell>
                     <TableCell align="center">
                       {moment(row.date).format("DD-MM-YYYY")}
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        size="small"
+                        aria-label="close"
+                        color="inherit"
+                        onClick={() => deleteMedical(row._id)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
