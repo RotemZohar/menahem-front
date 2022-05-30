@@ -41,7 +41,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
   const [medicalTreatments, setMedicalTreatments] = useState<Treatment[]>([]);
   const { petId } = useParams();
   const [qr] = useState(`${petId}/medical/guests`);
-  const { post } = useFetch("/pet");
+  const { put, del, response } = useFetch("/pet");
 
   useEffect(() => {
     setMedicalTreatments(medical);
@@ -82,7 +82,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
     return (
       <div>
         <Typography sx={{ fontSize: "26px" }}>
-          No tasks have been asigned yet
+          No tasks have been assigned yet
         </Typography>
       </div>
     );
@@ -93,7 +93,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
 
     const date = moment(treatmentDate, "DD-MM-YYYY").toDate();
 
-    const newTreatment = await post(`/${petId}/add-treatment`, {
+    const newTreatment = await put(`/${petId}/add-treatment`, {
       treatment,
       date,
     }).then((newTreatmentResponse) => {
@@ -104,7 +104,14 @@ const PetMedical = (props: { medical: Treatment[] }) => {
     });
   };
 
-  const deleteMedical = (id: string) => {};
+  const deleteMedical = async (medicalId: string) => {
+    const deletedMedical = await del(`/${petId}/${medicalId}/delete`);
+    if (response.data === "Deleted") {
+      let newMedical = [...medicalTreatments];
+      newMedical = newMedical.filter((item) => item._id !== medicalId);
+      setMedicalTreatments(newMedical);
+    }
+  };
 
   return (
     <Box>
