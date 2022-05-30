@@ -41,7 +41,7 @@ const HomePage = () => {
     return <Loader />;
   }
 
-  if (!todayTasks) {
+  if (todayTasks.length === 0) {
     return (
       <div>
         <Typography sx={{ fontSize: "26px" }}>
