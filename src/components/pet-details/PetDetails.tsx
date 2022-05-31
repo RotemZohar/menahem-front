@@ -3,7 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import { Box, Tab, Tabs, Typography, Container } from "@mui/material";
 import useFetch from "use-http";
 import { useParams } from "react-router-dom";
-import { Pet as petDetails } from "../../types/pet";
+import { Member, Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
 import PetMedical from "./PetMedical";
@@ -40,6 +40,10 @@ const PetDetails = () => {
         console.log(err);
       });
   }, []);
+
+  const onUserEdit = (user: Member) => {
+    // TODO: send update to back and update the list while saving the users tab
+  };
 
   return (
     <>
@@ -84,7 +88,7 @@ const PetDetails = () => {
               <PetMedical medical={details.medical} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <PetCarers carers={details.members} />
+              <PetCarers carers={details.members} onEditUser={onUserEdit} />
             </TabPanel>
             <TabPanel value={value} index={2}>
               <PetTasks tasks={details.tasks} />
