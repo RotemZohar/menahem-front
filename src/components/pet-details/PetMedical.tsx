@@ -105,7 +105,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
   };
 
   const deleteMedical = async (medicalId: string) => {
-    const deletedMedical = await del(`/${petId}/${medicalId}/delete`);
+    const deletedMedical = await del(`/${petId}/${medicalId}`);
     if (response.data === "Deleted") {
       let newMedical = [...medicalTreatments];
       newMedical = newMedical.filter((item) => item._id !== medicalId);
