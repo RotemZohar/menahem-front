@@ -43,7 +43,7 @@ const petEditPage = () => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    const editedDetails = await put(`/${petId}/edit`, {
+    const editedDetails = await put(`/${petId}`, {
       name,
       height,
       weight,
