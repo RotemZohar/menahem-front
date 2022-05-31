@@ -15,6 +15,7 @@ import GroupsPage from "./components/groups-page/Groups";
 import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
 import Navbar from "./components/navbar/Navbar";
+import HomePage from "./components/home-page/homePage";
 import PetMedicalPageGuests from "./components/pet-medical-page-guests/petMedicalPageGuests";
 
 const App = () => {
@@ -32,7 +33,7 @@ const App = () => {
         />
         {/* Everything that's inside private route is accessible only after logging in */}
         <Route element={<PrivateRoute />}>
-          <Route path={routes.home} element={<div>Home page</div>} />
+          <Route path={routes.home} element={<HomePage />} />
           <Route path={routes.createGroup} element={<CreateGroupPage />} />
           <Route path={routes.newpet} element={<AddPetForm />} />
           <Route path={routes.calendar} element={<CalendarPage />} />

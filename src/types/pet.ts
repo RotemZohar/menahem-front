@@ -31,7 +31,7 @@ interface Member {
   isAdmin: boolean;
 }
 
-interface Task {
+export interface Task {
   _id: string;
   title: string;
   description: string;
