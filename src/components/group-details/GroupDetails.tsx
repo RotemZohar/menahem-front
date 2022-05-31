@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
-import { Box, Tab, Tabs, Typography, Container } from "@mui/material";
+import {
+  Box,
+  Tab,
+  Tabs,
+  Typography,
+  Container,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Grid,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import useFetch from "use-http";
 import { useParams } from "react-router-dom";
 import { Group as groupDetails } from "../../types/group";
@@ -33,38 +47,43 @@ const GroupDetails = () => {
       {error && error.message}
       {loading && "Loading..."}
       {details && (
-        <Container>
-          <Box padding={3} sx={{ border: 2, borderBottom: 1 }} mt={4} mx={20}>
-            <Box display="flex">
-              {/* <Avatar
-                src={details.imgUrl}
-                sx={{ width: 160, height: 160, border: 2 }}
-              /> */}
-              <Box mx={3} mt={3}>
-                <Typography variant="h2" align="left">
-                  {details.name}
-                </Typography>
-                <Typography variant="h5" align="left">
-                  {details.description}
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-          <Box sx={{ border: 2, borderTop: 0 }} mx={20}>
-            <Box sx={{ borderBottom: 1 }}>
-              <Tabs value={value} onChange={handleChange} variant="fullWidth">
-                <Tab label="Pets" sx={{ borderRight: 1 }} />
-                <Tab label="Carers" sx={{ borderRight: 1 }} />
-              </Tabs>
+        <Grid container justifyContent="center">
+          <Card
+            sx={{
+              maxWidth: 600,
+              minHeight: 400,
+              m: 3,
+            }}
+          >
+            <CardHeader
+              // avatar={<Avatar alt={details.name} />}
+              title={details.name}
+              subheader={details.description}
+              action={
+                <IconButton>
+                  <Tooltip title="Edit">
+                    <EditIcon />
+                  </Tooltip>
+                </IconButton>
+              }
+            />
+            <Divider />
+            <CardContent>
+              <Grid container justifyContent="center">
+                <Tabs value={value} onChange={handleChange} variant="fullWidth">
+                  <Tab label="Pets" />
+                  <Tab label="Carers" />
+                </Tabs>
+              </Grid>
               <TabPanel value={value} index={0}>
                 <GroupPets pets={details.pets} />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <GroupCarers carers={details.members} />
               </TabPanel>
-            </Box>
-          </Box>
-        </Container>
+            </CardContent>
+          </Card>
+        </Grid>
       )}
     </>
   );
