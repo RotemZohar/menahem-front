@@ -13,6 +13,7 @@ import AddPetForm from "./components/pets/AddPetForm";
 import GroupsPage from "./components/groups-page/Groups";
 import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
+import GroupDetails from "./components/group-details/GroupDetails";
 import Navbar from "./components/navbar/Navbar";
 import PetMedicalPageGuests from "./components/pet-medical-page-guests/petMedicalPageGuests";
 
@@ -38,6 +39,7 @@ const App = () => {
           <Route path={routes.groups} element={<GroupsPage />} />
           <Route path={routes.pets} element={<PetsPage />} />
           <Route path={routes.pet} element={<PetDetails />} />
+          <Route path={routes.group} element={<GroupDetails />} />
           <Route path={routes.editDetals} element={<EditDetailsPage />} />
         </Route>
         <Route path="*" element={<Navigate to={routes.home} />} />

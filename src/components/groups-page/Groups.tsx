@@ -25,7 +25,7 @@ const GroupsPage = () => {
   const navigate = useNavigate();
 
   const navToGroup = (group: Group) => {
-    console.log("Navigating to group");
+    navigate(`/group/${group._id}`);
   };
 
   const addGroup = () => {
