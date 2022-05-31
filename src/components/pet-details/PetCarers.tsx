@@ -15,65 +15,37 @@ interface PetCarersProps {
   onDeleteUser: (userId: string) => void;
 }
 
-const PetCarers: React.FC<PetCarersProps> = ({ carers, onDeleteUser }) => {
-  const [editModeId, setEditModeId] = useState<string | undefined>();
-  const [nameEdit, setNameEdit] = useState("");
-  const [emailEdit, setEmailEdit] = useState("");
-
+const PetCarers: React.FC<PetCarersProps> = ({ carers, onDeleteUser }) => (
   // TODO: support add users
 
-  return (
-    <Box>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">name</TableCell>
-              <TableCell align="center">email</TableCell>
-              <TableCell align="center">delete</TableCell>
+  <Box>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="center">name</TableCell>
+            <TableCell align="center">email</TableCell>
+            <TableCell align="center">delete</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {carers.map((row) => (
+            <TableRow
+              key={row._id}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell align="center">{row.name}</TableCell>
+              <TableCell align="center">{row.email}</TableCell>
+              <TableCell align="center">
+                <IconButton id={row._id} onClick={() => onDeleteUser(row._id)}>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {carers.map((row) => (
-              <TableRow
-                key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell align="center">
-                  {editModeId === row._id ? (
-                    <Input
-                      value={nameEdit}
-                      onChange={(e) => setNameEdit(e.target.value)}
-                    />
-                  ) : (
-                    row.name
-                  )}
-                </TableCell>
-                <TableCell align="center">
-                  {editModeId === row._id ? (
-                    <Input
-                      value={emailEdit}
-                      onChange={(e) => setEmailEdit(e.target.value)}
-                    />
-                  ) : (
-                    row.email
-                  )}
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    id={row._id}
-                    onClick={() => onDeleteUser(row._id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  );
-};
-
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </Box>
+);
 export default PetCarers;
