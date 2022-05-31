@@ -46,8 +46,8 @@ const PetGroups = (props: { groups: Group[] }) => {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center">Treatments</TableCell>
-                <TableCell align="center">Date</TableCell>
+                <TableCell align="center">Name</TableCell>
+                <TableCell align="center">Description</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -65,7 +65,9 @@ const PetGroups = (props: { groups: Group[] }) => {
                     <TableCell align="center" component="th" scope="row">
                       {group.name}
                     </TableCell>
-                    <TableCell align="center">{group.description}</TableCell>
+                    <TableCell align="center" sx={{ maxWidth: 200 }}>
+                      {group.description}
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
