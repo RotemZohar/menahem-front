@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import EditDetailsPage from "./components/edit-details/EditDetails";
+import PetEditPage from "./components/edit-pet/editPetPage";
 import LandingPage from "./components/landing-page/LandingPage";
 import CalendarPage from "./components/calendar/CalendarPage";
 import { routes } from "./routes";
@@ -39,6 +40,7 @@ const App = () => {
           <Route path={routes.pets} element={<PetsPage />} />
           <Route path={routes.pet} element={<PetDetails />} />
           <Route path={routes.editDetals} element={<EditDetailsPage />} />
+          <Route path={routes.petEdit} element={<PetEditPage />} />
         </Route>
         <Route path="*" element={<Navigate to={routes.home} />} />
       </Routes>

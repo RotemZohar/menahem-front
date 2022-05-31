@@ -9,7 +9,7 @@ import { RootState } from "../../redux/store";
 import { setUsername } from "../../redux/slices/userSlice";
 
 const EditDetailsPage = () => {
-  const { put } = useFetch("/user");
+  const { put, response } = useFetch("/user");
   const dispatch = useDispatch();
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const userName = useSelector((state: RootState) => state.userReducer.name);
@@ -17,6 +17,8 @@ const EditDetailsPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [openSnack, setSnackOpen] = React.useState(false);
+  const [snackMessage, setSnackMessage] = useState("");
+
   let passNotMatchText = "";
 
   const handleSnackClick = () => {
@@ -64,7 +66,14 @@ const EditDetailsPage = () => {
         password,
       });
       dispatch(setUsername(name));
-      handleSnackClick();
+
+      if (response.data === "Edited") {
+        setSnackMessage("Details changed");
+        handleSnackClick();
+      } else {
+        setSnackMessage("Error occurred");
+        handleSnackClick();
+      }
     }
   };
 
