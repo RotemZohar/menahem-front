@@ -1,4 +1,12 @@
-import { Box, TablePagination, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Fab,
+  Grid,
+  TablePagination,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,11 +15,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import AddIcon from "@mui/icons-material/Add";
 
 const GroupCarers = (props: { carers: any[] }) => {
   const { carers } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [addUserOpen, setAddUserOpen] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -22,6 +32,14 @@ const GroupCarers = (props: { carers: any[] }) => {
   ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleAddUserOpen = () => {
+    setAddUserOpen(true);
+  };
+
+  const handleAddUserClose = () => {
+    setAddUserOpen(false);
   };
 
   if (!carers) {
@@ -58,6 +76,7 @@ const GroupCarers = (props: { carers: any[] }) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Divider />
         <TablePagination
           rowsPerPageOptions={[5, 10]}
           component="div"
@@ -68,6 +87,13 @@ const GroupCarers = (props: { carers: any[] }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <Grid container justifyContent="center" mt={3}>
+        <Tooltip arrow title="Add Member">
+          <Fab onClick={handleAddUserOpen} color="primary" aria-label="add">
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+      </Grid>
     </Box>
   );
 };
