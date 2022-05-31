@@ -15,6 +15,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import GroupIcon from "@mui/icons-material/Group";
 import useFetch from "use-http";
 import { useParams } from "react-router-dom";
 import { Group as groupDetails } from "../../types/group";
@@ -56,15 +57,35 @@ const GroupDetails = () => {
             }}
           >
             <CardHeader
-              // avatar={<Avatar alt={details.name} />}
-              title={details.name}
-              subheader={details.description}
+              // avatar={
+              //   <Avatar alt={details.name} sx={{ width: 160, height: 160 }}>
+              //     <GroupIcon />
+              //   </Avatar>
+              // }
+              title={
+                <Grid container m={1}>
+                  <Typography
+                    variant="h4"
+                    align="left"
+                    sx={{ fontWeight: "bold" }}
+                  >
+                    {details.name}
+                  </Typography>
+                </Grid>
+              }
+              subheader={
+                <Grid container m={1}>
+                  <Typography align="left">{details.description}</Typography>
+                </Grid>
+              }
               action={
-                <IconButton>
-                  <Tooltip title="Edit">
-                    <EditIcon />
-                  </Tooltip>
-                </IconButton>
+                <Grid container>
+                  <IconButton>
+                    <Tooltip title="Edit">
+                      <EditIcon fontSize="large" />
+                    </Tooltip>
+                  </IconButton>
+                </Grid>
               }
             />
             <Divider />
