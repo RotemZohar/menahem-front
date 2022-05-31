@@ -45,6 +45,10 @@ const PetDetails = () => {
     // TODO: send update to back and update the list while saving the users tab
   };
 
+  const onDeleteUser = (userId: string) => {
+    // TODO: send to back
+  };
+
   return (
     <>
       {error && error.message}
@@ -88,7 +92,11 @@ const PetDetails = () => {
               <PetMedical medical={details.medical} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <PetCarers carers={details.members} onEditUser={onUserEdit} />
+              <PetCarers
+                carers={details.members}
+                onEditUser={onUserEdit}
+                onDeleteUser={onDeleteUser}
+              />
             </TabPanel>
             <TabPanel value={value} index={2}>
               <PetTasks tasks={details.tasks} />

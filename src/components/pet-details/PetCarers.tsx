@@ -9,13 +9,20 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import SaveIcon from "@mui/icons-material/Save";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Member } from "../../types/pet";
 
-const PetCarers = (props: {
+interface PetCarersProps {
   carers: Member[];
   onEditUser: (user: Member) => void;
+  onDeleteUser: (userId: string) => void;
+}
+
+const PetCarers: React.FC<PetCarersProps> = ({
+  carers,
+  onEditUser,
+  onDeleteUser,
 }) => {
-  const { carers, onEditUser } = props;
   const [editModeId, setEditModeId] = useState<string | undefined>();
   const [nameEdit, setNameEdit] = useState("");
   const [emailEdit, setEmailEdit] = useState("");
@@ -48,6 +55,7 @@ const PetCarers = (props: {
               <TableCell align="center">name</TableCell>
               <TableCell align="center">email</TableCell>
               <TableCell align="center">edit</TableCell>
+              <TableCell align="center">delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -79,6 +87,14 @@ const PetCarers = (props: {
                 <TableCell align="center">
                   <IconButton id={row._id} onClick={() => onEdit(row._id)}>
                     {editModeId === row._id ? <SaveIcon /> : <ModeEditIcon />}
+                  </IconButton>
+                </TableCell>
+                <TableCell align="center">
+                  <IconButton
+                    id={row._id}
+                    onClick={() => onDeleteUser(row._id)}
+                  >
+                    <DeleteIcon />
                   </IconButton>
                 </TableCell>
               </TableRow>
