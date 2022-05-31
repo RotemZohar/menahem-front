@@ -87,7 +87,6 @@ const EditDetailsPage = () => {
         password,
       });
       dispatch(setUsername(name));
-      setUsername(name);
       handleSnackClick();
     }
   };
