@@ -41,10 +41,6 @@ const PetDetails = () => {
       });
   }, []);
 
-  const onUserEdit = (user: Member) => {
-    // TODO: send update to back and update the list while saving the users tab
-  };
-
   const onDeleteUser = (userId: string) => {
     // TODO: send to back
   };
@@ -92,11 +88,7 @@ const PetDetails = () => {
               <PetMedical medical={details.medical} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <PetCarers
-                carers={details.members}
-                onEditUser={onUserEdit}
-                onDeleteUser={onDeleteUser}
-              />
+              <PetCarers carers={details.members} onDeleteUser={onDeleteUser} />
             </TabPanel>
             <TabPanel value={value} index={2}>
               <PetTasks tasks={details.tasks} />

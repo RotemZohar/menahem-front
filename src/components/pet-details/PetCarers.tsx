@@ -1,5 +1,5 @@
 import { Box, IconButton, Input } from "@mui/material";
-import React, { useState, MouseEventHandler } from "react";
+import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,44 +7,20 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Member } from "../../types/pet";
 
 interface PetCarersProps {
   carers: Member[];
-  onEditUser: (user: Member) => void;
   onDeleteUser: (userId: string) => void;
 }
 
-const PetCarers: React.FC<PetCarersProps> = ({
-  carers,
-  onEditUser,
-  onDeleteUser,
-}) => {
+const PetCarers: React.FC<PetCarersProps> = ({ carers, onDeleteUser }) => {
   const [editModeId, setEditModeId] = useState<string | undefined>();
   const [nameEdit, setNameEdit] = useState("");
   const [emailEdit, setEmailEdit] = useState("");
 
-  const onEdit = (id: string) => {
-    if (editModeId && editModeId === id) {
-      onEditUser({
-        _id: id,
-        name: nameEdit,
-        email: emailEdit,
-      });
-      setNameEdit("");
-      setEmailEdit("");
-      setEditModeId(undefined);
-    } else if (!editModeId) {
-      setEditModeId(id);
-      setNameEdit(carers.find((care) => care._id === id)?.name || "");
-      setEmailEdit(carers.find((care) => care._id === id)?.email || "");
-    } else {
-      alert("Finish your other edit first!");
-    }
-  };
+  // TODO: support add users
 
   return (
     <Box>
@@ -54,7 +30,6 @@ const PetCarers: React.FC<PetCarersProps> = ({
             <TableRow>
               <TableCell align="center">name</TableCell>
               <TableCell align="center">email</TableCell>
-              <TableCell align="center">edit</TableCell>
               <TableCell align="center">delete</TableCell>
             </TableRow>
           </TableHead>
@@ -83,11 +58,6 @@ const PetCarers: React.FC<PetCarersProps> = ({
                   ) : (
                     row.email
                   )}
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton id={row._id} onClick={() => onEdit(row._id)}>
-                    {editModeId === row._id ? <SaveIcon /> : <ModeEditIcon />}
-                  </IconButton>
                 </TableCell>
                 <TableCell align="center">
                   <IconButton
