@@ -10,10 +10,9 @@ import TaskItem from "./taskItem";
 
 const HomePage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
-  const options = {};
   const { data: todayTasks = [], loading: loadingTasks } = useFetch(
     `/user/${userId}/today-tasks`,
-    options,
+    {},
     [userId]
   );
 
@@ -39,11 +38,9 @@ const HomePage = () => {
 
   if (todayTasks.length === 0) {
     return (
-      <div>
-        <Typography sx={{ fontSize: "26px" }}>
-          You have no tasks for today
-        </Typography>
-      </div>
+      <Typography sx={{ fontSize: "26px" }}>
+        You have no tasks for today
+      </Typography>
     );
   }
 

@@ -8,7 +8,6 @@ import {
   ListItemAvatar,
   Avatar,
 } from "@mui/material";
-import useFetch from "use-http";
 import { Pet, Task } from "../../types/pet";
 
 interface TaskItemProps {
@@ -18,14 +17,9 @@ interface TaskItemProps {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ pet, task, toggleTodo }) => {
-  // const { put } = useFetch("/pet");
-
   const onCheckedItem = async () => {
     toggleTodo(pet._id, task._id, !task.isCompleted);
     task.isCompleted = !task.isCompleted;
-    // const editStatus = await put(`/${pet._id}/${task._id}/changeStatus`, {
-    //   isCompleted: !task.isCompleted,
-    // });
   };
 
   return (
