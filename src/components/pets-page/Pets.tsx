@@ -63,7 +63,7 @@ const PetsPage = () => {
         }}
       >
         {pets.map((pet: Pet) => (
-          <Grid>
+          <Grid key={pet._id}>
             <ListItem
               secondaryAction={
                 <IconButton edge="end" aria-label="delete">

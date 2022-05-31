@@ -42,7 +42,7 @@ const GroupsPage = () => {
         My groups
       </Typography>
       {groups.map((group: Group) => (
-        <CardActionArea onClick={() => navToGroup(group)}>
+        <CardActionArea key={group._id} onClick={() => navToGroup(group)}>
           <Card variant="outlined" sx={{ minWidth: 275 }}>
             <CardContent>
               <Typography

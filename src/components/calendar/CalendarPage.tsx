@@ -5,7 +5,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
-import { CircularProgress } from "@mui/material";
 import { RootState } from "../../redux/store";
 import CalendarEvent from "./CalendarEvent";
 import Loader from "../loader/Loader";
