@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 import { Member } from "../../types/pet";
 
 interface PetCarersProps {
@@ -15,37 +16,45 @@ interface PetCarersProps {
   onDeleteUser: (userId: string) => void;
 }
 
-const PetCarers: React.FC<PetCarersProps> = ({ carers, onDeleteUser }) => (
-  // TODO: support add users
-
-  <Box>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">name</TableCell>
-            <TableCell align="center">email</TableCell>
-            <TableCell align="center">delete</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {carers.map((row) => (
-            <TableRow
-              key={row._id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell align="center">{row.name}</TableCell>
-              <TableCell align="center">{row.email}</TableCell>
-              <TableCell align="center">
-                <IconButton id={row._id} onClick={() => onDeleteUser(row._id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+const PetCarers: React.FC<PetCarersProps> = ({ carers, onDeleteUser }) => {
+  const [addUsers, setAddUsers] = useState(false);
+  return (
+    // TODO: support add users
+    <Box>
+      <IconButton>
+        <AddIcon />
+      </IconButton>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">name</TableCell>
+              <TableCell align="center">email</TableCell>
+              <TableCell align="center">delete</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </Box>
-);
+          </TableHead>
+          <TableBody>
+            {carers.map((row) => (
+              <TableRow
+                key={row._id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="center">{row.name}</TableCell>
+                <TableCell align="center">{row.email}</TableCell>
+                <TableCell align="center">
+                  <IconButton
+                    id={row._id}
+                    onClick={() => onDeleteUser(row._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
+};
 export default PetCarers;
