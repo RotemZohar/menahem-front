@@ -1,5 +1,10 @@
 import {
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   Fab,
   Grid,
@@ -7,7 +12,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,11 +21,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
+import AddUsers from "../add-users/AddUsers";
+import { User } from "../../types/user";
 
 const GroupCarers = (props: { carers: any[] }) => {
   const { carers } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [users, setUsers] = useState<User[]>([]);
   const [addUserOpen, setAddUserOpen] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -39,6 +47,12 @@ const GroupCarers = (props: { carers: any[] }) => {
   };
 
   const handleAddUserClose = () => {
+    setAddUserOpen(false);
+  };
+
+  const addMembers = async () => {
+    // todo: put members in group
+
     setAddUserOpen(false);
   };
 
@@ -94,6 +108,44 @@ const GroupCarers = (props: { carers: any[] }) => {
           </Fab>
         </Tooltip>
       </Grid>
+
+      <Dialog
+        open={addUserOpen}
+        onClose={handleAddUserClose}
+        fullWidth
+        maxWidth="xs"
+      >
+        <DialogTitle style={{ fontWeight: "bold" }}>Add Members</DialogTitle>
+        <Divider />
+        <DialogContent>
+          <AddUsers
+            selectedUsers={users}
+            onAddUser={(newUser) => {
+              setUsers((prevUsers) => {
+                if (
+                  prevUsers.findIndex((user) => user._id === newUser._id) === -1
+                ) {
+                  return [...prevUsers, newUser];
+                }
+                return prevUsers;
+              });
+            }}
+            onDeleteUser={(userId) => {
+              setUsers((prev) => {
+                const remove = prev.findIndex((user) => user._id === userId);
+                return prev.splice(remove);
+              });
+            }}
+          />
+        </DialogContent>
+        <Divider />
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button onClick={handleAddUserClose}>Cancel</Button>
+          <Button variant="contained" onClick={addMembers}>
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

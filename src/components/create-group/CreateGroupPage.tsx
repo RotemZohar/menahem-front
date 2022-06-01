@@ -96,6 +96,7 @@ function CreateGroupPage() {
       )}
       {stage === 1 && (
         <div style={{ display: "inline-flex", flexDirection: "column" }}>
+          <Typography variant="h5">Add Users</Typography>
           <AddUsers
             selectedUsers={users}
             onAddUser={(newUser) => {

@@ -1,13 +1,19 @@
 import {
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   Fab,
   Grid,
   TablePagination,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,13 +22,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
+import useFetch from "use-http";
 import { Pet } from "../../types/pet";
+import MultipleSelect from "../multiple-select/MultipleSelect";
 
 const GroupPets = (props: { pets: Pet[] }) => {
   const { pets } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [addPetOpen, setAddPetOpen] = React.useState(false);
+  const { data: petsList, loading } = useFetch("/user/pets", {}, []);
+  const [selectedPets, setSelectedPets] = useState<string[]>([]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -40,6 +50,13 @@ const GroupPets = (props: { pets: Pet[] }) => {
   };
 
   const handleAddPetClose = () => {
+    setAddPetOpen(false);
+  };
+
+  const addPets = async () => {
+    // TODO: put pets in group
+
+    setSelectedPets([]);
     setAddPetOpen(false);
   };
 
@@ -97,6 +114,34 @@ const GroupPets = (props: { pets: Pet[] }) => {
           </Fab>
         </Tooltip>
       </Grid>
+
+      <Dialog
+        open={addPetOpen}
+        onClose={handleAddPetClose}
+        fullWidth
+        maxWidth="xs"
+      >
+        <DialogTitle style={{ fontWeight: "bold" }}>Add Pets</DialogTitle>
+        <Divider />
+        <DialogContent>
+          {petsList && (
+            <MultipleSelect
+              selectOptions={petsList}
+              selectedArr={selectedPets}
+              setSelectedArr={setSelectedPets}
+              label="Select Pets*"
+            />
+          )}
+        </DialogContent>
+        <Divider />
+
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button onClick={handleAddPetClose}>Cancel</Button>
+          <Button variant="contained" onClick={addPets}>
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

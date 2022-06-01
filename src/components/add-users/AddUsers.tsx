@@ -33,7 +33,6 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
 
   return (
     <>
-      <Typography variant="h5">Add Users</Typography>
       {selectedUsers.map((user) => (
         <Chip
           key={user._id}
