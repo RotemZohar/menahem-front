@@ -15,12 +15,13 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
-import { Pet as petDetails } from "../../types/pet";
+import { Member, Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
 import PetMedical from "./PetMedical";
 import TabPanel from "../tab-panel/TabPanel";
 import PetGroups from "./petGroups";
+import { User } from "../../types/user";
 
 const getAge = (birthdate: Date) => {
   const today = new Date();
@@ -39,7 +40,7 @@ const PetDetails = () => {
   const [value, setValue] = useState(0);
   const [details, setDetails] = useState<petDetails>();
   const { petId } = useParams();
-  const { del } = useFetch("/pet");
+  const { del, put } = useFetch("/pet");
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -61,10 +62,21 @@ const PetDetails = () => {
         setDetails((prev) => {
           const ind = prev!.members.findIndex((mem) => mem._id === userId);
           return { ...prev!, members: prev!.members.splice(ind) };
-          // TODO: when cache need to delete from cache
+          // TODO: when cache need to refresh cache
         });
       }
     });
+  };
+
+  const onAddUser = (user: User) => {
+    if (!details?.members.find((member) => member._id === user._id)) {
+      put(`/${details!._id}/user/${user._id}`).then((res) => {
+        setDetails(
+          (prev) => ({ ...prev!, members: [...prev!.members, res] })
+          // TODO: when cache need to refresh cache
+        );
+      });
+    }
   };
 
   const navToEdit = () => {
@@ -135,6 +147,7 @@ const PetDetails = () => {
                 <PetCarers
                   carers={details.members}
                   onDeleteUser={onDeleteUser}
+                  onAddUser={onAddUser}
                 />
               </TabPanel>
               <TabPanel value={value} index={2}>

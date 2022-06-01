@@ -1,4 +1,4 @@
-import { Box, IconButton, Input } from "@mui/material";
+import { IconButton } from "@mui/material";
 import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,52 +9,77 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Member } from "../../types/pet";
+import AddUsers from "../add-users/AddUsers";
+import { User } from "../../types/user";
 
 interface PetCarersProps {
   carers: Member[];
   onDeleteUser: (userId: string) => void;
+  onAddUser: (userId: User) => void;
 }
 
-const PetCarers: React.FC<PetCarersProps> = ({ carers, onDeleteUser }) => {
+const PetCarers: React.FC<PetCarersProps> = ({
+  carers,
+  onDeleteUser,
+  onAddUser,
+}) => {
   const [addUsers, setAddUsers] = useState(false);
+
+  if (addUsers) {
+    return (
+      <>
+        <IconButton onClick={() => setAddUsers(false)}>
+          <ArrowBackIcon />
+        </IconButton>
+        <AddUsers
+          selectedUsers={carers}
+          onAddUser={onAddUser}
+          onDeleteUser={onDeleteUser}
+        />
+      </>
+    );
+  }
+
   return (
-    // TODO: support add users
-    <Paper variant="outlined">
-      <IconButton>
+    <>
+      <IconButton onClick={() => setAddUsers((prev) => !prev)}>
         <AddIcon />
       </IconButton>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Name</TableCell>
-              <TableCell align="center">Email</TableCell>
-              <TableCell align="center">Delete</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {carers.map((row) => (
-              <TableRow
-                key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.email}</TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    id={row._id}
-                    onClick={() => onDeleteUser(row._id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+      <Paper variant="outlined">
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Name</TableCell>
+                <TableCell align="center">Email</TableCell>
+                <TableCell align="center">Delete</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+            </TableHead>
+            <TableBody>
+              {carers.map((row) => (
+                <TableRow
+                  key={row._id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">{row.email}</TableCell>
+                  <TableCell align="center">
+                    <IconButton
+                      id={row._id}
+                      onClick={() => onDeleteUser(row._id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    </>
   );
 };
 export default PetCarers;
