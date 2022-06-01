@@ -16,6 +16,11 @@ const HomePage = () => {
     [userId]
   );
 
+  React.useEffect(() => {
+    console.log(todayTasks);
+    console.log(todayTasks.length);
+  }, []);
+
   const { put } = useFetch("/pet");
 
   const toggleTodo = async (petId: string, taskId: string, status: boolean) => {
@@ -36,7 +41,7 @@ const HomePage = () => {
     return <Loader />;
   }
 
-  if (todayTasks.length === 0) {
+  if (!todayTasks || todayTasks.length === 0) {
     return (
       <Typography sx={{ fontSize: "26px" }}>
         You have no tasks for today
