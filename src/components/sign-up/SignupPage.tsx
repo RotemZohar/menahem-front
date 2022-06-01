@@ -80,7 +80,6 @@ const SignUpPage = () => {
                 <Grid item mt={1} xs={12}>
                   <Tooltip
                     title="Passwords must be at least 8 characters long, include at least one number, and include both lower and upper case characters."
-                    placement="right"
                     arrow
                   >
                     <TextField

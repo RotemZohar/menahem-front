@@ -20,17 +20,17 @@ const PetCarers: React.FC<PetCarersProps> = ({ carers, onDeleteUser }) => {
   const [addUsers, setAddUsers] = useState(false);
   return (
     // TODO: support add users
-    <Box>
+    <Paper variant="outlined">
       <IconButton>
         <AddIcon />
       </IconButton>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">name</TableCell>
-              <TableCell align="center">email</TableCell>
-              <TableCell align="center">delete</TableCell>
+              <TableCell align="center">Name</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -54,7 +54,7 @@ const PetCarers: React.FC<PetCarersProps> = ({ carers, onDeleteUser }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Box>
+    </Paper>
   );
 };
 export default PetCarers;

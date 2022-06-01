@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import EditDetailsPage from "./components/edit-details/EditDetails";
+import PetEditPage from "./components/edit-pet/editPetPage";
 import LandingPage from "./components/landing-page/LandingPage";
 import CalendarPage from "./components/calendar/CalendarPage";
 import { routes } from "./routes";
@@ -14,6 +15,7 @@ import GroupsPage from "./components/groups-page/Groups";
 import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
 import Navbar from "./components/navbar/Navbar";
+import HomePage from "./components/home-page/homePage";
 import PetMedicalPageGuests from "./components/pet-medical-page-guests/petMedicalPageGuests";
 
 const App = () => {
@@ -31,7 +33,7 @@ const App = () => {
         />
         {/* Everything that's inside private route is accessible only after logging in */}
         <Route element={<PrivateRoute />}>
-          <Route path={routes.home} element={<div>Home page</div>} />
+          <Route path={routes.home} element={<HomePage />} />
           <Route path={routes.createGroup} element={<CreateGroupPage />} />
           <Route path={routes.newpet} element={<AddPetForm />} />
           <Route path={routes.calendar} element={<CalendarPage />} />
@@ -39,6 +41,7 @@ const App = () => {
           <Route path={routes.pets} element={<PetsPage />} />
           <Route path={routes.pet} element={<PetDetails />} />
           <Route path={routes.editDetals} element={<EditDetailsPage />} />
+          <Route path={routes.petEdit} element={<PetEditPage />} />
         </Route>
         <Route path="*" element={<Navigate to={routes.home} />} />
       </Routes>
