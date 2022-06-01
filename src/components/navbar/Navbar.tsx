@@ -8,6 +8,7 @@ import {
   MenuItem,
   MenuList,
   Toolbar,
+  Tooltip,
 } from "@mui/material";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -71,23 +72,31 @@ function Navbar() {
             <Grid container justifyContent="space-around">
               <Grid item>
                 <IconButton onClick={navToCalendar}>
-                  <img src={calendarPng} height="40" alt="calendar" />
+                  <Tooltip title="Calender">
+                    <img src={calendarPng} height="40" alt="calendar" />
+                  </Tooltip>
                 </IconButton>
               </Grid>
               <Grid item>
                 <IconButton onClick={navToPets}>
-                  <img src={myPetsPng} height="40" alt="pets" />
+                  <Tooltip title="My Pets">
+                    <img src={myPetsPng} height="40" alt="pets" />
+                  </Tooltip>
                 </IconButton>
               </Grid>
               <Grid item>
                 <IconButton onClick={navToGroups}>
-                  <img src={groupsPng} height="40" alt="groups" />
+                  <Tooltip title="My Groups">
+                    <img src={groupsPng} height="40" alt="groups" />
+                  </Tooltip>
                 </IconButton>
               </Grid>
               <Grid item>
                 <IconButton onClick={handleClick}>
                   {/* TODO: put the user's profile picture */}
-                  <img src={userPng} height="40" alt="general" />
+                  <Tooltip title="Account">
+                    <img src={userPng} height="40" alt="general" />
+                  </Tooltip>
                 </IconButton>
                 {/* TODO: redirect to the right pages */}
                 <Menu open={open} onClose={handleClose} anchorEl={anchorEl}>

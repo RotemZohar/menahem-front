@@ -16,6 +16,8 @@ import {
   TextField,
   DialogActions,
   Button,
+  Grid,
+  Tooltip,
   IconButton,
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
@@ -115,9 +117,9 @@ const PetMedical = (props: { medical: Treatment[] }) => {
 
   return (
     <Box>
-      <Paper sx={{ width: "100%" }}>
+      <Paper variant="outlined">
         <TableContainer>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="center">Treatments</TableCell>
@@ -167,15 +169,22 @@ const PetMedical = (props: { medical: Treatment[] }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-
-      <Fab onClick={handleAddTreatmentOpen} color="primary" aria-label="add">
-        <AddIcon />
-      </Fab>
-
-      <Fab onClick={handleShowQrOpen} color="primary" aria-label="add">
-        <QrIcon />
-      </Fab>
-
+      <Grid container justifyContent="space-around" mt={2}>
+        <Tooltip arrow title="Add Treatment">
+          <Fab
+            onClick={handleAddTreatmentOpen}
+            color="primary"
+            aria-label="add"
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+        <Tooltip arrow title="Generate QRcode">
+          <Fab onClick={handleShowQrOpen} color="primary" aria-label="add">
+            <QrIcon />
+          </Fab>
+        </Tooltip>
+      </Grid>
       <Dialog open={showQrOpen} onClose={handleShowQrClose}>
         <DialogTitle>Pet medical page for guests</DialogTitle>
         <DialogContent>
@@ -191,30 +200,29 @@ const PetMedical = (props: { medical: Treatment[] }) => {
           <Button onClick={handleShowQrClose}>Close</Button>
         </DialogActions>
       </Dialog>
-
       <Dialog open={addTreatmentOpen} onClose={handleAddTreatmentClose}>
         <DialogTitle>Add treatment</DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
             margin="dense"
             id="name"
             label="Treatment"
             type="string"
             fullWidth
             variant="standard"
+            InputLabelProps={{ shrink: true }}
             onChange={(e) => {
               setTreatment(e.target.value);
             }}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="date"
             label="TreatmentDate"
             type="date"
             fullWidth
             variant="standard"
+            InputLabelProps={{ shrink: true }}
             onChange={(e) => {
               setTreatmentDate(e.target.value);
             }}
