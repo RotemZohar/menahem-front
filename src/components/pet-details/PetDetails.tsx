@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
-import { Box, Tab, Tabs, Typography, Container } from "@mui/material";
+import {
+  Box,
+  Tab,
+  Tabs,
+  Typography,
+  Container,
+  Toolbar,
+  Tooltip,
+} from "@mui/material";
 import useFetch from "use-http";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
+import IconButton from "@mui/material/IconButton";
 import { Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
@@ -22,6 +32,7 @@ const getAge = (birthdate: Date) => {
 };
 
 const PetDetails = () => {
+  const navigate = useNavigate();
   const { get, loading, error } = useFetch("/pet");
   const [value, setValue] = useState(0);
   const [details, setDetails] = useState<petDetails>();
@@ -40,6 +51,10 @@ const PetDetails = () => {
         console.log(err);
       });
   }, []);
+
+  const navToEdit = () => {
+    navigate(`/pet/${petId}/edit`);
+  };
 
   return (
     <>
@@ -70,6 +85,11 @@ const PetDetails = () => {
                 weight: {details.weight}kg
               </Typography>
             </Box>
+            <Tooltip title="Edit">
+              <IconButton onClick={navToEdit}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
           <Box sx={{ border: 2, borderTop: 0 }} mx={20}>
             <Box sx={{ borderBottom: 1 }}>

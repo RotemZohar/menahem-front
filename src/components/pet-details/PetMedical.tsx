@@ -16,6 +16,7 @@ import {
   TextField,
   DialogActions,
   Button,
+  IconButton,
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
@@ -23,7 +24,7 @@ import QrIcon from "@mui/icons-material/QrCode";
 import moment from "moment";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 import ReactDOM from "react-dom";
 import QRcode from "qrcode.react";
 import { Treatment } from "../../types/pet";
@@ -40,7 +41,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
   const [medicalTreatments, setMedicalTreatments] = useState<Treatment[]>([]);
   const { petId } = useParams();
   const [qr] = useState(`${petId}/medical/guests`);
-  const { post } = useFetch("/pet");
+  const { put, del, response } = useFetch("/pet");
 
   useEffect(() => {
     setMedicalTreatments(medical);
@@ -81,7 +82,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
     return (
       <div>
         <Typography sx={{ fontSize: "26px" }}>
-          No tasks have been asigned yet
+          No tasks have been assigned yet
         </Typography>
       </div>
     );
@@ -92,7 +93,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
 
     const date = moment(treatmentDate, "DD-MM-YYYY").toDate();
 
-    const newTreatment = await post(`/${petId}/add-treatment`, {
+    const newTreatment = await put(`/${petId}/add-treatment`, {
       treatment,
       date,
     }).then((newTreatmentResponse) => {
@@ -101,6 +102,15 @@ const PetMedical = (props: { medical: Treatment[] }) => {
         { _id: newTreatmentResponse, treatment, date },
       ]);
     });
+  };
+
+  const deleteMedical = async (medicalId: string) => {
+    const deletedMedical = await del(`/${petId}/${medicalId}`);
+    if (response.data === "Deleted") {
+      let newMedical = [...medicalTreatments];
+      newMedical = newMedical.filter((item) => item._id !== medicalId);
+      setMedicalTreatments(newMedical);
+    }
   };
 
   return (
@@ -131,6 +141,16 @@ const PetMedical = (props: { medical: Treatment[] }) => {
                     </TableCell>
                     <TableCell align="center">
                       {moment(row.date).format("DD-MM-YYYY")}
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        size="small"
+                        aria-label="close"
+                        color="inherit"
+                        onClick={() => deleteMedical(row._id)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
