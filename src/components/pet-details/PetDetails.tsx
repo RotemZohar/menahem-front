@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import useFetch from "use-http";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
@@ -34,6 +34,7 @@ const getAge = (birthdate: Date) => {
 };
 
 const PetDetails = () => {
+  const navigate = useNavigate();
   const { get, loading, error } = useFetch("/pet");
   const [value, setValue] = useState(0);
   const [details, setDetails] = useState<petDetails>();
@@ -52,6 +53,10 @@ const PetDetails = () => {
         console.log(err);
       });
   }, []);
+
+  const navToEdit = () => {
+    navigate(`/pet/${petId}/edit`);
+  };
 
   return (
     <>
@@ -84,7 +89,7 @@ const PetDetails = () => {
               }
               action={
                 <Grid container mt={5} mr={2}>
-                  <IconButton aria-label="edit-details">
+                  <IconButton onClick={navToEdit}>
                     <Tooltip title="Edit">
                       <EditIcon fontSize="large" />
                     </Tooltip>
