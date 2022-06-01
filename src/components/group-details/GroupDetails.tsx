@@ -51,17 +51,12 @@ const GroupDetails = () => {
         <Grid container justifyContent="center">
           <Card
             sx={{
-              maxWidth: 600,
+              width: 600,
               minHeight: 400,
               m: 3,
             }}
           >
             <CardHeader
-              // avatar={
-              //   <Avatar alt={details.name} sx={{ width: 160, height: 160 }}>
-              //     <GroupIcon />
-              //   </Avatar>
-              // }
               title={
                 <Grid container m={1}>
                   <Typography
