@@ -3,7 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import { Box, Tab, Tabs, Typography, Container } from "@mui/material";
 import useFetch from "use-http";
 import { useParams } from "react-router-dom";
-import { Member, Pet as petDetails } from "../../types/pet";
+import { Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
 import PetMedical from "./PetMedical";
@@ -26,6 +26,7 @@ const PetDetails = () => {
   const [value, setValue] = useState(0);
   const [details, setDetails] = useState<petDetails>();
   const { petId } = useParams();
+  const { del } = useFetch("/pet");
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -42,7 +43,15 @@ const PetDetails = () => {
   }, []);
 
   const onDeleteUser = (userId: string) => {
-    // TODO: send to back
+    del(`/${details!._id}/user/${userId}`).then((res) => {
+      if (res === "OK") {
+        setDetails((prev) => {
+          const ind = prev!.members.findIndex((mem) => mem._id === userId);
+          return { ...prev!, members: prev!.members.splice(ind) };
+          // TODO: when cache need to delete from cache
+        });
+      }
+    });
   };
 
   return (
