@@ -41,7 +41,7 @@ const HomePage = () => {
     return <Loader />;
   }
 
-  if (!todayTasks || todayTasks.length === 0) {
+  if (todayTasks.length === 0) {
     return (
       <Typography sx={{ fontSize: "26px" }}>
         You have no tasks for today
