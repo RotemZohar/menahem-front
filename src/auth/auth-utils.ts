@@ -16,8 +16,8 @@ export const tokens = {
 
 // Client-side token verification
 
-interface Token {
-  userId: string;
+export interface Token {
+  _id: string;
   iat: number;
   exp: number;
 }
@@ -34,7 +34,7 @@ export const acquireToken = async () => {
     return null;
   }
 
-  const decoded = jwtDecode(accessToken) as Token;
+  const decoded = jwtDecode<Token>(accessToken);
   // If the token has not expired yet, just return it
   if (Date.now() < decoded.exp * 1000) {
     return accessToken;
