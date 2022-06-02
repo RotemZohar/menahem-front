@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import loadingSrc from "../../assets/loading3.gif";
 
 function Loader() {
+  const [renderLoader, setRenderLoader] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderLoader(true);
+    }, 50);
+  }, []);
+
+  if (!renderLoader) return null;
+
   return (
     <div style={{ marginTop: "15%" }}>
       <img src={loadingSrc} alt="Loading" />

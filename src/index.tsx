@@ -9,8 +9,9 @@ import App from "./App";
 import { persistor, store } from "./redux/store";
 import "./i18n";
 import useFetchOptions from "./hooks/use-fetch-options";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
-const BACK_API = process.env.REACT_APP_BACK_API;
+const BACK_API = `${process.env.REACT_APP_BACK_API}/api`;
 
 ReactDOM.render(
   <React.StrictMode>
@@ -26,3 +27,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
+serviceWorkerRegistration.register();
