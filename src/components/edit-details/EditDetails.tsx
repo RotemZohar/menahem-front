@@ -108,7 +108,6 @@ const EditDetailsPage = () => {
           <Grid container direction="column">
             <Grid item margin={1} xs={12}>
               <TextField
-                required
                 value={name}
                 label="Name"
                 type="string"
