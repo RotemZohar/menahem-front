@@ -9,7 +9,6 @@ import {
   Fab,
   Grid,
   TablePagination,
-  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -28,7 +27,7 @@ import { Pet } from "../../types/pet";
 import MultipleSelect from "../multiple-select/MultipleSelect";
 
 const GroupPets = (props: { pets: Pet[] }) => {
-  const { post, response } = useFetch("/group");
+  const { post } = useFetch("/group");
   const { pets } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -99,16 +98,18 @@ const GroupPets = (props: { pets: Pet[] }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {pets.map((pet) => (
-                <TableRow
-                  key={pet._id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="center">{pet.name}</TableCell>
-                  <TableCell align="center">{pet.species}</TableCell>
-                  <TableCell align="center">{pet.breed}</TableCell>
-                </TableRow>
-              ))}
+              {pets
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((pet) => (
+                  <TableRow
+                    key={pet._id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell align="center">{pet.name}</TableCell>
+                    <TableCell align="center">{pet.species}</TableCell>
+                    <TableCell align="center">{pet.breed}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

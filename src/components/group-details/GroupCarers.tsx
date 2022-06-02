@@ -27,7 +27,7 @@ import AddUsers from "../add-users/AddUsers";
 import { User } from "../../types/user";
 
 const GroupCarers = (props: { carers: any[] }) => {
-  const { post, response } = useFetch("/group");
+  const { post } = useFetch("/group");
   const { carers } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -95,15 +95,17 @@ const GroupCarers = (props: { carers: any[] }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {carers.map((row) => (
-                <TableRow
-                  key={row._id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="center">{row.name}</TableCell>
-                  <TableCell align="center">{row.email}</TableCell>
-                </TableRow>
-              ))}
+              {carers
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow
+                    key={row._id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell align="center">{row.name}</TableCell>
+                    <TableCell align="center">{row.email}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
