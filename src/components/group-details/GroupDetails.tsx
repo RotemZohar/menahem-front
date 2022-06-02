@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import {
-  Box,
   Tab,
   Tabs,
   Typography,
-  Container,
   Card,
   CardContent,
   CardHeader,
@@ -17,13 +15,14 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import GroupIcon from "@mui/icons-material/Group";
 import useFetch from "use-http";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Group as groupDetails } from "../../types/group";
 import TabPanel from "../tab-panel/TabPanel";
 import GroupCarers from "./GroupCarers";
 import GroupPets from "./GroupPets";
 
 const GroupDetails = () => {
+  const navigate = useNavigate();
   const { get, loading, error } = useFetch("/group");
   const [value, setValue] = useState(0);
   const [details, setDetails] = useState<groupDetails>();
@@ -31,6 +30,10 @@ const GroupDetails = () => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const navToEdit = () => {
+    navigate(`/group/${groupId}/edit`);
   };
 
   useEffect(() => {
@@ -75,7 +78,7 @@ const GroupDetails = () => {
               }
               action={
                 <Grid container>
-                  <IconButton>
+                  <IconButton onClick={navToEdit}>
                     <Tooltip title="Edit">
                       <EditIcon fontSize="large" />
                     </Tooltip>

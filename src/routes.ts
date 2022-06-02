@@ -11,5 +11,6 @@ export const routes = {
   group: "/group/:groupId",
   editDetals: "/editDetails",
   petEdit: "/pet/:petId/edit",
+  groupEdit: "/group/:groupId/edit",
   petMedicalGuests: "/:petId/medical/guests",
 };
