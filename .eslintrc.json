@@ -29,6 +29,8 @@
     "jsx-a11y/label-has-associated-control": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "react/require-default-props": "off",
-    "react/no-unused-prop-types": "warn"
+    "react/no-unused-prop-types": "warn",
+    "no-alert": "off",
+    "no-console": "off"
   }
 }
