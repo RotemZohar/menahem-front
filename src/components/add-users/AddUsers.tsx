@@ -32,7 +32,7 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
   };
 
   return (
-    <>
+    <div style={{ flexDirection: "column", alignSelf: "center" }}>
       <Typography variant="h5">Add Users</Typography>
       {selectedUsers.map((user) => (
         <Chip
@@ -67,7 +67,7 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
           </List>
         )}
       </form>
-    </>
+    </div>
   );
 }
 

@@ -29,16 +29,21 @@ const PetCarers: React.FC<PetCarersProps> = ({
 
   if (addUsers) {
     return (
-      <>
-        <IconButton onClick={() => setAddUsers(false)}>
+      <div style={{ position: "relative" }}>
+        <IconButton
+          onClick={() => setAddUsers(false)}
+          style={{ position: "absolute", left: 0 }}
+        >
           <ArrowBackIcon />
         </IconButton>
-        <AddUsers
-          selectedUsers={carers}
-          onAddUser={onAddUser}
-          onDeleteUser={onDeleteUser}
-        />
-      </>
+        <div>
+          <AddUsers
+            selectedUsers={carers}
+            onAddUser={onAddUser}
+            onDeleteUser={onDeleteUser}
+          />
+        </div>
+      </div>
     );
   }
 
