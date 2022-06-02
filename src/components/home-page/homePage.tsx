@@ -10,11 +10,11 @@ import TaskItem from "./taskItem";
 
 const HomePage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
-  const { data: todayTasks = [], loading: loadingTasks } = useFetch(
-    `/user/${userId}/today-tasks`,
-    {},
-    [userId]
-  );
+  const {
+    data: todayTasks = [],
+    loading: loadingTasks,
+    error: tasksError,
+  } = useFetch(`/user/${userId}/today-tasks`, {}, [userId]);
 
   React.useEffect(() => {
     console.log(todayTasks);
@@ -39,6 +39,10 @@ const HomePage = () => {
 
   if (loadingTasks) {
     return <Loader />;
+  }
+
+  if (tasksError) {
+    return <Typography sx={{ fontSize: "26px" }}>Error occured</Typography>;
   }
 
   if (todayTasks.length === 0) {
