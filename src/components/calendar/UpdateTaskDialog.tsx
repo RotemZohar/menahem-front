@@ -123,8 +123,9 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
                 InputLabelProps={{ shrink: true }}
               />
             </Grid>
-            {/* ({ () => taskId ? () : () }) */}
-            <Grid item margin={1} xs={10.3}>
+            {
+              !taskId && 
+              (<Grid item margin={1} xs={10.3}>
                 <TextField
                     label="Pet"
                     select
@@ -132,14 +133,15 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
                     value={pet}
                     required
                     onChange={(e) => setPet(e.target.value)}
-                >
-                    {petsList?.map((option) => (
-                    <MenuItem key={option._id} value={option.name}>
-                        {option.name}
-                    </MenuItem>
-                    ))}
-              </TextField>
-            </Grid>
+                  >
+                      {petsList?.map((option) => (
+                      <MenuItem key={option._id} value={option.name}>
+                          {option.name}
+                      </MenuItem>
+                      ))}
+                </TextField>
+              </Grid>)
+            }            
           </Grid>
           <Grid container justifyContent="flex-end">
             <Grid item margin={3}>
