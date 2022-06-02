@@ -23,16 +23,19 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
 import useFetch from "use-http";
+import { useParams } from "react-router-dom";
 import { Pet } from "../../types/pet";
 import MultipleSelect from "../multiple-select/MultipleSelect";
 
 const GroupPets = (props: { pets: Pet[] }) => {
+  const { post, response } = useFetch("/group");
   const { pets } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [addPetOpen, setAddPetOpen] = React.useState(false);
   const { data: petsList, loading } = useFetch("/user/pets", {}, []);
   const [selectedPets, setSelectedPets] = useState<string[]>([]);
+  const { groupId } = useParams();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -54,7 +57,20 @@ const GroupPets = (props: { pets: Pet[] }) => {
   };
 
   const addPets = async () => {
-    // TODO: put pets in group
+    if (selectedPets.length === 0) {
+      alert("Please add some pets!");
+    } else {
+      post(`/${groupId}/Pets`, {
+        petsIds: selectedPets,
+      })
+        .then(() => {
+          // TODO: add pet to table
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Something went wrong with adding pets");
+        });
+    }
 
     setSelectedPets([]);
     setAddPetOpen(false);

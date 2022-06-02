@@ -21,15 +21,19 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
+import { useParams } from "react-router-dom";
+import useFetch from "use-http";
 import AddUsers from "../add-users/AddUsers";
 import { User } from "../../types/user";
 
 const GroupCarers = (props: { carers: any[] }) => {
+  const { post, response } = useFetch("/group");
   const { carers } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState<User[]>([]);
   const [addUserOpen, setAddUserOpen] = React.useState(false);
+  const { groupId } = useParams();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -51,7 +55,20 @@ const GroupCarers = (props: { carers: any[] }) => {
   };
 
   const addMembers = async () => {
-    // todo: put members in group
+    if (users.length === 0) {
+      alert("Please add some members!");
+    } else {
+      post(`/${groupId}/Users`, {
+        usersIds: users,
+      })
+        .then(() => {
+          // TODO: add users to table
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Something went wrong with adding users");
+        });
+    }
 
     setAddUserOpen(false);
   };
