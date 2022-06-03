@@ -17,16 +17,10 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
     const [taskId, setTaskId] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [dateFrom, setDateFrom] = useState(
-        moment(new Date()).format("DD/MM/YYYY HH:mm")
-    );
-    const [dateTo, setDateTo] = useState(
-        moment(new Date()).format("DD/MM/YYYY HH:mm")
-    );
+    const [dateFrom, setDateFrom] = useState(moment().format('YYYY-MM-DDTHH:mm'));
+    const [dateTo, setDateTo] = useState(moment().format('YYYY-MM-DDTHH:mm'));
     const [isCompleted, setIsCompleted] = useState(false);
     const [pet, setPet] = useState<string>("");
-
-
     const [titleError, setTitleError] = useState(false);
     const [datesError, setDatesError] = useState(
         new Date(dateFrom).getTime() > new Date(dateTo).getTime()
@@ -36,8 +30,8 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
       setTaskId(task ? task._id : "");
       setTitle(task ? task.title : "");
       setDescription(task ? task.description : "");
-      setDateFrom(task ? moment(task.dateFrom).format("DD/MM/YYYY HH:mm") : moment(new Date()).format("DD/MM/YYYY HH:mm"));
-      setDateTo(task ? moment(task.dateTo).format("DD/MM/YYYY HH:mm") : moment(new Date()).format("DD/MM/YYYY HH:mm"));
+      setDateFrom(task ? moment(task.dateFrom).format('YYYY-MM-DDTHH:mm') : moment().format('YYYY-MM-DDTHH:mm'));
+      setDateTo(task ? moment(task.dateTo).format('YYYY-MM-DDTHH:mm') : moment().format('YYYY-MM-DDTHH:mm'));
       setIsCompleted(task ? task.isCompleted : false);
 
       const selectedPet = petsList?.find(p => p._id === selectedPetId);
@@ -89,7 +83,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
                 label="From"
                 type="datetime-local"
                 value={dateFrom}
-                onChange={(e) => setDateFrom(moment().format(e.target.value))}
+                onChange={(e) => setDateFrom(e.target.value)}
                 onBlur={() => setDatesError(new Date(dateFrom).getTime() > new Date(dateTo).getTime())}
                 fullWidth
                 required
@@ -103,7 +97,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
                 label="To"
                 type="datetime-local"
                 value={dateTo}
-                onChange={(e) => setDateTo(moment().format(e.target.value))}
+                onChange={(e) => setDateTo(e.target.value)}
                 onBlur={() => setDatesError(new Date(dateFrom).getTime() > new Date(dateTo).getTime())}
                 fullWidth
                 required
