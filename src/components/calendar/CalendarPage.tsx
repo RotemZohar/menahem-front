@@ -162,6 +162,7 @@ function CalendarPage() {
           }}
           initialView="dayGridMonth"
           height={650}
+          fixedWeekCount={false}
           events={calendarEvents}
           eventContent={renderEventContent}
         />
