@@ -101,7 +101,7 @@ function CalendarPage() {
       dateTo: task.dateTo, 
       isCompleted: task.isCompleted
     }).then((res) => {
-        if (res === "Created" || res === "OK") {
+        if (res === "Created" || res === "Updated") {
           fetchUserTasks();
         } else {
           alert(`Error: ${res}`);
@@ -116,7 +116,7 @@ function CalendarPage() {
   const handleDeleteTask = (data: { petId: string, taskId: string }) => {
     del(`/${data.petId}/task/${data.taskId}`
     ).then((res) => {
-        if (res === "OK") {
+        if (res === "Deleted") {
           fetchUserTasks();
         } else {
           alert(`Error: ${res}`);
