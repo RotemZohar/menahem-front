@@ -101,21 +101,30 @@ function CalendarPage() {
       dateTo: task.dateTo, 
       isCompleted: task.isCompleted
     }).then((res) => {
-      // TODO: Check status
-        fetchUserTasks();
+        if (res === "Created" || res === "OK") {
+          fetchUserTasks();
+        } else {
+          alert(`Error: ${res}`);
+        }
       })
       .catch((err) => {
         console.error(err);
+        alert(`Error: ${err}`);
       });
   };
 
   const handleDeleteTask = (data: { petId: string, taskId: string }) => {
     del(`/${data.petId}/task/${data.taskId}`
     ).then((res) => {
-        fetchUserTasks();
+        if (res === "OK") {
+          fetchUserTasks();
+        } else {
+          alert(`Error: ${res}`);
+        }
       })
       .catch((err) => {
         console.error(err);
+        alert(`Error: ${err}`);
       });
   };
 

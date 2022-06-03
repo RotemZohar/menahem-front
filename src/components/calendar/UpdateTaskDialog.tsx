@@ -20,7 +20,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
     const [dateFrom, setDateFrom] = useState(moment().format('YYYY-MM-DDTHH:mm'));
     const [dateTo, setDateTo] = useState(moment().format('YYYY-MM-DDTHH:mm'));
     const [isCompleted, setIsCompleted] = useState(false);
-    const [petId, setPetId] = useState<string | undefined>("");
+    const [petId, setPetId] = useState<string>("");
     const [titleError, setTitleError] = useState(false);
     const [datesError, setDatesError] = useState(
         new Date(dateFrom).getTime() > new Date(dateTo).getTime()
@@ -33,7 +33,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
       setDateFrom(task ? moment(task.dateFrom).format('YYYY-MM-DDTHH:mm') : moment().format('YYYY-MM-DDTHH:mm'));
       setDateTo(task ? moment(task.dateTo).format('YYYY-MM-DDTHH:mm') : moment().format('YYYY-MM-DDTHH:mm'));
       setIsCompleted(task ? task.isCompleted : false);
-      setPetId(selectedPetId);
+      setPetId(task && selectedPetId ? selectedPetId : "");
       setTitleError(false);
       setTitleError(false);
     }, [open]);
