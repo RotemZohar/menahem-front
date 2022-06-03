@@ -3,10 +3,11 @@ import { Alert, Box, Button, Card, Grid, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../../App.css";
 import { useTranslation } from "react-i18next";
-import useFetch from "use-http";
+import useFetch, { CachePolicies } from "use-http";
 import { useDispatch } from "react-redux";
+import jwtDecode from "jwt-decode";
 import { routes } from "../../routes";
-import { acquireToken, tokens } from "../../auth/auth-utils";
+import { acquireToken, Token, tokens } from "../../auth/auth-utils";
 import { useHideNavbar } from "../../hooks/use-hide-navbar";
 import { setUserId } from "../../redux/slices/userSlice";
 import mainLogo from "../../assets/main-logo.png";
@@ -19,14 +20,20 @@ const LandingPage = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const { post, response } = useFetch("/auth");
+  const { post, response } = useFetch("/auth", {
+    cachePolicy: CachePolicies.NO_CACHE,
+  });
   const dispatch = useDispatch();
 
   useHideNavbar();
 
   useEffect(() => {
     acquireToken().then((value) => {
-      if (value) navigate(routes.home);
+      if (value) {
+        const decoded = jwtDecode<Token>(value);
+        dispatch(setUserId(decoded._id));
+        navigate(routes.home);
+      }
     });
   }, []);
 

@@ -8,13 +8,14 @@ import {
   MenuItem,
   MenuList,
   Toolbar,
+  Tooltip,
 } from "@mui/material";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useFetch from "use-http";
+import useFetch, { CachePolicies } from "use-http";
 import calendarPng from "../../assets/calendar.png";
 import userPng from "../../assets/user.png";
 import myPetsPng from "../../assets/leash.png";
@@ -27,7 +28,9 @@ function Navbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
-  const { post } = useFetch("/auth");
+  const { post } = useFetch("/auth", {
+    cachePolicy: CachePolicies.NO_CACHE,
+  });
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -53,7 +56,7 @@ function Navbar() {
   };
 
   const logout = () => {
-    post("/logout").then((res) => {
+    post("/logout").then(() => {
       tokens.access.delete();
       tokens.refresh.delete();
       navigate(routes.signin);
@@ -71,23 +74,31 @@ function Navbar() {
             <Grid container justifyContent="space-around">
               <Grid item>
                 <IconButton onClick={navToCalendar}>
-                  <img src={calendarPng} height="40" alt="calendar" />
+                  <Tooltip title="Calender">
+                    <img src={calendarPng} height="40" alt="calendar" />
+                  </Tooltip>
                 </IconButton>
               </Grid>
               <Grid item>
                 <IconButton onClick={navToPets}>
-                  <img src={myPetsPng} height="40" alt="pets" />
+                  <Tooltip title="My Pets">
+                    <img src={myPetsPng} height="40" alt="pets" />
+                  </Tooltip>
                 </IconButton>
               </Grid>
               <Grid item>
                 <IconButton onClick={navToGroups}>
-                  <img src={groupsPng} height="40" alt="groups" />
+                  <Tooltip title="My Groups">
+                    <img src={groupsPng} height="40" alt="groups" />
+                  </Tooltip>
                 </IconButton>
               </Grid>
               <Grid item>
                 <IconButton onClick={handleClick}>
                   {/* TODO: put the user's profile picture */}
-                  <img src={userPng} height="40" alt="general" />
+                  <Tooltip title="Account">
+                    <img src={userPng} height="40" alt="general" />
+                  </Tooltip>
                 </IconButton>
                 {/* TODO: redirect to the right pages */}
                 <Menu open={open} onClose={handleClose} anchorEl={anchorEl}>

@@ -5,4 +5,5 @@ export interface UserDetails {
 export interface User {
   _id: string;
   name: string;
+  email: string;
 }

@@ -3,7 +3,7 @@ import { count } from "console";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import useFetch from "use-http";
+import useFetch, { CachePolicies } from "use-http";
 import { useHideNavbar } from "../../hooks/use-hide-navbar";
 import signupLogo from "../../assets/signup-logo.png";
 
@@ -21,7 +21,9 @@ const SignUpPage = () => {
   const [requiredLength, setRequiredLength] = useState(8);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { post } = useFetch("/auth");
+  const { post } = useFetch("/auth", {
+    cachePolicy: CachePolicies.NO_CACHE,
+  });
   useHideNavbar();
 
   useEffect(() => {
@@ -80,7 +82,6 @@ const SignUpPage = () => {
                 <Grid item mt={1} xs={12}>
                   <Tooltip
                     title="Passwords must be at least 8 characters long, include at least one number, and include both lower and upper case characters."
-                    placement="right"
                     arrow
                   >
                     <TextField
