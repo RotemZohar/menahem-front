@@ -20,7 +20,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
     const [dateFrom, setDateFrom] = useState(moment().format('YYYY-MM-DDTHH:mm'));
     const [dateTo, setDateTo] = useState(moment().format('YYYY-MM-DDTHH:mm'));
     const [isCompleted, setIsCompleted] = useState(false);
-    const [pet, setPet] = useState<string>("");
+    const [petId, setPetId] = useState<string | undefined>("");
     const [titleError, setTitleError] = useState(false);
     const [datesError, setDatesError] = useState(
         new Date(dateFrom).getTime() > new Date(dateTo).getTime()
@@ -33,10 +33,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
       setDateFrom(task ? moment(task.dateFrom).format('YYYY-MM-DDTHH:mm') : moment().format('YYYY-MM-DDTHH:mm'));
       setDateTo(task ? moment(task.dateTo).format('YYYY-MM-DDTHH:mm') : moment().format('YYYY-MM-DDTHH:mm'));
       setIsCompleted(task ? task.isCompleted : false);
-
-      const selectedPet = petsList?.find(p => p._id === selectedPetId);
-      setPet(selectedPet ? selectedPet.name : "");
-
+      setPetId(selectedPetId);
       setTitleError(false);
       setTitleError(false);
     }, [open]);
@@ -53,7 +50,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
             description,
             dateFrom,
             dateTo,
-            petId: petsList?.find(p => p.name === pet)?._id,
+            petId,
             isCompleted
         });
         onClose();
@@ -124,12 +121,12 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
                     label="Pet"
                     select
                     fullWidth
-                    value={pet}
+                    value={petId}
                     required
-                    onChange={(e) => setPet(e.target.value)}
+                    onChange={(e) => setPetId(e.target.value)}
                   >
                       {petsList?.map((option) => (
-                      <MenuItem key={option._id} value={option.name}>
+                      <MenuItem key={option._id} value={option._id}>
                           {option.name}
                       </MenuItem>
                       ))}
