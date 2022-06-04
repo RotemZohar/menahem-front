@@ -8,11 +8,13 @@ import {
   Divider,
   Fab,
   Grid,
+  IconButton,
   TablePagination,
   Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -27,7 +29,7 @@ import { Pet } from "../../types/pet";
 import MultipleSelect from "../multiple-select/MultipleSelect";
 
 const GroupPets = (props: { pets: Pet[] }) => {
-  const { post } = useFetch("/group");
+  const { post, del, response } = useFetch("/group");
   const { pets } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -75,6 +77,15 @@ const GroupPets = (props: { pets: Pet[] }) => {
     setAddPetOpen(false);
   };
 
+  const deletePet = async (petId: string) => {
+    const deletedPet = await del(`/${groupId}/Pet/${petId}`);
+    if (response.data === "Deleted") {
+      // TODO: remove pet from table w/o refresh
+    } else {
+      alert("Something went wrong with deleting pet");
+    }
+  };
+
   if (!pets) {
     return (
       <Box>
@@ -95,6 +106,7 @@ const GroupPets = (props: { pets: Pet[] }) => {
                 <TableCell align="center">Name</TableCell>
                 <TableCell align="center">Species</TableCell>
                 <TableCell align="center">Breed</TableCell>
+                <TableCell align="center"> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -108,6 +120,13 @@ const GroupPets = (props: { pets: Pet[] }) => {
                     <TableCell align="center">{pet.name}</TableCell>
                     <TableCell align="center">{pet.species}</TableCell>
                     <TableCell align="center">{pet.breed}</TableCell>
+                    <TableCell align="center">
+                      <IconButton onClick={() => deletePet(pet._id)}>
+                        <Tooltip title="Delete">
+                          <DeleteIcon />
+                        </Tooltip>
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>

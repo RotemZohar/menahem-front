@@ -8,6 +8,7 @@ import {
   Divider,
   Fab,
   Grid,
+  IconButton,
   TablePagination,
   Tooltip,
   Typography,
@@ -21,13 +22,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useParams } from "react-router-dom";
 import useFetch from "use-http";
 import AddUsers from "../add-users/AddUsers";
 import { User } from "../../types/user";
 
 const GroupCarers = (props: { carers: any[] }) => {
-  const { post } = useFetch("/group");
+  const { post, del, response } = useFetch("/group");
   const { carers } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -73,6 +75,15 @@ const GroupCarers = (props: { carers: any[] }) => {
     setAddUserOpen(false);
   };
 
+  const deleteMember = async (userId: string) => {
+    const deletedUser = await del(`/${groupId}/User/${userId}`);
+    if (response.data === "Deleted") {
+      // TODO: remove user from table w/o refresh
+    } else {
+      alert("Something went wrong with deleting pet");
+    }
+  };
+
   if (!carers) {
     return (
       <Box>
@@ -92,6 +103,7 @@ const GroupCarers = (props: { carers: any[] }) => {
               <TableRow>
                 <TableCell align="center">Name</TableCell>
                 <TableCell align="center">Email</TableCell>
+                <TableCell align="center"> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -104,6 +116,13 @@ const GroupCarers = (props: { carers: any[] }) => {
                   >
                     <TableCell align="center">{row.name}</TableCell>
                     <TableCell align="center">{row.email}</TableCell>
+                    <TableCell align="center">
+                      <IconButton onClick={() => deleteMember(row._id)}>
+                        <Tooltip title="Delete">
+                          <DeleteIcon />
+                        </Tooltip>
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Avatar from "@mui/material/Avatar";
 import {
   Tab,
   Tabs,
@@ -13,7 +12,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import GroupIcon from "@mui/icons-material/Group";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
 import { Group as groupDetails } from "../../types/group";
