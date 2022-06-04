@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   Divider,
   Fab,
@@ -23,6 +24,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
+import WarningIcon from "@mui/icons-material/Warning";
 import useFetch from "use-http";
 import { useParams } from "react-router-dom";
 import { Pet } from "../../types/pet";
@@ -38,6 +40,10 @@ const GroupPets = (props: { pets: Pet[] }) => {
   const { data: petsList, loading } = useFetch("/user/pets", {}, []);
   const [selectedPets, setSelectedPets] = useState<string[]>([]);
   const { groupId } = useParams();
+  const [deletePetModal, setDeletePetModal] = React.useState({
+    isOpen: false,
+    id: "",
+  });
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -58,6 +64,14 @@ const GroupPets = (props: { pets: Pet[] }) => {
     setAddPetOpen(false);
   };
 
+  const handleDeletePetOpen = (petId: string) => {
+    setDeletePetModal({ isOpen: true, id: petId });
+  };
+
+  const handleDeletePetClose = () => {
+    setDeletePetModal({ isOpen: false, id: "" });
+  };
+
   const addPets = async () => {
     if (selectedPets.length === 0) {
       alert("Please add some pets!");
@@ -67,15 +81,15 @@ const GroupPets = (props: { pets: Pet[] }) => {
       })
         .then(() => {
           // TODO: add pet to table
+
+          setSelectedPets([]);
+          setAddPetOpen(false);
         })
         .catch((error) => {
           console.log(error);
           alert("Something went wrong with adding pets");
         });
     }
-
-    setSelectedPets([]);
-    setAddPetOpen(false);
   };
 
   const deletePet = async (petId: string) => {
@@ -84,6 +98,7 @@ const GroupPets = (props: { pets: Pet[] }) => {
       let newPet = [...petList];
       newPet = newPet.filter((item) => item._id !== petId);
       setPetList(newPet);
+      handleDeletePetClose();
     } else {
       alert("Something went wrong with deleting pet");
     }
@@ -124,7 +139,7 @@ const GroupPets = (props: { pets: Pet[] }) => {
                     <TableCell align="center">{pet.species}</TableCell>
                     <TableCell align="center">{pet.breed}</TableCell>
                     <TableCell align="center">
-                      <IconButton onClick={() => deletePet(pet._id)}>
+                      <IconButton onClick={() => handleDeletePetOpen(pet._id)}>
                         <Tooltip title="Delete">
                           <DeleteIcon />
                         </Tooltip>
@@ -178,6 +193,32 @@ const GroupPets = (props: { pets: Pet[] }) => {
           <Button onClick={handleAddPetClose}>Cancel</Button>
           <Button variant="contained" onClick={addPets}>
             Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={deletePetModal.isOpen}
+        onClose={handleDeletePetClose}
+        maxWidth="xs"
+      >
+        <DialogTitle style={{ fontWeight: "bold" }}>
+          <WarningIcon fontSize="large" color="error" />
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action will permanently delete this pet from this group. Are
+            you sure you want to continue?
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button onClick={handleDeletePetClose}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => deletePet(deletePetModal.id)}
+          >
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

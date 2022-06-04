@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   Divider,
   Fab,
@@ -23,6 +24,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import WarningIcon from "@mui/icons-material/Warning";
 import { useParams } from "react-router-dom";
 import useFetch from "use-http";
 import AddUsers from "../add-users/AddUsers";
@@ -36,6 +38,10 @@ const GroupCarers = (props: { carers: any[] }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState<User[]>([]);
   const [addUserOpen, setAddUserOpen] = React.useState(false);
+  const [deleteUserModal, setDeleteUserModal] = React.useState({
+    isOpen: false,
+    id: "",
+  });
   const { groupId } = useParams();
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -57,6 +63,14 @@ const GroupCarers = (props: { carers: any[] }) => {
     setAddUserOpen(false);
   };
 
+  const handleDeleteUserOpen = (userId: string) => {
+    setDeleteUserModal({ isOpen: true, id: userId });
+  };
+
+  const handleDeleteUserClose = () => {
+    setDeleteUserModal({ isOpen: false, id: "" });
+  };
+
   const addMembers = async () => {
     if (users.length === 0) {
       alert("Please add some members!");
@@ -66,14 +80,14 @@ const GroupCarers = (props: { carers: any[] }) => {
       })
         .then(() => {
           // TODO: add users to table
+
+          setAddUserOpen(false);
         })
         .catch((error) => {
           console.log(error);
           alert("Something went wrong with adding users");
         });
     }
-
-    setAddUserOpen(false);
   };
 
   const deleteMember = async (userId: string) => {
@@ -82,6 +96,7 @@ const GroupCarers = (props: { carers: any[] }) => {
       let newMember = [...memberList];
       newMember = newMember.filter((item) => item._id !== userId);
       setMemberList(newMember);
+      handleDeleteUserClose();
     } else {
       alert("Something went wrong with deleting pet");
     }
@@ -120,7 +135,7 @@ const GroupCarers = (props: { carers: any[] }) => {
                     <TableCell align="center">{row.name}</TableCell>
                     <TableCell align="center">{row.email}</TableCell>
                     <TableCell align="center">
-                      <IconButton onClick={() => deleteMember(row._id)}>
+                      <IconButton onClick={() => handleDeleteUserOpen(row._id)}>
                         <Tooltip title="Delete">
                           <DeleteIcon />
                         </Tooltip>
@@ -184,6 +199,32 @@ const GroupCarers = (props: { carers: any[] }) => {
           <Button onClick={handleAddUserClose}>Cancel</Button>
           <Button variant="contained" onClick={addMembers}>
             Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={deleteUserModal.isOpen}
+        onClose={handleDeleteUserClose}
+        maxWidth="xs"
+      >
+        <DialogTitle style={{ fontWeight: "bold" }}>
+          <WarningIcon fontSize="large" color="error" />
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action will permanently delete this user from the carers in
+            this group. Are you sure you want to continue?
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button onClick={handleDeleteUserClose}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => deleteMember(deleteUserModal.id)}
+          >
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
