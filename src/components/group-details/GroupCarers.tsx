@@ -31,6 +31,7 @@ import { User } from "../../types/user";
 const GroupCarers = (props: { carers: any[] }) => {
   const { post, del, response } = useFetch("/group");
   const { carers } = props;
+  const [memberList, setMemberList] = useState(carers);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState<User[]>([]);
@@ -76,9 +77,11 @@ const GroupCarers = (props: { carers: any[] }) => {
   };
 
   const deleteMember = async (userId: string) => {
-    const deletedUser = await del(`/${groupId}/User/${userId}`);
+    const deletedMember = await del(`/${groupId}/User/${userId}`);
     if (response.data === "Deleted") {
-      // TODO: remove user from table w/o refresh
+      let newMember = [...memberList];
+      newMember = newMember.filter((item) => item._id !== userId);
+      setMemberList(newMember);
     } else {
       alert("Something went wrong with deleting pet");
     }
@@ -107,7 +110,7 @@ const GroupCarers = (props: { carers: any[] }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {carers
+              {memberList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
                   <TableRow

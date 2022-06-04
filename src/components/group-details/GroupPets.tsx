@@ -31,6 +31,7 @@ import MultipleSelect from "../multiple-select/MultipleSelect";
 const GroupPets = (props: { pets: Pet[] }) => {
   const { post, del, response } = useFetch("/group");
   const { pets } = props;
+  const [petList, setPetList] = useState(pets);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [addPetOpen, setAddPetOpen] = React.useState(false);
@@ -80,7 +81,9 @@ const GroupPets = (props: { pets: Pet[] }) => {
   const deletePet = async (petId: string) => {
     const deletedPet = await del(`/${groupId}/Pet/${petId}`);
     if (response.data === "Deleted") {
-      // TODO: remove pet from table w/o refresh
+      let newPet = [...petList];
+      newPet = newPet.filter((item) => item._id !== petId);
+      setPetList(newPet);
     } else {
       alert("Something went wrong with deleting pet");
     }
@@ -110,7 +113,7 @@ const GroupPets = (props: { pets: Pet[] }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {pets
+              {petList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((pet) => (
                   <TableRow
