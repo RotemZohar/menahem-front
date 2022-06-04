@@ -48,8 +48,11 @@ const PetCarers: React.FC<PetCarersProps> = ({
   }
 
   return (
-    <>
-      <IconButton onClick={() => setAddUsers((prev) => !prev)}>
+    <div style={{ display: "flex", alignItems: "baseline" }}>
+      <IconButton
+        onClick={() => setAddUsers((prev) => !prev)}
+        // style={{ position: "absolute", left: 0 }}
+      >
         <AddIcon />
       </IconButton>
       <Paper variant="outlined">
@@ -84,7 +87,7 @@ const PetCarers: React.FC<PetCarersProps> = ({
           </Table>
         </TableContainer>
       </Paper>
-    </>
+    </div>
   );
 };
 export default PetCarers;

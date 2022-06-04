@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import useFetch from "use-http";
+import useFetch, { CachePolicies } from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
 import { Member, Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
@@ -36,11 +36,15 @@ const getAge = (birthdate: Date) => {
 
 const PetDetails = () => {
   const navigate = useNavigate();
-  const { get, loading, error } = useFetch("/pet");
+  const { get, loading, error } = useFetch("/pet", {
+    cachePolicy: CachePolicies.NO_CACHE,
+  });
   const [value, setValue] = useState(0);
   const [details, setDetails] = useState<petDetails>();
   const { petId } = useParams();
-  const { del, put } = useFetch("/pet");
+  const { del, put } = useFetch("/pet", {
+    cachePolicy: CachePolicies.NO_CACHE,
+  });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
