@@ -93,7 +93,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
   const addTreatment = async () => {
     setTreatmentOpen(false);
 
-    const date = moment(treatmentDate, "DD-MM-YYYY").toDate();
+    const date = moment(treatmentDate, "YYYY-MM-DD").toDate();
 
     const newTreatment = await put(`/${petId}/add-treatment`, {
       treatment,
@@ -142,7 +142,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
                       {row.treatment}
                     </TableCell>
                     <TableCell align="center">
-                      {moment(row.date).format("DD-MM-YYYY")}
+                      {moment(row.date).format("YYYY-MM-DD")}
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
@@ -204,6 +204,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
         <DialogTitle>Add treatment</DialogTitle>
         <DialogContent>
           <TextField
+            required
             margin="dense"
             id="name"
             label="Treatment"
@@ -216,6 +217,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
             }}
           />
           <TextField
+            required
             margin="dense"
             id="date"
             label="TreatmentDate"
