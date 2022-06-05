@@ -49,7 +49,7 @@ export const acquireToken = async () => {
   }
 
   // Refresh the tokens
-  const API_URL = `${process.env.REACT_APP_BACK_API}/api`;
+  const API_URL = `${process.env.REACT_APP_BACK_API}`;
   const refreshResponse = await fetch(`${API_URL}/api/auth/refresh-token`, {
     method: "POST",
     headers: {
