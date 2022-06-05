@@ -1,6 +1,7 @@
 import {
   Chip,
   FormControl,
+  Grid,
   IconButton,
   Input,
   InputLabel,
@@ -66,6 +67,15 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
           </List>
         )}
       </form>
+      <Grid container m={2} xs={!2}>
+        {selectedUsers.map((user) => (
+          <Chip
+            key={user._id}
+            label={user.name}
+            onDelete={() => onDeleteUser(user._id)}
+          />
+        ))}
+      </Grid>
     </>
   );
 }

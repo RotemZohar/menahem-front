@@ -9,6 +9,7 @@ import {
   MenuItem,
   Avatar,
   CardHeader,
+  Divider,
 } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useNavigate } from "react-router-dom";
@@ -147,7 +148,8 @@ const AddPetForm = () => {
     <Grid container justifyContent="center">
       <Card sx={{ width: 600, minHeight: 300, m: 3 }}>
         <CardHeader title="Add New Pet" />
-        <Grid item>
+        <Divider />
+        <Grid item mt={2}>
           <Avatar
             src={image}
             alt="X"
