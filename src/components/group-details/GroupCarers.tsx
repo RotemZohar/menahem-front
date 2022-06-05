@@ -30,10 +30,17 @@ import useFetch from "use-http";
 import AddUsers from "../add-users/AddUsers";
 import { User } from "../../types/user";
 
-const GroupCarers = (props: { carers: any[] }) => {
-  const { post, del, response } = useFetch("/group");
-  const { carers } = props;
-  const [memberList, setMemberList] = useState(carers);
+interface GroupCarersProps {
+  carers: User[];
+  deleteUserFromGroup: (userId: string) => void;
+  addUserToGroup: (users: User[]) => void;
+}
+
+const GroupCarers: React.FC<GroupCarersProps> = ({
+  carers,
+  deleteUserFromGroup,
+  addUserToGroup,
+}) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState<User[]>([]);
@@ -42,7 +49,6 @@ const GroupCarers = (props: { carers: any[] }) => {
     isOpen: false,
     id: "",
   });
-  const { groupId } = useParams();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -71,37 +77,6 @@ const GroupCarers = (props: { carers: any[] }) => {
     setDeleteUserModal({ isOpen: false, id: "" });
   };
 
-  const addMembers = async () => {
-    if (users.length === 0) {
-      alert("Please add some members!");
-    } else {
-      post(`/${groupId}/Users`, {
-        usersIds: users,
-      })
-        .then(() => {
-          // TODO: add users to table
-
-          setAddUserOpen(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Something went wrong with adding users");
-        });
-    }
-  };
-
-  const deleteMember = async (userId: string) => {
-    const deletedMember = await del(`/${groupId}/User/${userId}`);
-    if (response.data === "Deleted") {
-      let newMember = [...memberList];
-      newMember = newMember.filter((item) => item._id !== userId);
-      setMemberList(newMember);
-      handleDeleteUserClose();
-    } else {
-      alert("Something went wrong with deleting pet");
-    }
-  };
-
   if (!carers) {
     return (
       <Box>
@@ -125,7 +100,7 @@ const GroupCarers = (props: { carers: any[] }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {memberList
+              {carers
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
                   <TableRow
@@ -197,7 +172,13 @@ const GroupCarers = (props: { carers: any[] }) => {
         <Divider />
         <DialogActions sx={{ justifyContent: "space-between" }}>
           <Button onClick={handleAddUserClose}>Cancel</Button>
-          <Button variant="contained" onClick={addMembers}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setAddUserOpen(false);
+              addUserToGroup(users);
+            }}
+          >
             Add
           </Button>
         </DialogActions>
@@ -222,7 +203,10 @@ const GroupCarers = (props: { carers: any[] }) => {
           <Button onClick={handleDeleteUserClose}>Cancel</Button>
           <Button
             variant="contained"
-            onClick={() => deleteMember(deleteUserModal.id)}
+            onClick={() => {
+              handleDeleteUserClose();
+              deleteUserFromGroup(deleteUserModal.id);
+            }}
           >
             Delete
           </Button>

@@ -10,22 +10,34 @@ import {
   Grid,
   IconButton,
   Tooltip,
+  Box,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
-import { Group as groupDetails } from "../../types/group";
 import TabPanel from "../tab-panel/TabPanel";
 import GroupCarers from "./GroupCarers";
 import GroupPets from "./GroupPets";
 import Loader from "../loader/Loader";
+import { User } from "../../types/user";
 
 const GroupDetails = () => {
   const navigate = useNavigate();
-  const { get, loading, error } = useFetch("/group");
-  const [value, setValue] = useState(0);
-  const [details, setDetails] = useState<groupDetails>();
   const { groupId } = useParams();
+  const [carers, setCarers] = useState<User[]>([]);
+  const { post, del, get, response } = useFetch("/group");
+  const {
+    data: details,
+    loading,
+    error,
+  } = useFetch(`/group/${groupId}`, {}, [groupId]);
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (details) {
+      setCarers(details.members);
+    }
+  }, [details]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -35,18 +47,36 @@ const GroupDetails = () => {
     navigate(`/group/${groupId}/edit`);
   };
 
-  useEffect(() => {
-    get(`/${groupId}`)
-      .then((group) => {
-        setDetails(group);
-      })
-      .catch((err) => {
-        console.log(err);
+  const deleteUserFromGroup = async (userId: string) => {
+    const data = await del(`/${groupId}/user/${userId}`);
+    if (data === "Deleted") {
+      details.members = details.members.filter(
+        (member: User) => member._id !== userId
+      );
+
+      setCarers(details.members);
+    }
+  };
+
+  const addUserToGroup = async (users: User[]) => {
+    if (users.length === 0) {
+      alert("Please add some members!");
+    } else {
+      const data = await post(`/${groupId}/Users`, {
+        usersIds: users,
       });
-  }, []);
+
+      users.forEach((user) => {
+        details.members.push(user);
+      });
+
+      details.members = [...details.members];
+      setCarers(details.members);
+    }
+  };
 
   return (
-    <>
+    <Box>
       {error && error.message}
       {loading && <Loader />}
       {details && (
@@ -97,13 +127,17 @@ const GroupDetails = () => {
                 <GroupPets pets={details.pets} />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <GroupCarers carers={details.members} />
+                <GroupCarers
+                  carers={carers}
+                  deleteUserFromGroup={deleteUserFromGroup}
+                  addUserToGroup={addUserToGroup}
+                />
               </TabPanel>
             </CardContent>
           </Card>
         </Grid>
       )}
-    </>
+    </Box>
   );
 };
 
