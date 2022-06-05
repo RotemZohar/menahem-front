@@ -20,11 +20,13 @@ import GroupCarers from "./GroupCarers";
 import GroupPets from "./GroupPets";
 import Loader from "../loader/Loader";
 import { User } from "../../types/user";
+import { Pet } from "../../types/pet";
 
 const GroupDetails = () => {
   const navigate = useNavigate();
   const { groupId } = useParams();
   const [carers, setCarers] = useState<User[]>([]);
+  const [pets, setPets] = useState<Pet[]>([]);
   const { post, del, get, response } = useFetch("/group");
   const {
     data: details,
@@ -36,6 +38,7 @@ const GroupDetails = () => {
   useEffect(() => {
     if (details) {
       setCarers(details.members);
+      setPets(details.pets);
     }
   }, [details]);
 
@@ -72,6 +75,15 @@ const GroupDetails = () => {
 
       details.members = [...details.members];
       setCarers(details.members);
+    }
+  };
+
+  const deletePetFromGroup = async (petId: string) => {
+    const data = await del(`/${groupId}/pet/${petId}`);
+    if (data === "Deleted") {
+      details.pets = details.pets.filter((pet: Pet) => pet._id !== petId);
+
+      setPets(details.pets);
     }
   };
 
@@ -124,7 +136,10 @@ const GroupDetails = () => {
                 </Tabs>
               </Grid>
               <TabPanel value={value} index={0}>
-                <GroupPets pets={details.pets} />
+                <GroupPets
+                  pets={pets}
+                  deletePetFromGroup={deletePetFromGroup}
+                />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <GroupCarers

@@ -30,10 +30,13 @@ import { useParams } from "react-router-dom";
 import { Pet } from "../../types/pet";
 import MultipleSelect from "../multiple-select/MultipleSelect";
 
-const GroupPets = (props: { pets: Pet[] }) => {
+interface GroupPetsProps {
+  pets: Pet[];
+  deletePetFromGroup: (petId: string) => void;
+}
+
+const GroupPets: React.FC<GroupPetsProps> = ({ pets, deletePetFromGroup }) => {
   const { post, del, response } = useFetch("/group");
-  const { pets } = props;
-  const [petList, setPetList] = useState(pets);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [addPetOpen, setAddPetOpen] = React.useState(false);
@@ -92,17 +95,17 @@ const GroupPets = (props: { pets: Pet[] }) => {
     }
   };
 
-  const deletePet = async (petId: string) => {
-    const deletedPet = await del(`/${groupId}/Pet/${petId}`);
-    if (response.data === "Deleted") {
-      let newPet = [...petList];
-      newPet = newPet.filter((item) => item._id !== petId);
-      setPetList(newPet);
-      handleDeletePetClose();
-    } else {
-      alert("Something went wrong with deleting pet");
-    }
-  };
+  // const deletePet = async (petId: string) => {
+  //   const deletedPet = await del(`/${groupId}/Pet/${petId}`);
+  //   if (response.data === "Deleted") {
+  //     let newPet = [...petList];
+  //     newPet = newPet.filter((item) => item._id !== petId);
+  //     setPetList(newPet);
+  //     handleDeletePetClose();
+  //   } else {
+  //     alert("Something went wrong with deleting pet");
+  //   }
+  // };
 
   if (!pets) {
     return (
@@ -128,7 +131,7 @@ const GroupPets = (props: { pets: Pet[] }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {petList
+              {pets
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((pet) => (
                   <TableRow
@@ -216,7 +219,10 @@ const GroupPets = (props: { pets: Pet[] }) => {
           <Button onClick={handleDeletePetClose}>Cancel</Button>
           <Button
             variant="contained"
-            onClick={() => deletePet(deletePetModal.id)}
+            onClick={() => {
+              handleDeletePetClose();
+              deletePetFromGroup(deletePetModal.id);
+            }}
           >
             Delete
           </Button>
