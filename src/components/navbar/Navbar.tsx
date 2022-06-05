@@ -15,7 +15,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useFetch, { CachePolicies } from "use-http";
+import useFetch from "use-http";
 import calendarPng from "../../assets/calendar.png";
 import userPng from "../../assets/user.png";
 import myPetsPng from "../../assets/leash.png";
@@ -28,9 +28,7 @@ function Navbar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
-  const { post } = useFetch("/auth", {
-    cachePolicy: CachePolicies.NO_CACHE,
-  });
+  const { post } = useFetch("/auth");
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
