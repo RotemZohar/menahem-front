@@ -60,7 +60,7 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
           </List>
         )}
       </form>
-      <Grid container m={2} xs={!2}>
+      <Grid container m={2}>
         {selectedUsers.map((user) => (
           <Chip
             key={user._id}

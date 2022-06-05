@@ -79,7 +79,7 @@ const GroupsPage = () => {
         {groups
           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
           .map((group: Group) => (
-            <Grid>
+            <Grid key={group._id}>
               <ListItem ContainerComponent="div" disablePadding>
                 <ListItemButton
                   sx={{ height: 80, mr: 5 }}

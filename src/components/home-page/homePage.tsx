@@ -17,11 +17,6 @@ const HomePage = () => {
     error: tasksError,
   } = useFetch(`/user/${userId}/today-tasks`, {}, [userId]);
 
-  React.useEffect(() => {
-    console.log(todayTasks);
-    console.log(todayTasks.length);
-  }, []);
-
   const { put } = useFetch("/pet");
 
   const toggleTodo = async (petId: string, taskId: string, status: boolean) => {
