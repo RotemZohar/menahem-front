@@ -60,8 +60,7 @@ function CalendarPage() {
   const userId = useSelector((state: RootState) => state.userReducer._id);
 
   const { get, loading } = useFetch("/user");
-  const { put } = useFetch("/pet");
-  const { del } = useFetch("/pet");
+  const { put, del } = useFetch("/pet");
   
   const fetchUserTasks = () => {
     get(`/${userId}/tasks`)
