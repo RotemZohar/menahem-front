@@ -1,5 +1,15 @@
 import { Preview } from "@mui/icons-material";
-import { Button, CircularProgress, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardHeader,
+  CircularProgress,
+  Divider,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "use-http";
@@ -46,87 +56,114 @@ function CreateGroupPage() {
 
   return (
     <main>
-      <Typography variant="h4" marginBottom={2}>
-        Create a new group
-      </Typography>
-      {stage === 0 && (
-        <div
-          style={{
-            display: "inline-flex",
-            flexDirection: "column",
-            gap: 10,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <label htmlFor="group">Group name*:</label>
-            <TextField
-              style={{ display: "inline" }}
-              id="group"
-              variant="standard"
-              value={name}
-              required
-              onChange={(e) => setGroupName(e.target.value)}
-            />
-          </div>
-          <TextField
-            value={description}
-            multiline
-            minRows={3}
-            required
-            onChange={(e) => setDescription(e.target.value)}
-            label="Description"
-          />
-          {petsList && (
-            <MultipleSelect
-              selectOptions={petsList}
-              selectedArr={selectedPets}
-              setSelectedArr={setSelectedPets}
-              label="Select Pets*"
-            />
-          )}
-          <Button
-            onClick={() => {
-              setStage(1);
-            }}
-            style={{ width: "50%", alignSelf: "end" }}
-          >
-            Next
-          </Button>
-        </div>
-      )}
-      {stage === 1 && (
-        <div style={{ display: "inline-flex", flexDirection: "column" }}>
-          <AddUsers
-            selectedUsers={users}
-            onAddUser={(newUser) => {
-              setUsers((prevUsers) => {
-                if (
-                  prevUsers.findIndex((user) => user._id === newUser._id) === -1
-                ) {
-                  return [...prevUsers, newUser];
-                }
-                return prevUsers;
-              });
-            }}
-            onDeleteUser={(userId) => {
-              setUsers((prev) => {
-                const remove = prev.findIndex((user) => user._id === userId);
-                return prev.splice(remove);
-              });
-            }}
-          />
-          <div style={{ justifyContent: "space-between", display: "flex" }}>
-            <Button
-              onClick={() => {
-                setStage(0);
+      <Grid container justifyContent="center">
+        <Card sx={{ width: 400, minHeight: 250, m: 3 }}>
+          <CardHeader title="Create New Group" />
+          <Divider />
+          {stage === 0 && (
+            <Grid
+              m={2}
+              style={{
+                display: "inline-flex",
+                flexDirection: "column",
+                gap: 10,
               }}
             >
-              Back
-            </Button>
-            <Button onClick={onSubmit}>Create</Button>
-          </div>
-        </div>
-      )}
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <label htmlFor="group">Group name*:</label>
+                <TextField
+                  style={{ display: "inline" }}
+                  id="group"
+                  variant="standard"
+                  value={name}
+                  required
+                  onChange={(e) => setGroupName(e.target.value)}
+                />
+              </div>
+              <TextField
+                value={description}
+                multiline
+                minRows={3}
+                maxRows={10}
+                required
+                onChange={(e) => setDescription(e.target.value)}
+                label="Description"
+              />
+              {petsList && (
+                <MultipleSelect
+                  selectOptions={petsList}
+                  selectedArr={selectedPets}
+                  setSelectedArr={setSelectedPets}
+                  label="Select Pets*"
+                />
+              )}
+              <Grid container justifyContent="flex-end">
+                <Button
+                  onClick={() => {
+                    setStage(1);
+                  }}
+                  style={{ alignSelf: "end" }}
+                >
+                  Next
+                </Button>
+              </Grid>
+            </Grid>
+          )}
+          {stage === 1 && (
+            <Grid
+              m={2}
+              style={{
+                display: "inline-flex",
+                flexDirection: "column",
+                gap: 10,
+              }}
+            >
+              <Typography variant="h6">Add Users</Typography>
+              <Grid item m={2}>
+                <AddUsers
+                  selectedUsers={users}
+                  onAddUser={(newUser) => {
+                    setUsers((prevUsers) => {
+                      if (
+                        prevUsers.findIndex(
+                          (user) => user._id === newUser._id
+                        ) === -1
+                      ) {
+                        return [...prevUsers, newUser];
+                      }
+                      return prevUsers;
+                    });
+                  }}
+                  onDeleteUser={(userId) => {
+                    setUsers((prev) => {
+                      const remove = prev.findIndex(
+                        (user) => user._id === userId
+                      );
+                      return prev.splice(remove);
+                    });
+                  }}
+                />
+              </Grid>
+              <Grid container justifyContent="space-between">
+                <Grid item>
+                  <Button
+                    onClick={() => {
+                      setStage(0);
+                    }}
+                  >
+                    Back
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" onClick={onSubmit}>
+                    Create
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          )}
+        </Card>
+      </Grid>
     </main>
   );
 }
