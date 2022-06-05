@@ -33,16 +33,19 @@ import MultipleSelect from "../multiple-select/MultipleSelect";
 interface GroupPetsProps {
   pets: Pet[];
   deletePetFromGroup: (petId: string) => void;
+  addPetToGroup: (pets: Pet[]) => void;
 }
 
-const GroupPets: React.FC<GroupPetsProps> = ({ pets, deletePetFromGroup }) => {
-  const { post, del, response } = useFetch("/group");
+const GroupPets: React.FC<GroupPetsProps> = ({
+  pets,
+  deletePetFromGroup,
+  addPetToGroup,
+}) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [addPetOpen, setAddPetOpen] = React.useState(false);
   const { data: petsList, loading } = useFetch("/user/pets", {}, []);
   const [selectedPets, setSelectedPets] = useState<string[]>([]);
-  const { groupId } = useParams();
   const [deletePetModal, setDeletePetModal] = React.useState({
     isOpen: false,
     id: "",
@@ -75,38 +78,6 @@ const GroupPets: React.FC<GroupPetsProps> = ({ pets, deletePetFromGroup }) => {
     setDeletePetModal({ isOpen: false, id: "" });
   };
 
-  const addPets = async () => {
-    if (selectedPets.length === 0) {
-      alert("Please add some pets!");
-    } else {
-      post(`/${groupId}/Pets`, {
-        petsIds: selectedPets,
-      })
-        .then(() => {
-          // TODO: add pet to table
-
-          setSelectedPets([]);
-          setAddPetOpen(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Something went wrong with adding pets");
-        });
-    }
-  };
-
-  // const deletePet = async (petId: string) => {
-  //   const deletedPet = await del(`/${groupId}/Pet/${petId}`);
-  //   if (response.data === "Deleted") {
-  //     let newPet = [...petList];
-  //     newPet = newPet.filter((item) => item._id !== petId);
-  //     setPetList(newPet);
-  //     handleDeletePetClose();
-  //   } else {
-  //     alert("Something went wrong with deleting pet");
-  //   }
-  // };
-
   if (!pets) {
     return (
       <Box>
@@ -116,6 +87,17 @@ const GroupPets: React.FC<GroupPetsProps> = ({ pets, deletePetFromGroup }) => {
       </Box>
     );
   }
+
+  const handleAddPetToGroup = () => {
+    const selectedPetsWithData: Pet[] = [];
+    petsList.forEach((pet: Pet) => {
+      if (selectedPets.includes(pet._id)) {
+        selectedPetsWithData.push(pet);
+      }
+    });
+
+    addPetToGroup(selectedPetsWithData);
+  };
 
   return (
     <Box>
@@ -194,7 +176,13 @@ const GroupPets: React.FC<GroupPetsProps> = ({ pets, deletePetFromGroup }) => {
 
         <DialogActions sx={{ justifyContent: "space-between" }}>
           <Button onClick={handleAddPetClose}>Cancel</Button>
-          <Button variant="contained" onClick={addPets}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setAddPetOpen(false);
+              handleAddPetToGroup();
+            }}
+          >
             Add
           </Button>
         </DialogActions>

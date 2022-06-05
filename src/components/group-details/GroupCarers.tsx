@@ -25,8 +25,6 @@ import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WarningIcon from "@mui/icons-material/Warning";
-import { useParams } from "react-router-dom";
-import useFetch from "use-http";
 import AddUsers from "../add-users/AddUsers";
 import { User } from "../../types/user";
 

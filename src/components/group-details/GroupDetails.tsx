@@ -87,6 +87,23 @@ const GroupDetails = () => {
     }
   };
 
+  const addPetToGroup = async (petsToAdd: Pet[]) => {
+    if (petsToAdd.length === 0) {
+      alert("Please add some pets!");
+    } else {
+      const data = await post(`/${groupId}/Pets`, {
+        petsIds: petsToAdd,
+      });
+
+      petsToAdd.forEach((pet) => {
+        details.pets.push(pet);
+      });
+
+      details.pets = [...details.pets];
+      setPets(details.pets);
+    }
+  };
+
   return (
     <Box>
       {error && error.message}
@@ -139,6 +156,7 @@ const GroupDetails = () => {
                 <GroupPets
                   pets={pets}
                   deletePetFromGroup={deletePetFromGroup}
+                  addPetToGroup={addPetToGroup}
                 />
               </TabPanel>
               <TabPanel value={value} index={1}>
