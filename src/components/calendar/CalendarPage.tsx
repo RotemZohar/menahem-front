@@ -38,7 +38,7 @@ function convertTaskToCalendarEvent(
         end: task.dateTo,
         backgroundColor,
         extendedProps: {
-          _id: task._id,
+          taskId: task._id,
           petId: pet._id,
           name: pet.name,
           imgUrl: pet.imgUrl,

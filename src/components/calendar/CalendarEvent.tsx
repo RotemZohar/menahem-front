@@ -18,18 +18,18 @@ function CalendarEvent(props: {eventInfo: any, editTask: any, deleteTask: any, c
       };
     
       const handleCompleteTask = () => {
-        const { petId, _id } = eventInfo.event.extendedProps;
-        completeTask({ petId, taskId: _id })
+        const { petId, taskId } = eventInfo.event.extendedProps;
+        completeTask({ petId, taskId })
       };
     
       const handleDeleteTask = () => {
-        const { petId, _id } = eventInfo.event.extendedProps;
-        deleteTask({ petId, taskId: _id })
+        const { petId, taskId } = eventInfo.event.extendedProps;
+        deleteTask({ petId, taskId })
       };
     
       const handleEditTask = () => {
-        const { petId, _id } = eventInfo.event.extendedProps;
-        editTask({ petId, taskId: _id });
+        const { petId, taskId } = eventInfo.event.extendedProps;
+        editTask({ petId, taskId });
       };
     
       const open = Boolean(anchorEl);
