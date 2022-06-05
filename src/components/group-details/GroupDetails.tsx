@@ -18,6 +18,7 @@ import { Group as groupDetails } from "../../types/group";
 import TabPanel from "../tab-panel/TabPanel";
 import GroupCarers from "./GroupCarers";
 import GroupPets from "./GroupPets";
+import Loader from "../loader/Loader";
 
 const GroupDetails = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const GroupDetails = () => {
   return (
     <>
       {error && error.message}
-      {loading && "Loading..."}
+      {loading && <Loader />}
       {details && (
         <Grid container justifyContent="center">
           <Card
