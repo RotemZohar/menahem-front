@@ -7,14 +7,15 @@ import { RootState } from "../../redux/store";
 import Loader from "../loader/Loader";
 import { Pet, Task } from "../../types/pet";
 import TaskItem from "./taskItem";
+import noTasks from "../../assets/no-tasks.png";
 
 const HomePage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
-  const { data: todayTasks = [], loading: loadingTasks } = useFetch(
-    `/user/${userId}/today-tasks`,
-    {},
-    [userId]
-  );
+  const {
+    data: todayTasks = [],
+    loading: loadingTasks,
+    error: tasksError,
+  } = useFetch(`/user/${userId}/today-tasks`, {}, [userId]);
 
   React.useEffect(() => {
     console.log(todayTasks);
@@ -41,11 +42,15 @@ const HomePage = () => {
     return <Loader />;
   }
 
+  if (tasksError) {
+    return <Typography sx={{ fontSize: "26px" }}>Error occured</Typography>;
+  }
+
   if (todayTasks.length === 0) {
     return (
-      <Typography sx={{ fontSize: "26px" }}>
-        You have no tasks for today
-      </Typography>
+      <Grid item xs={12} mt={2}>
+        <img src={noTasks} alt="You have no tasks for today" width="450" />
+      </Grid>
     );
   }
 
