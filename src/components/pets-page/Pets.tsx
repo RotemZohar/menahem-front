@@ -12,8 +12,11 @@ import {
   IconButton,
   Divider,
   Paper,
+  TablePagination,
+  ListItemSecondaryAction,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +30,8 @@ import Loader from "../loader/Loader";
 const PetsPage = () => {
   const navigate = useNavigate();
   const userId = useSelector((state: RootState) => state.userReducer._id);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const options = {};
   const { data: pets = [], loading } = useFetch(
     `/user/${userId}/pets`,
@@ -42,9 +47,24 @@ const PetsPage = () => {
     navigate(routes.newpet);
   };
 
+  const navToEdit = (pet: Pet) => {
+    navigate(`/pet/${pet._id}/edit`);
+  };
+
   if (loading) {
     return <Loader />;
   }
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   return (
     <Grid container justifyContent="center">
@@ -54,44 +74,56 @@ const PetsPage = () => {
       <Paper
         sx={{
           width: "100%",
-          maxWidth: 550,
-          maxHeight: 400,
+          maxWidth: 500,
           bgcolor: "background.paper",
-          overflow: "auto",
           borderRadius: 5,
           elevation: 3,
         }}
       >
-        {pets.map((pet: Pet) => (
-          <Grid key={pet._id}>
-            <ListItem
-              secondaryAction={
-                <IconButton edge="end" aria-label="delete">
-                  <Tooltip title="Delete">
-                    <DeleteIcon />
-                  </Tooltip>
-                </IconButton>
-              }
-              disablePadding
-            >
-              <ListItemButton
-                sx={{ height: 100 }}
-                alignItems="center"
-                onClick={() => navToPet(pet)}
-              >
-                <ListItemAvatar>
-                  <Avatar
-                    alt={pet.name}
-                    src={pet.imgUrl}
-                    sx={{ width: 50, height: 50, mr: 2 }}
-                  />
-                </ListItemAvatar>
-                <ListItemText primary={pet.name} secondary={pet.breed} />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-          </Grid>
-        ))}
+        {pets
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          .map((pet: Pet) => (
+            <Grid>
+              <ListItem ContainerComponent="div" disablePadding>
+                <ListItemButton
+                  sx={{ height: 80, mr: 5 }}
+                  alignItems="center"
+                  onClick={() => navToPet(pet)}
+                >
+                  <ListItemAvatar>
+                    <Avatar
+                      alt={pet.name}
+                      src={pet.imgUrl}
+                      sx={{ width: 50, height: 50, mr: 2 }}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={pet.name} secondary={pet.breed} />
+                </ListItemButton>
+                <ListItemSecondaryAction>
+                  <IconButton onClick={() => navToEdit(pet)}>
+                    <Tooltip title="Edit">
+                      <EditIcon />
+                    </Tooltip>
+                  </IconButton>
+                  <IconButton edge="end">
+                    <Tooltip title="Delete">
+                      <DeleteIcon />
+                    </Tooltip>
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+              <Divider />
+            </Grid>
+          ))}
+        <TablePagination
+          rowsPerPageOptions={[5, 10]}
+          component="div"
+          count={pets.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
       <Grid item xs={12} m={2}>
         <Tooltip arrow title="Add Pet">

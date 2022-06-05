@@ -1,6 +1,5 @@
 import { Box, Button, Card, Grid, TextField, Tooltip } from "@mui/material";
-import { count } from "console";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useFetch from "use-http";
@@ -80,7 +79,6 @@ const SignUpPage = () => {
                 <Grid item mt={1} xs={12}>
                   <Tooltip
                     title="Passwords must be at least 8 characters long, include at least one number, and include both lower and upper case characters."
-                    placement="right"
                     arrow
                   >
                     <TextField

@@ -52,9 +52,9 @@ const PetTasks = (props: { tasks: any[] }) => {
   }
 
   return (
-    <Paper sx={{ width: "100%" }}>
+    <Paper variant="outlined">
       <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell align="center">Title</TableCell>

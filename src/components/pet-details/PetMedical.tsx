@@ -16,6 +16,9 @@ import {
   TextField,
   DialogActions,
   Button,
+  Grid,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
@@ -23,7 +26,7 @@ import QrIcon from "@mui/icons-material/QrCode";
 import moment from "moment";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 import ReactDOM from "react-dom";
 import QRcode from "qrcode.react";
 import { Treatment } from "../../types/pet";
@@ -40,7 +43,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
   const [medicalTreatments, setMedicalTreatments] = useState<Treatment[]>([]);
   const { petId } = useParams();
   const [qr] = useState(`${petId}/medical/guests`);
-  const { post } = useFetch("/pet");
+  const { put, del, response } = useFetch("/pet");
 
   useEffect(() => {
     setMedicalTreatments(medical);
@@ -81,7 +84,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
     return (
       <div>
         <Typography sx={{ fontSize: "26px" }}>
-          No tasks have been asigned yet
+          No tasks have been assigned yet
         </Typography>
       </div>
     );
@@ -90,9 +93,9 @@ const PetMedical = (props: { medical: Treatment[] }) => {
   const addTreatment = async () => {
     setTreatmentOpen(false);
 
-    const date = moment(treatmentDate, "DD-MM-YYYY").toDate();
+    const date = moment(treatmentDate, "YYYY-MM-DD").toDate();
 
-    const newTreatment = await post(`/${petId}/add-treatment`, {
+    const newTreatment = await put(`/${petId}/add-treatment`, {
       treatment,
       date,
     }).then((newTreatmentResponse) => {
@@ -103,11 +106,20 @@ const PetMedical = (props: { medical: Treatment[] }) => {
     });
   };
 
+  const deleteMedical = async (medicalId: string) => {
+    const deletedMedical = await del(`/${petId}/${medicalId}`);
+    if (response.data === "Deleted") {
+      let newMedical = [...medicalTreatments];
+      newMedical = newMedical.filter((item) => item._id !== medicalId);
+      setMedicalTreatments(newMedical);
+    }
+  };
+
   return (
     <Box>
-      <Paper sx={{ width: "100%" }}>
+      <Paper variant="outlined">
         <TableContainer>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="center">Treatments</TableCell>
@@ -130,7 +142,17 @@ const PetMedical = (props: { medical: Treatment[] }) => {
                       {row.treatment}
                     </TableCell>
                     <TableCell align="center">
-                      {moment(row.date).format("DD-MM-YYYY")}
+                      {moment(row.date).format("YYYY-MM-DD")}
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        size="small"
+                        aria-label="close"
+                        color="inherit"
+                        onClick={() => deleteMedical(row._id)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -147,15 +169,22 @@ const PetMedical = (props: { medical: Treatment[] }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-
-      <Fab onClick={handleAddTreatmentOpen} color="primary" aria-label="add">
-        <AddIcon />
-      </Fab>
-
-      <Fab onClick={handleShowQrOpen} color="primary" aria-label="add">
-        <QrIcon />
-      </Fab>
-
+      <Grid container justifyContent="space-around" mt={2}>
+        <Tooltip arrow title="Add Treatment">
+          <Fab
+            onClick={handleAddTreatmentOpen}
+            color="primary"
+            aria-label="add"
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+        <Tooltip arrow title="Generate QRcode">
+          <Fab onClick={handleShowQrOpen} color="primary" aria-label="add">
+            <QrIcon />
+          </Fab>
+        </Tooltip>
+      </Grid>
       <Dialog open={showQrOpen} onClose={handleShowQrClose}>
         <DialogTitle>Pet medical page for guests</DialogTitle>
         <DialogContent>
@@ -171,30 +200,31 @@ const PetMedical = (props: { medical: Treatment[] }) => {
           <Button onClick={handleShowQrClose}>Close</Button>
         </DialogActions>
       </Dialog>
-
       <Dialog open={addTreatmentOpen} onClose={handleAddTreatmentClose}>
         <DialogTitle>Add treatment</DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
+            required
             margin="dense"
             id="name"
             label="Treatment"
             type="string"
             fullWidth
             variant="standard"
+            InputLabelProps={{ shrink: true }}
             onChange={(e) => {
               setTreatment(e.target.value);
             }}
           />
           <TextField
-            autoFocus
+            required
             margin="dense"
             id="date"
             label="TreatmentDate"
             type="date"
             fullWidth
             variant="standard"
+            InputLabelProps={{ shrink: true }}
             onChange={(e) => {
               setTreatmentDate(e.target.value);
             }}

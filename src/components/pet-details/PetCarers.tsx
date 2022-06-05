@@ -12,27 +12,29 @@ const PetCarers = (props: { carers: any[] }) => {
   const { carers } = props;
   return (
     <Box>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">name</TableCell>
-              <TableCell align="center">email</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {carers.map((row) => (
-              <TableRow
-                key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell align="center">{row.name}</TableCell>
-                <TableCell align="center">{row.email}</TableCell>
+      <Paper variant="outlined">
+        <TableContainer>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Name</TableCell>
+                <TableCell align="center">Email</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {carers.map((row) => (
+                <TableRow
+                  key={row._id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell align="center">{row.name}</TableCell>
+                  <TableCell align="center">{row.email}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </Box>
   );
 };
