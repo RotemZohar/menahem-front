@@ -47,6 +47,10 @@ const GroupsPage = () => {
     navigate(routes.createGroup);
   };
 
+  const navToEdit = (group: Group) => {
+    navigate(`/group/${group._id}/edit`);
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -100,7 +104,7 @@ const GroupsPage = () => {
                   />
                 </ListItemButton>
                 <ListItemSecondaryAction>
-                  <IconButton>
+                  <IconButton onClick={() => navToEdit(group)}>
                     <Tooltip title="Edit">
                       <EditIcon />
                     </Tooltip>
