@@ -12,6 +12,7 @@ import { RootState } from "../../redux/store";
 import CalendarEvent from "./CalendarEvent";
 import Loader from "../loader/Loader";
 import UpdateTaskDialog from "./UpdateTaskDialog";
+import "./Calendar.css";
 
 interface Task {
   _id: string,
