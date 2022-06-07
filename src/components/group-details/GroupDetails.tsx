@@ -11,8 +11,15 @@ import {
   IconButton,
   Tooltip,
   Box,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  MenuList,
+  ListItemText,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import LogoutIcon from "@mui/icons-material/Logout";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
 import TabPanel from "../tab-panel/TabPanel";
@@ -25,6 +32,8 @@ import { Pet } from "../../types/pet";
 const GroupDetails = () => {
   const navigate = useNavigate();
   const { groupId } = useParams();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
   const [carers, setCarers] = useState<User[]>([]);
   const [pets, setPets] = useState<Pet[]>([]);
   const { post, del, get, response } = useFetch("/group");
@@ -41,6 +50,14 @@ const GroupDetails = () => {
       setPets(details.pets);
     }
   }, [details]);
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -136,14 +153,34 @@ const GroupDetails = () => {
               }
               action={
                 <Grid container>
-                  <IconButton onClick={navToEdit}>
-                    <Tooltip title="Edit">
-                      <EditIcon fontSize="large" />
-                    </Tooltip>
+                  <IconButton onClick={handleMenuClick}>
+                    <MoreVertIcon fontSize="large" />
                   </IconButton>
                 </Grid>
               }
             />
+            <Menu open={openMenu} onClose={handleMenuClose} anchorEl={anchorEl}>
+              <MenuList dense>
+                <MenuItem
+                  onClick={() => {
+                    navToEdit();
+                    handleMenuClose();
+                  }}
+                >
+                  <ListItemIcon>
+                    <EditIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Edit Details</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" color="error" />
+                  </ListItemIcon>
+                  <ListItemText>Leave Group</ListItemText>
+                </MenuItem>
+              </MenuList>
+            </Menu>
             <Divider />
             <CardContent>
               <Grid container justifyContent="center">
