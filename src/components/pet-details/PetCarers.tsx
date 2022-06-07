@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, TablePagination, Typography } from "@mui/material";
 import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,7 +10,20 @@ import Paper from "@mui/material/Paper";
 
 const PetCarers = (props: { carers: any[] }) => {
   const { carers } = props;
-  console.log(carers);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   return (
     <Box>
       <Paper variant="outlined">
@@ -35,6 +48,16 @@ const PetCarers = (props: { carers: any[] }) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Divider />
+        <TablePagination
+          rowsPerPageOptions={[5, 10]}
+          component="div"
+          count={carers.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
     </Box>
   );

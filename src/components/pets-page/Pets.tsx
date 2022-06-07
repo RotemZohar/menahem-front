@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
   Avatar,
-  CircularProgress,
   Fab,
   Grid,
   ListItem,
@@ -9,14 +8,10 @@ import {
   ListItemAvatar,
   ListItemText,
   Tooltip,
-  IconButton,
   Divider,
   Paper,
   TablePagination,
-  ListItemSecondaryAction,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -47,10 +42,6 @@ const PetsPage = () => {
     navigate(routes.newpet);
   };
 
-  const navToEdit = (pet: Pet) => {
-    navigate(`/pet/${pet._id}/edit`);
-  };
-
   if (loading) {
     return <Loader />;
   }
@@ -74,7 +65,7 @@ const PetsPage = () => {
       <Paper
         sx={{
           width: "100%",
-          maxWidth: 500,
+          maxWidth: 480,
           bgcolor: "background.paper",
           borderRadius: 5,
           elevation: 3,
@@ -86,7 +77,7 @@ const PetsPage = () => {
             <Grid>
               <ListItem ContainerComponent="div" disablePadding>
                 <ListItemButton
-                  sx={{ height: 80, mr: 5 }}
+                  sx={{ height: 80 }}
                   alignItems="center"
                   onClick={() => navToPet(pet)}
                 >
@@ -99,18 +90,6 @@ const PetsPage = () => {
                   </ListItemAvatar>
                   <ListItemText primary={pet.name} secondary={pet.breed} />
                 </ListItemButton>
-                <ListItemSecondaryAction>
-                  <IconButton onClick={() => navToEdit(pet)}>
-                    <Tooltip title="Edit">
-                      <EditIcon />
-                    </Tooltip>
-                  </IconButton>
-                  <IconButton edge="end">
-                    <Tooltip title="Delete">
-                      <DeleteIcon />
-                    </Tooltip>
-                  </IconButton>
-                </ListItemSecondaryAction>
               </ListItem>
               <Divider />
             </Grid>

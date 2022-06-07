@@ -10,6 +10,7 @@ import {
   Paper,
   Typography,
   Box,
+  Divider,
 } from "@mui/material";
 import { Group } from "../../types/pet";
 
@@ -73,6 +74,7 @@ const PetGroups = (props: { groups: Group[] }) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Divider />
         <TablePagination
           rowsPerPageOptions={[5, 10]}
           component="div"

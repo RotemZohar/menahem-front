@@ -3,22 +3,19 @@ import {
   Avatar,
   Divider,
   Grid,
-  IconButton,
   ListItem,
   ListItemAvatar,
   ListItemButton,
-  ListItemSecondaryAction,
   ListItemText,
   Paper,
   TablePagination,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import useFetch from "use-http";
 import Fab from "@mui/material/Fab";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { Group } from "../../types/group";
@@ -70,7 +67,7 @@ const GroupsPage = () => {
       <Paper
         sx={{
           width: "100%",
-          maxWidth: 500,
+          maxWidth: 480,
           bgcolor: "background.paper",
           borderRadius: 5,
           elevation: 3,
@@ -82,7 +79,7 @@ const GroupsPage = () => {
             <Grid>
               <ListItem ContainerComponent="div" disablePadding>
                 <ListItemButton
-                  sx={{ height: 80, mr: 5 }}
+                  sx={{ height: 80 }}
                   alignItems="center"
                   onClick={() => navToGroup(group)}
                 >
@@ -99,18 +96,6 @@ const GroupsPage = () => {
                     secondary={`Members: ${group.members.length}`}
                   />
                 </ListItemButton>
-                <ListItemSecondaryAction>
-                  <IconButton>
-                    <Tooltip title="Edit">
-                      <EditIcon />
-                    </Tooltip>
-                  </IconButton>
-                  <IconButton edge="end">
-                    <Tooltip title="Delete">
-                      <DeleteIcon />
-                    </Tooltip>
-                  </IconButton>
-                </ListItemSecondaryAction>
               </ListItem>
               <Divider />
             </Grid>

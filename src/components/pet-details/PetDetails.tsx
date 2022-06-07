@@ -11,8 +11,15 @@ import {
   CardContent,
   Divider,
   Tooltip,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  MenuList,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
 import { Pet as petDetails } from "../../types/pet";
@@ -37,11 +44,21 @@ const PetDetails = () => {
   const navigate = useNavigate();
   const { get, loading, error } = useFetch("/pet");
   const [value, setValue] = useState(0);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
   const [details, setDetails] = useState<petDetails>();
   const { petId } = useParams();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
   };
 
   useEffect(() => {
@@ -88,15 +105,35 @@ const PetDetails = () => {
                 </Grid>
               }
               action={
-                <Grid container mt={5} mr={2}>
-                  <IconButton onClick={navToEdit}>
-                    <Tooltip title="Edit">
-                      <EditIcon fontSize="large" />
-                    </Tooltip>
+                <Grid container>
+                  <IconButton onClick={handleMenuClick}>
+                    <MoreVertIcon fontSize="large" />
                   </IconButton>
                 </Grid>
               }
             />
+            <Menu open={openMenu} onClose={handleMenuClose} anchorEl={anchorEl}>
+              <MenuList dense>
+                <MenuItem
+                  onClick={() => {
+                    navToEdit();
+                    handleMenuClose();
+                  }}
+                >
+                  <ListItemIcon>
+                    <EditIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Edit Details</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem>
+                  <ListItemIcon>
+                    <PersonRemoveIcon fontSize="small" color="error" />
+                  </ListItemIcon>
+                  <ListItemText>Leave Pet</ListItemText>
+                </MenuItem>
+              </MenuList>
+            </Menu>
             <Grid container direction="row" mb={2}>
               <Typography variant="body1" ml={5}>
                 Height: {details.height} cm
