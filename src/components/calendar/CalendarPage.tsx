@@ -46,6 +46,7 @@ function convertTaskToCalendarEvent(
           name: pet.name,
           imgUrl: pet.imgUrl,
           description: task.description,
+          isCompleted: task.isCompleted
         },
       });
     });
@@ -142,7 +143,7 @@ function CalendarPage() {
       });
   };
 
-  const handleCompleteTask = (data: { petId: string; taskId: string }) => {
+  const handleChangeCompleteStatus = (data: { petId: string; taskId: string, isCompleted: boolean }) => {
     const task = petTasks
       ?.find((p) => p._id === data.petId)
       ?.tasks?.find((t) => t._id === data.taskId);
@@ -155,7 +156,7 @@ function CalendarPage() {
         dateFrom: task.dateFrom,
         dateTo: task.dateTo,
         petId: data.petId,
-        isCompleted: true,
+        isCompleted: data.isCompleted,
       });
     }
   };
@@ -165,7 +166,7 @@ function CalendarPage() {
       eventInfo={eventInfo}
       editTask={handleEditTask}
       deleteTask={handleDeleteTask}
-      completeTask={handleCompleteTask}
+      changeCompleteStatus={handleChangeCompleteStatus}
     />
   );
 
