@@ -1,4 +1,4 @@
-import { IconButton } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -37,6 +37,7 @@ const PetCarers: React.FC<PetCarersProps> = ({
           <ArrowBackIcon />
         </IconButton>
         <div>
+          <Typography variant="h4">Update users</Typography>
           <AddUsers
             selectedUsers={carers}
             onAddUser={onAddUser}
@@ -49,13 +50,10 @@ const PetCarers: React.FC<PetCarersProps> = ({
 
   return (
     <div style={{ display: "flex", alignItems: "baseline" }}>
-      <IconButton
-        onClick={() => setAddUsers((prev) => !prev)}
-        // style={{ position: "absolute", left: 0 }}
-      >
+      <IconButton onClick={() => setAddUsers((prev) => !prev)}>
         <AddIcon />
       </IconButton>
-      <Paper variant="outlined">
+      <Paper variant="outlined" style={{ width: "100%" }}>
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
