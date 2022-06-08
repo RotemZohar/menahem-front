@@ -11,7 +11,7 @@ import "./i18n";
 import useFetchOptions from "./hooks/use-fetch-options";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
-const BACK_API = `${process.env.REACT_APP_BACK_API}/api`;
+const BACK_API = `${process.env.REACT_APP_BACK_API || ""}/api`;
 
 ReactDOM.render(
   <React.StrictMode>
