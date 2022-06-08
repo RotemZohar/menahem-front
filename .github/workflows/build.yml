@@ -31,6 +31,7 @@ jobs:
           path: ./build
 
       - name: Trigger backend ci/cd
+        if: success()
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
