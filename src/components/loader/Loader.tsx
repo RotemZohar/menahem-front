@@ -4,12 +4,12 @@ import loadingSrc from "../../assets/loading3.gif";
 function Loader() {
   const [renderLoader, setRenderLoader] = useState(false);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setRenderLoader(true);
-  //   }, 50);
-  //   return setRenderLoader(false);
-  // }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderLoader(true);
+    }, 50);
+    return setRenderLoader(false);
+  }, []);
 
   if (!renderLoader) return null;
 
