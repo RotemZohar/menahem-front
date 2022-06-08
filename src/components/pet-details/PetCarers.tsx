@@ -10,7 +10,6 @@ import Paper from "@mui/material/Paper";
 
 const PetCarers = (props: { carers: any[] }) => {
   const { carers } = props;
-  console.log(carers);
   return (
     <Box>
       <Paper variant="outlined">

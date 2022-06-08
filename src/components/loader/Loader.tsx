@@ -8,6 +8,7 @@ function Loader() {
     setTimeout(() => {
       setRenderLoader(true);
     }, 50);
+    return setRenderLoader(false);
   }, []);
 
   if (!renderLoader) return null;

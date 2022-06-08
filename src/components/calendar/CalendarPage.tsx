@@ -7,7 +7,7 @@ import useFetch from "use-http";
 import { useSelector } from "react-redux";
 import { Box, Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import * as _ from 'lodash';
+import * as _ from "lodash";
 import { RootState } from "../../redux/store";
 import CalendarEvent from "./CalendarEvent";
 import Loader from "../loader/Loader";
@@ -15,7 +15,7 @@ import UpdateTaskDialog from "./UpdateTaskDialog";
 import "./Calendar.css";
 
 interface Task {
-  _id: string,
+  _id: string;
   title: string;
   description: string;
   dateFrom: Date;
@@ -24,7 +24,7 @@ interface Task {
 }
 
 function convertTaskToCalendarEvent(
-  petTasks: { _id: string, name: string, imgUrl: string; tasks: Task[] }[]
+  petTasks: { _id: string; name: string; imgUrl: string; tasks: Task[] }[]
 ) {
   const events: EventInput[] = [];
   petTasks?.forEach((pet) => {
@@ -52,17 +52,18 @@ function convertTaskToCalendarEvent(
 }
 
 function CalendarPage() {
-  const [petTasks, setPetTasks] = useState<{ _id: string, name: string, imgUrl: string; tasks: Task[] }[]>(
-    []
-  );
+  const [petTasks, setPetTasks] = useState<
+    { _id: string; name: string; imgUrl: string; tasks: Task[] }[]
+  >([]);
   const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [selectedTaskData, setSelectedTaskData] = useState<{petId: string | undefined, task: Task | undefined}>();
+  const [selectedTaskData, setSelectedTaskData] =
+    useState<{ petId: string | undefined; task: Task | undefined }>();
   const userId = useSelector((state: RootState) => state.userReducer._id);
 
   const { get, loading } = useFetch("/user");
   const { put, del } = useFetch("/pet");
-  
+
   const fetchUserTasks = () => {
     get(`/${userId}/tasks`)
       .then((res) => {
@@ -72,7 +73,7 @@ function CalendarPage() {
       .catch((err) => {
         console.error(err);
       });
-  }
+  };
 
   useEffect(() => {
     fetchUserTasks();
@@ -83,9 +84,11 @@ function CalendarPage() {
     setDialogOpen(true);
   };
 
-  const handleEditTask  = (data: { petId: string, taskId: string }) => {
-    const task = petTasks?.find(p => p._id === data.petId)?.tasks?.find(t => t._id === data.taskId);
-    setSelectedTaskData({petId: data.petId, task});
+  const handleEditTask = (data: { petId: string; taskId: string }) => {
+    const task = petTasks
+      ?.find((p) => p._id === data.petId)
+      ?.tasks?.find((t) => t._id === data.taskId);
+    setSelectedTaskData({ petId: data.petId, task });
     setDialogOpen(true);
   };
 
@@ -93,14 +96,23 @@ function CalendarPage() {
     setDialogOpen(false);
   };
 
-  const handleUpdateTask = (task: { _id: string, title: string, description: string, dateFrom: Date, dateTo: Date, petId: string, isCompleted: boolean }) => {
-    put(`/${task.petId}/task${task._id ? `/${task._id}`: ``}`, { 
-      title: task.title, 
-      description: task.description, 
-      dateFrom: task.dateFrom, 
-      dateTo: task.dateTo, 
-      isCompleted: task.isCompleted
-    }).then((res) => {
+  const handleUpdateTask = (task: {
+    _id: string;
+    title: string;
+    description: string;
+    dateFrom: Date;
+    dateTo: Date;
+    petId: string;
+    isCompleted: boolean;
+  }) => {
+    put(`/${task.petId}/task${task._id ? `/${task._id}` : ``}`, {
+      title: task.title,
+      description: task.description,
+      dateFrom: task.dateFrom,
+      dateTo: task.dateTo,
+      isCompleted: task.isCompleted,
+    })
+      .then((res) => {
         if (res === "Created" || res === "Updated") {
           fetchUserTasks();
         } else {
@@ -113,9 +125,9 @@ function CalendarPage() {
       });
   };
 
-  const handleDeleteTask = (data: { petId: string, taskId: string }) => {
-    del(`/${data.petId}/task/${data.taskId}`
-    ).then((res) => {
+  const handleDeleteTask = (data: { petId: string; taskId: string }) => {
+    del(`/${data.petId}/task/${data.taskId}`)
+      .then((res) => {
         if (res === "Deleted") {
           fetchUserTasks();
         } else {
@@ -128,23 +140,32 @@ function CalendarPage() {
       });
   };
 
-  const handleCompleteTask = (data: { petId: string, taskId: string }) => {
-    const task = petTasks?.find(p => p._id === data.petId)?.tasks?.find(t => t._id === data.taskId);
+  const handleCompleteTask = (data: { petId: string; taskId: string }) => {
+    const task = petTasks
+      ?.find((p) => p._id === data.petId)
+      ?.tasks?.find((t) => t._id === data.taskId);
 
     if (task) {
       handleUpdateTask({
         _id: data.taskId,
-        title: task.title, 
-        description: task.description, 
-        dateFrom: task.dateFrom, 
-        dateTo: task.dateTo, 
+        title: task.title,
+        description: task.description,
+        dateFrom: task.dateFrom,
+        dateTo: task.dateTo,
         petId: data.petId,
-        isCompleted: true
-      })
+        isCompleted: true,
+      });
     }
   };
 
-  const renderEventContent = (eventInfo: EventInput) => <CalendarEvent eventInfo={eventInfo} editTask={handleEditTask} deleteTask={handleDeleteTask} completeTask={handleCompleteTask} />;
+  const renderEventContent = (eventInfo: EventInput) => (
+    <CalendarEvent
+      eventInfo={eventInfo}
+      editTask={handleEditTask}
+      deleteTask={handleDeleteTask}
+      completeTask={handleCompleteTask}
+    />
+  );
 
   if (loading) {
     return <Loader />;
@@ -167,7 +188,12 @@ function CalendarPage() {
           eventContent={renderEventContent}
         />
       </div>
-      <Fab onClick={openDialog} color="primary" aria-label="add" style={{ position: "fixed", bottom: "2rem", right: "2rem", zIndex: 1 }}>
+      <Fab
+        onClick={openDialog}
+        color="primary"
+        aria-label="add"
+        style={{ position: "fixed", bottom: "2rem", right: "2rem", zIndex: 1 }}
+      >
         <AddIcon />
       </Fab>
       <UpdateTaskDialog
@@ -175,7 +201,9 @@ function CalendarPage() {
         task={selectedTaskData?.task}
         onClose={handleDialogClose}
         updateTask={handleUpdateTask}
-        petsList={_.uniq(petTasks?.map(pet => ({ _id: pet._id, name: pet.name })))}
+        petsList={_.uniq(
+          petTasks?.map((pet) => ({ _id: pet._id, name: pet.name }))
+        )}
         selectedPetId={selectedTaskData?.petId}
       />
     </Box>

@@ -21,6 +21,7 @@ import PetCarers from "./PetCarers";
 import PetMedical from "./PetMedical";
 import TabPanel from "../tab-panel/TabPanel";
 import PetGroups from "./petGroups";
+import Loader from "../loader/Loader";
 
 const getAge = (birthdate: Date) => {
   const today = new Date();
@@ -61,7 +62,7 @@ const PetDetails = () => {
   return (
     <>
       {error && error.message}
-      {loading && "Loading..."}
+      {loading && <Loader />}
       {details && (
         <Grid container justifyContent="center">
           <Card sx={{ minWidth: 600, minHeight: 400, m: 3 }}>

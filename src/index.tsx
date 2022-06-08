@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { Provider as ReduxProvider } from "react-redux";
@@ -13,7 +13,10 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const BACK_API = `${process.env.REACT_APP_BACK_API || ""}/api`;
 
-ReactDOM.render(
+const container = document.getElementById("root");
+const root = createRoot(container!);
+
+root.render(
   <React.StrictMode>
     <ReduxProvider store={store}>
       <UseFetchProvider url={BACK_API} options={useFetchOptions()}>
@@ -24,8 +27,7 @@ ReactDOM.render(
         </PersistGate>
       </UseFetchProvider>
     </ReduxProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
 
 serviceWorkerRegistration.register();
