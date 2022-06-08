@@ -67,7 +67,6 @@ const PetDetails = () => {
         setDetails((prev) => {
           const ind = prev!.members.findIndex((mem) => mem._id === userId);
           return { ...prev!, members: prev!.members.splice(ind) };
-          // TODO: when cache need to refresh cache
         });
       }
     });
@@ -76,10 +75,7 @@ const PetDetails = () => {
   const onAddUser = (user: User) => {
     if (!details?.members.find((member) => member._id === user._id)) {
       put(`/${details!._id}/user/${user._id}`).then((res) => {
-        setDetails(
-          (prev) => ({ ...prev!, members: [...prev!.members, res] })
-          // TODO: when cache need to refresh cache
-        );
+        setDetails((prev) => ({ ...prev!, members: [...prev!.members, res] }));
       });
     }
   };
