@@ -6,6 +6,7 @@ export interface Pet {
   groups: Group[];
   tasks: Task[];
   birthdate: Date;
+  species: string;
   breed: string;
   height: string;
   weight: string;

@@ -8,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemButton,
-  Typography,
 } from "@mui/material";
 import React, { FormEvent, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
@@ -60,7 +59,7 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
           </List>
         )}
       </form>
-      <Grid container m={2} xs={!2}>
+      <Grid container justifyContent="center" mt={2}>
         {selectedUsers.map((user) => (
           <Chip
             key={user._id}
