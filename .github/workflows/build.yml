@@ -29,3 +29,10 @@ jobs:
         with:
           name: frontend-build
           path: ./build
+
+      - name: Trigger backend ci/cd
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          event-type: build-menahem-back
+          repository: ${{ github.repository_owner }}/menahem-back
