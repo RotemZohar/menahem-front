@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: npm i
+        run: npm i
+
       # Runs a single command using the runners shell
       - name: Build code
         run: npm run build
