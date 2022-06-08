@@ -30,8 +30,10 @@ function convertTaskToCalendarEvent(
   petTasks?.forEach((pet) => {
     pet.tasks?.forEach((task) => {
       let backgroundColor = "#3788d8"; // blue
-      if (new Date(task.dateTo).getTime() < Date.now()) {
-        backgroundColor = task.isCompleted ? "darkgreen" : "darkred";
+      if (task.isCompleted) {
+        backgroundColor = "darkgreen";
+      } else if (new Date(task.dateTo).getTime() < Date.now()) {
+        backgroundColor = "darkred";
       }
       events.push({
         title: task.title,
