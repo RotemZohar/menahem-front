@@ -14,9 +14,11 @@ import AddPetForm from "./components/pets/AddPetForm";
 import GroupsPage from "./components/groups-page/Groups";
 import PetsPage from "./components/pets-page/Pets";
 import PetDetails from "./components/pet-details/PetDetails";
+import GroupDetails from "./components/group-details/GroupDetails";
 import Navbar from "./components/navbar/Navbar";
 import HomePage from "./components/home-page/homePage";
 import PetMedicalPageGuests from "./components/pet-medical-page-guests/petMedicalPageGuests";
+import GroupEditPage from "./components/edit-group/EditGroupPage";
 
 const App = () => {
   const showNavbar = useAppSelector((state) => state.navbarReducer);
@@ -40,8 +42,10 @@ const App = () => {
           <Route path={routes.groups} element={<GroupsPage />} />
           <Route path={routes.pets} element={<PetsPage />} />
           <Route path={routes.pet} element={<PetDetails />} />
+          <Route path={routes.group} element={<GroupDetails />} />
           <Route path={routes.editDetals} element={<EditDetailsPage />} />
           <Route path={routes.petEdit} element={<PetEditPage />} />
+          <Route path={routes.groupEdit} element={<GroupEditPage />} />
         </Route>
         <Route path="*" element={<Navigate to={routes.home} />} />
       </Routes>
