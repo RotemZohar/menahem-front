@@ -15,8 +15,10 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useNavigate } from "react-router-dom";
 import useFetch from "use-http";
 import moment from "moment";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import defaultPetPic from "../../assets/pet-pic.png";
 import { routes } from "../../routes";
+import { storage } from "../../firebase";
 
 const speciesList = ["Dog", "Cat", "Rodent", "Bird", "Reptile"];
 const dogList = [
@@ -75,13 +77,16 @@ const AddPetForm = () => {
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
   const [image, setImage] = useState(defaultPetPic);
-
+  const [imageUrl, setImageUrl] = useState<any>();
   const [nameError, setNameError] = useState(false);
   const [weightError, setWeightError] = useState(false);
   const [heightError, setHeightError] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-  const onUploadPicture = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // const onUploadPicture = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onUploadPicture = (event: any) => {
     if (event.target.files?.length) {
+      setImageUrl(event.target.files[0]);
       setImage(URL.createObjectURL(event.target.files[0]));
     }
   };
@@ -108,7 +113,49 @@ const AddPetForm = () => {
     }
   }, [species]);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const addPet = async () => {
+    // Upload image
+    const storageRef = ref(storage, `petsImages/${imageUrl.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, imageUrl);
+
+    await uploadTask.on(
+      "state_changed",
+      (snapshot: { bytesTransferred: number; totalBytes: number }) => {
+        const progressTemp = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progressTemp);
+      },
+      (error: any) => {
+        console.log(error);
+      },
+      async () => {
+        const firebaseUrl = await getDownloadURL(uploadTask.snapshot.ref);
+        post("/", {
+          name,
+          birthDate,
+          species,
+          breed,
+          weight,
+          height,
+          imgUrl: firebaseUrl,
+        })
+          .then((res) => {
+            // TODO: recieve pet id & redirect to pet page
+            if (res === "Created") {
+              navigate(routes.pets);
+            } else {
+              alert("Something went wrong :(");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    );
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
       !name ||
@@ -121,26 +168,31 @@ const AddPetForm = () => {
       // TODO: change alert
       alert("Please insert all fields!");
     } else {
-      post("/", {
-        name,
-        birthDate,
-        species,
-        breed,
-        weight,
-        height,
-        image,
-      })
-        .then((res) => {
-          // TODO: recieve pet id & redirect to pet page
-          if (res === "Created") {
-            navigate(routes.pets);
-          } else {
-            alert("Something went wrong :(");
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      // const data = new FormData();
+      // console.log(imageUrl);
+      // data.append("imageUrl", imageUrl);
+      await addPet();
+      // uploadImage(data);
+      // post("/", {
+      //   name,
+      //   birthDate,
+      //   species,
+      //   breed,
+      //   weight,
+      //   height,
+      //   imgUrl: url,
+      // })
+      //   .then((res) => {
+      //     // TODO: recieve pet id & redirect to pet page
+      //     if (res === "Created") {
+      //       navigate(routes.pets);
+      //     } else {
+      //       alert("Something went wrong :(");
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.error(err);
+      //   });
     }
   };
 
