@@ -16,8 +16,10 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "use-http";
 import moment from "moment";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { useSelector } from "react-redux";
 import defaultPetPic from "../../assets/pet-pic.png";
 import { routes } from "../../routes";
+import { RootState } from "../../redux/store";
 import { storage } from "../../firebase";
 
 const speciesList = ["Dog", "Cat", "Rodent", "Bird", "Reptile"];
@@ -66,7 +68,7 @@ const reptileList = [
 const AddPetForm = () => {
   const navigate = useNavigate();
   const { post } = useFetch("/pet");
-
+  const userId = useSelector((state: RootState) => state.userReducer._id);
   const [currentBreedList, setCurrentBreedList] = useState<string[]>(dogList);
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState(
@@ -115,7 +117,7 @@ const AddPetForm = () => {
 
   const addPet = async () => {
     // Upload image
-    const storageRef = ref(storage, `petsImages/${imageUrl.name}`);
+    const storageRef = ref(storage, `petsImages/${userId}/${name}`);
     const uploadTask = uploadBytesResumable(storageRef, imageUrl);
 
     await uploadTask.on(
@@ -169,26 +171,6 @@ const AddPetForm = () => {
       alert("Please insert all fields!");
     } else {
       await addPet();
-      // post("/", {
-      //   name,
-      //   birthDate,
-      //   species,
-      //   breed,
-      //   weight,
-      //   height,
-      //   image: firebaseUrl,
-      // })
-      //   .then((res) => {
-      //     // TODO: recieve pet id & redirect to pet page
-      //     if (res === "Created") {
-      //       navigate(routes.pets);
-      //     } else {
-      //       alert("Something went wrong :(");
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.error(err);
-      //   });
     }
   };
 
