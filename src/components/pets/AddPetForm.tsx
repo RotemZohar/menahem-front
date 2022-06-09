@@ -65,7 +65,7 @@ const AddPetForm = () => {
   const navigate = useNavigate();
   const { post } = useFetch("/pet");
 
-  const [currentBreedList, setCurrentBreedList] = useState<String[]>(dogList);
+  const [currentBreedList, setCurrentBreedList] = useState<string[]>(dogList);
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState(
     moment(new Date()).format("YYYY-MM-DD")
@@ -195,7 +195,9 @@ const AddPetForm = () => {
                 onChange={(e) => setSpecies(e.target.value)}
               >
                 {speciesList.map((option) => (
-                  <MenuItem value={option}>{option}</MenuItem>
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
                 ))}
               </TextField>
             </Grid>
@@ -209,7 +211,7 @@ const AddPetForm = () => {
                 onChange={(e) => setBreed(e.target.value)}
               >
                 {currentBreedList.map((option) => (
-                  <MenuItem key={option as string} value={option as string}>
+                  <MenuItem key={option} value={option}>
                     {option}
                   </MenuItem>
                 ))}

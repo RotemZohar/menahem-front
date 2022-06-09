@@ -6,6 +6,7 @@ export interface Pet {
   groups: Group[];
   tasks: Task[];
   birthdate: Date;
+  species: string;
   breed: string;
   height: string;
   weight: string;
@@ -26,9 +27,10 @@ export interface Group {
   pets: Pet[];
 }
 
-interface Member {
+export interface Member {
   _id: string;
-  isAdmin: boolean;
+  name: string;
+  email: string;
 }
 
 export interface Task {

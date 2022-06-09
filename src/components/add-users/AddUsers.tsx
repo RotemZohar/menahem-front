@@ -8,9 +8,8 @@ import {
   List,
   ListItem,
   ListItemButton,
-  Typography,
 } from "@mui/material";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import useFetch from "use-http";
 import { User } from "../../types/user";
@@ -33,7 +32,7 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
   };
 
   return (
-    <>
+    <div style={{ flexDirection: "column", alignSelf: "center" }}>
       <form onSubmit={onSubmit}>
         <FormControl>
           <InputLabel>Search User</InputLabel>
@@ -60,7 +59,7 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
           </List>
         )}
       </form>
-      <Grid container m={2} xs={!2}>
+      <Grid container justifyContent="center" mt={2}>
         {selectedUsers.map((user) => (
           <Chip
             key={user._id}
@@ -69,7 +68,7 @@ function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
           />
         ))}
       </Grid>
-    </>
+    </div>
   );
 }
 

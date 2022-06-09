@@ -72,7 +72,7 @@ const PetTasks = (props: { tasks: any[] }) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow
-                  key={row.id}
+                  key={row._id}
                   sx={{
                     "&:last-child td, &:last-child th": {
                       border: 0,

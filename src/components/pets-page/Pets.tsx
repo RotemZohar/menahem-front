@@ -74,7 +74,7 @@ const PetsPage = () => {
         {pets
           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
           .map((pet: Pet) => (
-            <Grid>
+            <Grid key={pet._id}>
               <ListItem ContainerComponent="div" disablePadding>
                 <ListItemButton
                   sx={{ height: 80 }}

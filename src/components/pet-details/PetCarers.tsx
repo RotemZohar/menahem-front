@@ -1,5 +1,10 @@
-import { Box, Divider, TablePagination, Typography } from "@mui/material";
-import React from "react";
+import {
+  Divider,
+  IconButton,
+  TablePagination,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,9 +12,25 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Member } from "../../types/pet";
+import AddUsers from "../add-users/AddUsers";
+import { User } from "../../types/user";
 
-const PetCarers = (props: { carers: any[] }) => {
-  const { carers } = props;
+interface PetCarersProps {
+  carers: Member[];
+  onDeleteUser: (userId: string) => void;
+  onAddUser: (userId: User) => void;
+}
+
+const PetCarers: React.FC<PetCarersProps> = ({
+  carers,
+  onDeleteUser,
+  onAddUser,
+}) => {
+  const [addUsers, setAddUsers] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -24,15 +45,40 @@ const PetCarers = (props: { carers: any[] }) => {
     setPage(0);
   };
 
+  if (addUsers) {
+    return (
+      <div style={{ position: "relative" }}>
+        <IconButton
+          onClick={() => setAddUsers(false)}
+          style={{ position: "absolute", left: 0 }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <div>
+          <Typography variant="h4">Update users</Typography>
+          <AddUsers
+            selectedUsers={carers}
+            onAddUser={onAddUser}
+            onDeleteUser={onDeleteUser}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <Box>
-      <Paper variant="outlined">
-        <TableContainer>
+    <div style={{ display: "flex", alignItems: "baseline" }}>
+      <IconButton onClick={() => setAddUsers((prev) => !prev)}>
+        <AddIcon />
+      </IconButton>
+      <Paper variant="outlined" style={{ width: "100%" }}>
+        <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="center">Name</TableCell>
                 <TableCell align="center">Email</TableCell>
+                <TableCell align="center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -43,6 +89,14 @@ const PetCarers = (props: { carers: any[] }) => {
                 >
                   <TableCell align="center">{row.name}</TableCell>
                   <TableCell align="center">{row.email}</TableCell>
+                  <TableCell align="center">
+                    <IconButton
+                      id={row._id}
+                      onClick={() => onDeleteUser(row._id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -59,8 +113,7 @@ const PetCarers = (props: { carers: any[] }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </Box>
+    </div>
   );
 };
-
 export default PetCarers;

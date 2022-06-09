@@ -20,14 +20,16 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import useFetch from "use-http";
+import useFetch, { CachePolicies } from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
-import { Pet as petDetails } from "../../types/pet";
+import { Member, Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
 import PetMedical from "./PetMedical";
 import TabPanel from "../tab-panel/TabPanel";
 import PetGroups from "./petGroups";
+import { User } from "../../types/user";
+import Loader from "../loader/Loader";
 
 const getAge = (birthdate: Date) => {
   const today = new Date();
@@ -42,12 +44,17 @@ const getAge = (birthdate: Date) => {
 
 const PetDetails = () => {
   const navigate = useNavigate();
-  const { get, loading, error } = useFetch("/pet");
+  const { get, loading, error } = useFetch("/pet", {
+    cachePolicy: CachePolicies.NO_CACHE,
+  });
   const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const [details, setDetails] = useState<petDetails>();
   const { petId } = useParams();
+  const { del, put } = useFetch("/pet", {
+    cachePolicy: CachePolicies.NO_CACHE,
+  });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -71,6 +78,25 @@ const PetDetails = () => {
       });
   }, []);
 
+  const onDeleteUser = (userId: string) => {
+    del(`/${details!._id}/user/${userId}`).then((res) => {
+      if (res === "OK") {
+        setDetails((prev) => {
+          const ind = prev!.members.findIndex((mem) => mem._id === userId);
+          return { ...prev!, members: prev!.members.splice(ind) };
+        });
+      }
+    });
+  };
+
+  const onAddUser = (user: User) => {
+    if (!details?.members.find((member) => member._id === user._id)) {
+      put(`/${details!._id}/user/${user._id}`).then((res) => {
+        setDetails((prev) => ({ ...prev!, members: [...prev!.members, res] }));
+      });
+    }
+  };
+
   const navToEdit = () => {
     navigate(`/pet/${petId}/edit`);
   };
@@ -78,7 +104,7 @@ const PetDetails = () => {
   return (
     <>
       {error && error.message}
-      {loading && "Loading..."}
+      {loading && <Loader />}
       {details && (
         <Grid container justifyContent="center">
           <Card sx={{ minWidth: 600, minHeight: 400, m: 3 }}>
@@ -156,7 +182,11 @@ const PetDetails = () => {
                 <PetMedical medical={details.medical} />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <PetCarers carers={details.members} />
+                <PetCarers
+                  carers={details.members}
+                  onDeleteUser={onDeleteUser}
+                  onAddUser={onAddUser}
+                />
               </TabPanel>
               <TabPanel value={value} index={2}>
                 <PetTasks tasks={details.tasks} />
