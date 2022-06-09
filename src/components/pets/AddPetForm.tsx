@@ -168,11 +168,7 @@ const AddPetForm = () => {
       // TODO: change alert
       alert("Please insert all fields!");
     } else {
-      // const data = new FormData();
-      // console.log(imageUrl);
-      // data.append("imageUrl", imageUrl);
       await addPet();
-      // uploadImage(data);
       // post("/", {
       //   name,
       //   birthDate,
@@ -180,7 +176,7 @@ const AddPetForm = () => {
       //   breed,
       //   weight,
       //   height,
-      //   imgUrl: url,
+      //   image: firebaseUrl,
       // })
       //   .then((res) => {
       //     // TODO: recieve pet id & redirect to pet page
