@@ -138,7 +138,7 @@ const AddPetForm = () => {
           breed,
           weight,
           height,
-          imgUrl: firebaseUrl,
+          image: firebaseUrl,
         })
           .then((res) => {
             // TODO: recieve pet id & redirect to pet page
