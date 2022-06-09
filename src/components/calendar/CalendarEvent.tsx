@@ -8,9 +8,9 @@ function CalendarEvent(props: {
   eventInfo: any;
   editTask: any;
   deleteTask: any;
-  completeTask: any;
+  changeCompleteStatus: any;
 }) {
-  const { eventInfo, editTask, deleteTask, completeTask } = props;
+  const { eventInfo, editTask, deleteTask, changeCompleteStatus } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
@@ -22,9 +22,9 @@ function CalendarEvent(props: {
     setAnchorEl(null);
   };
 
-  const handleCompleteTask = () => {
-    const { petId, taskId } = eventInfo.event.extendedProps;
-    completeTask({ petId, taskId });
+  const handleChangeCompleteStatus = () => {
+    const { petId, taskId, isCompleted } = eventInfo.event.extendedProps;
+    changeCompleteStatus({ petId, taskId, isCompleted: !isCompleted });
   };
 
   const handleDeleteTask = () => {
@@ -106,9 +106,9 @@ function CalendarEvent(props: {
             <Button
               variant="contained"
               style={{ fontSize: "smaller" }}
-              onClick={handleCompleteTask}
+              onClick={handleChangeCompleteStatus}
             >
-              Task Completed!
+              { eventInfo.event.extendedProps.isCompleted ? 'Task Not Completed' : 'Task Completed!' }
             </Button>
             <EditIcon style={{ marginLeft: "auto" }} onClick={handleEditTask} />
           </Grid>

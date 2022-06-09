@@ -30,8 +30,10 @@ function convertTaskToCalendarEvent(
   petTasks?.forEach((pet) => {
     pet.tasks?.forEach((task) => {
       let backgroundColor = "#3788d8"; // blue
-      if (new Date(task.dateTo).getTime() < Date.now()) {
-        backgroundColor = task.isCompleted ? "darkgreen" : "darkred";
+      if (task.isCompleted) {
+        backgroundColor = "darkgreen";
+      } else if (new Date(task.dateTo).getTime() < Date.now()) {
+        backgroundColor = "darkred";
       }
       events.push({
         title: task.title,
@@ -44,6 +46,7 @@ function convertTaskToCalendarEvent(
           name: pet.name,
           imgUrl: pet.imgUrl,
           description: task.description,
+          isCompleted: task.isCompleted
         },
       });
     });
@@ -140,7 +143,7 @@ function CalendarPage() {
       });
   };
 
-  const handleCompleteTask = (data: { petId: string; taskId: string }) => {
+  const handleChangeCompleteStatus = (data: { petId: string; taskId: string, isCompleted: boolean }) => {
     const task = petTasks
       ?.find((p) => p._id === data.petId)
       ?.tasks?.find((t) => t._id === data.taskId);
@@ -153,7 +156,7 @@ function CalendarPage() {
         dateFrom: task.dateFrom,
         dateTo: task.dateTo,
         petId: data.petId,
-        isCompleted: true,
+        isCompleted: data.isCompleted,
       });
     }
   };
@@ -163,7 +166,7 @@ function CalendarPage() {
       eventInfo={eventInfo}
       editTask={handleEditTask}
       deleteTask={handleDeleteTask}
-      completeTask={handleCompleteTask}
+      changeCompleteStatus={handleChangeCompleteStatus}
     />
   );
 

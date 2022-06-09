@@ -27,9 +27,10 @@ export interface Group {
   pets: Pet[];
 }
 
-interface Member {
+export interface Member {
   _id: string;
-  isAdmin: boolean;
+  name: string;
+  email: string;
 }
 
 export interface Task {

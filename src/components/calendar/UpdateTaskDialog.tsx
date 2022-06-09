@@ -18,12 +18,12 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [dateFrom, setDateFrom] = useState(moment().format('YYYY-MM-DDTHH:mm'));
-    const [dateTo, setDateTo] = useState(moment().format('YYYY-MM-DDTHH:mm'));
+    const [dateTo, setDateTo] = useState(moment().add(1, 'hours').format('YYYY-MM-DDTHH:mm'));
     const [isCompleted, setIsCompleted] = useState(false);
     const [petId, setPetId] = useState<string>("");
     const [titleError, setTitleError] = useState(false);
     const [datesError, setDatesError] = useState(
-        new Date(dateFrom).getTime() > new Date(dateTo).getTime()
+        moment(dateFrom).isSameOrAfter(moment(dateTo))
     );
 
     useEffect(() => {
@@ -31,7 +31,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
       setTitle(task ? task.title : "");
       setDescription(task ? task.description : "");
       setDateFrom(task ? moment(task.dateFrom).format('YYYY-MM-DDTHH:mm') : moment().format('YYYY-MM-DDTHH:mm'));
-      setDateTo(task ? moment(task.dateTo).format('YYYY-MM-DDTHH:mm') : moment().format('YYYY-MM-DDTHH:mm'));
+      setDateTo(task ? moment(task.dateTo).format('YYYY-MM-DDTHH:mm') : moment().add(1, 'hours').format('YYYY-MM-DDTHH:mm'));
       setIsCompleted(task ? task.isCompleted : false);
       setPetId(task && selectedPetId ? selectedPetId : "");
       setTitleError(false);
@@ -81,7 +81,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
                 type="datetime-local"
                 value={dateFrom}
                 onChange={(e) => setDateFrom(e.target.value)}
-                onBlur={() => setDatesError(new Date(dateFrom).getTime() > new Date(dateTo).getTime())}
+                onBlur={() => setDatesError(moment(dateFrom).isSameOrAfter(moment(dateTo)))}
                 fullWidth
                 required
                 InputLabelProps={{ shrink: true }}
@@ -95,7 +95,7 @@ function UpdateTaskDialog(props: {onClose: any, updateTask: any, open: boolean, 
                 type="datetime-local"
                 value={dateTo}
                 onChange={(e) => setDateTo(e.target.value)}
-                onBlur={() => setDatesError(new Date(dateFrom).getTime() > new Date(dateTo).getTime())}
+                onBlur={() => setDatesError(moment(dateFrom).isSameOrAfter(moment(dateTo)))}
                 fullWidth
                 required
                 InputLabelProps={{ shrink: true }}
