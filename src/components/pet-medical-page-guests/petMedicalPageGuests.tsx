@@ -62,7 +62,7 @@ const PetMedicalPageGuests = () => {
                 iconPosition="start"
               />
               <Tab
-                label="Contact Us"
+                label="Owners"
                 icon={<ContactMailIcon />}
                 iconPosition="start"
               />
