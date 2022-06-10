@@ -56,7 +56,7 @@ const PetTasks = (props: { tasks: any[] }) => {
   }
 
   return (
-    <Paper variant="outlined">
+    <Paper variant="outlined" sx={{ maxWidth: 500 }}>
       <TableContainer>
         <Table aria-label="simple table">
           <TableHead>

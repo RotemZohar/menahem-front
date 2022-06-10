@@ -1,7 +1,11 @@
 import {
+  Box,
   Divider,
+  Fab,
+  Grid,
   IconButton,
   TablePagination,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -67,18 +71,15 @@ const PetCarers: React.FC<PetCarersProps> = ({
   }
 
   return (
-    <div style={{ display: "flex", alignItems: "baseline" }}>
-      <IconButton onClick={() => setAddUsers((prev) => !prev)}>
-        <AddIcon />
-      </IconButton>
-      <Paper variant="outlined" style={{ width: "100%" }}>
-        <TableContainer component={Paper}>
+    <Box>
+      <Paper variant="outlined">
+        <TableContainer>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="center">Name</TableCell>
                 <TableCell align="center">Email</TableCell>
-                <TableCell align="center">Delete</TableCell>
+                <TableCell align="center"> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -94,7 +95,9 @@ const PetCarers: React.FC<PetCarersProps> = ({
                       id={row._id}
                       onClick={() => onDeleteUser(row._id)}
                     >
-                      <DeleteIcon />
+                      <Tooltip title="Delete">
+                        <DeleteIcon />
+                      </Tooltip>
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -113,7 +116,18 @@ const PetCarers: React.FC<PetCarersProps> = ({
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </div>
+      <Grid container justifyContent="center" mt={3}>
+        <Tooltip arrow title="Add Carers">
+          <Fab
+            onClick={() => setAddUsers((prev) => !prev)}
+            color="primary"
+            aria-label="add"
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+      </Grid>
+    </Box>
   );
 };
 export default PetCarers;

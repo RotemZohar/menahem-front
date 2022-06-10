@@ -151,7 +151,9 @@ const PetMedical = (props: { medical: Treatment[] }) => {
                         aria-label="close"
                         onClick={() => deleteMedical(row._id)}
                       >
-                        <DeleteIcon fontSize="small" />
+                        <Tooltip title="Delete">
+                          <DeleteIcon />
+                        </Tooltip>
                       </IconButton>
                     </TableCell>
                   </TableRow>
