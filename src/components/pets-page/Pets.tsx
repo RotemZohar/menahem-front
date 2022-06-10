@@ -11,7 +11,10 @@ import {
   Divider,
   Paper,
   TablePagination,
+  Button,
+  Card,
 } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +22,7 @@ import { Pet } from "../../types/pet";
 import { RootState } from "../../redux/store";
 import { routes } from "../../routes";
 import petsLogo from "../../assets/mypets.png";
+import noPets from "../../assets/no-pets.png";
 import addIcon from "../../assets/add-pet.png";
 import Loader from "../loader/Loader";
 
@@ -56,6 +60,28 @@ const PetsPage = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  if (pets.length === 0) {
+    return (
+      <Grid container justifyContent="center">
+        <Card sx={{ width: 500, m: 3 }}>
+          <Grid item xs={12}>
+            <img src={noPets} alt="You have no pets yet" width="350" />
+          </Grid>
+          <Grid item m={3}>
+            <Button
+              variant="text"
+              onClick={addPet}
+              style={{ textTransform: "none" }}
+              startIcon={<SendIcon />}
+            >
+              Click here to add your first pet!
+            </Button>
+          </Grid>
+        </Card>
+      </Grid>
+    );
+  }
 
   return (
     <Grid container justifyContent="center">

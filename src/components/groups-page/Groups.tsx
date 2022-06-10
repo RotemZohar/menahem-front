@@ -1,6 +1,8 @@
 import * as React from "react";
 import {
   Avatar,
+  Button,
+  Card,
   Divider,
   Grid,
   ListItem,
@@ -17,12 +19,14 @@ import Fab from "@mui/material/Fab";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import SendIcon from "@mui/icons-material/Send";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { Group } from "../../types/group";
 import { RootState } from "../../redux/store";
 import { routes } from "../../routes";
 import Loader from "../loader/Loader";
 import groupsLogo from "../../assets/mygroups.png";
+import noGroups from "../../assets/no-groups.png";
 
 const GroupsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
@@ -58,6 +62,28 @@ const GroupsPage = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  if (groups.length === 0) {
+    return (
+      <Grid container justifyContent="center">
+        <Card sx={{ width: 500, m: 3 }}>
+          <Grid item xs={12}>
+            <img src={noGroups} alt="You have no groups yet" width="350" />
+          </Grid>
+          <Grid item m={3}>
+            <Button
+              variant="text"
+              onClick={addGroup}
+              style={{ textTransform: "none" }}
+              startIcon={<SendIcon />}
+            >
+              Click here to create your first group!
+            </Button>
+          </Grid>
+        </Card>
+      </Grid>
+    );
+  }
 
   return (
     <Grid container justifyContent="center">
