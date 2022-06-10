@@ -13,7 +13,8 @@ import React, { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import useFetch from "use-http";
-import { useParams } from "react-router-dom";
+import { useNavigate, useNavigationType, useParams } from "react-router-dom";
+import { routes } from "../../routes";
 
 const petEditPage = () => {
   const { put, get, response } = useFetch("/pet");
@@ -23,6 +24,7 @@ const petEditPage = () => {
   const [weight, setWeight] = useState("");
   const [snackMessage, setSnackMessage] = useState("");
   const [openSnack, setSnackOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     get(`/${petId}`)
@@ -64,15 +66,14 @@ const petEditPage = () => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    const editedDetails = await put(`/${petId}`, {
+    await put(`/${petId}`, {
       name,
       height,
       weight,
     });
 
     if (response.data === "Edited") {
-      setSnackMessage("Details changed");
-      handleSnackClick();
+      navigate(routes.pets);
     } else {
       setSnackMessage("Error occurred");
       handleSnackClick();
