@@ -13,7 +13,20 @@ import Paper from "@mui/material/Paper";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import moment from "moment";
-import { Card, Grid, Tab, Tabs } from "@mui/material";
+import {
+  Avatar,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Divider,
+  Fab,
+  Grid,
+  ImageListItem,
+  ImageListItemBar,
+  Tab,
+  Tabs,
+} from "@mui/material";
 import { useState } from "react";
 import { Treatment } from "../../types/pet";
 import TabPanel from "../tab-panel/TabPanel";
@@ -55,6 +68,38 @@ const PetMedicalPageGuests = () => {
               m: 3,
             }}
           >
+            <Grid style={{ position: "relative" }}>
+              <CardMedia
+                component="img"
+                height="200"
+                image={petMedical.imgUrl}
+                alt={petMedical.name}
+              />
+              <Grid
+                style={{
+                  position: "absolute",
+                  top: 1,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "100%",
+                  background:
+                    "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
+                    "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+                }}
+              >
+                <Typography
+                  variant="overline"
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#ffffff",
+                    fontSize: "24px",
+                  }}
+                >
+                  {petMedical.name}
+                </Typography>
+              </Grid>
+            </Grid>
+
             <Tabs value={value} onChange={handleChange} variant="fullWidth">
               <Tab
                 label="Medical History"
@@ -68,7 +113,7 @@ const PetMedicalPageGuests = () => {
               />
             </Tabs>
             <TabPanel value={value} index={0}>
-              <Grid item xs={12} m={2}>
+              <Grid item xs={12} mb={2}>
                 <img src={medicalLogo} alt="medical history" width="500" />
               </Grid>
               <TableContainer>
@@ -76,8 +121,12 @@ const PetMedicalPageGuests = () => {
                   <Table aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell align="center">Treatment</TableCell>
-                        <TableCell align="center">Date</TableCell>
+                        <TableCell align="center">
+                          <Typography variant="button">Treatment</Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography variant="button">Date</Typography>
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -100,7 +149,7 @@ const PetMedicalPageGuests = () => {
               </TableContainer>
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <Grid item xs={12} m={2}>
+              <Grid item xs={12} mb={2}>
                 <img src={carersLogo} alt="pet-carers" width="500" />
               </Grid>
               <TableContainer>
@@ -108,8 +157,12 @@ const PetMedicalPageGuests = () => {
                   <Table aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell align="center">Name</TableCell>
-                        <TableCell align="center">Email</TableCell>
+                        <TableCell align="center">
+                          <Typography variant="button">Name</Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography variant="button">Email</Typography>
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
