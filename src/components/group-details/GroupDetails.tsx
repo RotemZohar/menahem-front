@@ -100,7 +100,6 @@ const GroupDetails = () => {
     const data = await del(`/${groupId}/pet/${petId}`);
     if (data === "Deleted") {
       details.pets = details.pets.filter((pet: Pet) => pet._id !== petId);
-
       details.members = [...details.members];
       setPets(details.pets);
     }
