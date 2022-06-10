@@ -74,6 +74,7 @@ const GroupDetails = () => {
         (member: User) => member._id !== userId
       );
 
+      details.members = [...details.members];
       setCarers(details.members);
     }
   };
@@ -100,6 +101,7 @@ const GroupDetails = () => {
     if (data === "Deleted") {
       details.pets = details.pets.filter((pet: Pet) => pet._id !== petId);
 
+      details.members = [...details.members];
       setPets(details.pets);
     }
   };
