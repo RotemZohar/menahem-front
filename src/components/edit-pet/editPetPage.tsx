@@ -1,9 +1,11 @@
 import {
   Avatar,
+  Backdrop,
   Box,
   Button,
   Card,
   CardHeader,
+  CircularProgress,
   Divider,
   Grid,
   InputAdornment,
@@ -16,18 +18,26 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { useSelector } from "react-redux";
 import Loader from "../loader/Loader";
+import { RootState } from "../../redux/store";
+import { storage } from "../../firebase";
 
 const petEditPage = () => {
   const { put, get, response, loading } = useFetch("/pet");
   const { petId } = useParams();
   const navigate = useNavigate();
+  const userId = useSelector((state: RootState) => state.userReducer._id);
   const [name, setName] = useState("");
+  const [imageUrl, setImageUrl] = useState<any>();
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [snackMessage, setSnackMessage] = useState("");
   const [openSnack, setSnackOpen] = React.useState(false);
+  const [progress, setProgress] = useState(100);
+  // const [firebaseUrl, setFirebaseUrl] = useState("");
 
   const navToPet = () => {
     navigate(`/pet/${petId}`);
@@ -36,6 +46,7 @@ const petEditPage = () => {
   useEffect(() => {
     get(`/${petId}`)
       .then((pet) => {
+        console.log(pet);
         setName(pet.name);
         setHeight(pet.height);
         setWeight(pet.weight);
@@ -61,9 +72,54 @@ const petEditPage = () => {
     setSnackOpen(false);
   };
 
+  const editPetServer = async (firebaseImageUrl = "") => {
+    console.log(firebaseImageUrl);
+    const editedDetails = await put(`/${petId}`, {
+      name,
+      height,
+      weight,
+      imgUrl: firebaseImageUrl,
+    });
+
+    if (response.data === "Edited") {
+      setSnackMessage("Details changed");
+      handleSnackClick();
+    } else {
+      setSnackMessage("Error occurred");
+      handleSnackClick();
+    }
+  };
+
+  const editPet = async () => {
+    // Upload image
+    if (!imageUrl) {
+      editPetServer();
+    } else {
+      const storageRef = ref(storage, `petsImages/${userId}/${name}`);
+      const uploadTask = uploadBytesResumable(storageRef, imageUrl);
+
+      await uploadTask.on(
+        "state_changed",
+        (snapshot: { bytesTransferred: number; totalBytes: number }) => {
+          const progressTemp = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(progressTemp);
+        },
+        (error: any) => {
+          console.log(error);
+        },
+        async () => {
+          const firebaseUrlTemp = await getDownloadURL(uploadTask.snapshot.ref);
+          editPetServer(firebaseUrlTemp);
+        }
+      );
+    }
+  };
+
   const onUploadPicture = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
-      // TODO: use rom's image fix
+      setImageUrl(event.target.files[0]);
       setImgUrl(URL.createObjectURL(event.target.files[0]));
     }
   };
@@ -81,20 +137,7 @@ const petEditPage = () => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    const editedDetails = await put(`/${petId}`, {
-      name,
-      height,
-      weight,
-      imgUrl,
-    });
-
-    if (response.data === "Edited") {
-      setSnackMessage("Details changed");
-      handleSnackClick();
-    } else {
-      setSnackMessage("Error occurred");
-      handleSnackClick();
-    }
+    editPet();
   };
 
   if (loading) {
@@ -158,6 +201,7 @@ const petEditPage = () => {
               </Button>
             </Grid>
           </Grid>
+
           <Grid container justifyContent="flex-end">
             <Grid item margin={1}>
               <Button variant="contained" type="submit">
@@ -174,6 +218,9 @@ const petEditPage = () => {
             />
           </Grid>
         </Box>
+        <Backdrop open={progress !== 100}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Card>
     </Grid>
   );
