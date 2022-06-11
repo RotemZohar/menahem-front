@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -12,15 +13,18 @@ import Snackbar from "@mui/material/Snackbar";
 import React, { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import useFetch from "use-http";
 import { useParams } from "react-router-dom";
+import Loader from "../loader/Loader";
 
 const petEditPage = () => {
-  const { put, get, response } = useFetch("/pet");
+  const { put, get, response, loading } = useFetch("/pet");
   const { petId } = useParams();
   const [name, setName] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [imgUrl, setImgUrl] = useState("");
   const [snackMessage, setSnackMessage] = useState("");
   const [openSnack, setSnackOpen] = React.useState(false);
 
@@ -30,6 +34,7 @@ const petEditPage = () => {
         setName(pet.name);
         setHeight(pet.height);
         setWeight(pet.weight);
+        setImgUrl(pet.imgUrl);
       })
       .catch((err) => {
         console.log(err);
@@ -51,6 +56,13 @@ const petEditPage = () => {
     setSnackOpen(false);
   };
 
+  const onUploadPicture = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files?.length) {
+      // TODO: use rom's image fix
+      setImgUrl(URL.createObjectURL(event.target.files[0]));
+    }
+  };
+
   const action = (
     <IconButton
       size="small"
@@ -68,6 +80,7 @@ const petEditPage = () => {
       name,
       height,
       weight,
+      imgUrl,
     });
 
     if (response.data === "Edited") {
@@ -79,11 +92,22 @@ const petEditPage = () => {
     }
   };
 
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <Grid container justifyContent="center">
       <Card sx={{ width: 600, minHeight: 300, m: 3 }}>
         <CardHeader title="Edit Pet" />
         <Divider />
+        <Grid item mt={2}>
+          <Avatar
+            src={imgUrl}
+            alt="X"
+            sx={{ width: 160, height: 160, m: "auto", mb: 2 }}
+          />
+        </Grid>
         <Box component="form" onSubmit={onSubmit} m={2}>
           <Grid
             style={{
@@ -122,18 +146,27 @@ const petEditPage = () => {
                 ),
               }}
             />
-            <Grid item margin={1} xs={12}>
+            <Grid item margin={1}>
+              <Button startIcon={<AddAPhotoIcon />} component="label">
+                Upload Picture
+                <input type="file" hidden onChange={onUploadPicture} />
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="flex-end">
+            <Grid item margin={1}>
               <Button variant="contained" type="submit">
                 Submit
               </Button>
-              <Snackbar
-                open={openSnack}
-                autoHideDuration={3000}
-                message={snackMessage}
-                onClose={handleSnackClose}
-                action={action}
-              />
             </Grid>
+
+            <Snackbar
+              open={openSnack}
+              autoHideDuration={3000}
+              message={snackMessage}
+              onClose={handleSnackClose}
+              action={action}
+            />
           </Grid>
         </Box>
       </Card>
