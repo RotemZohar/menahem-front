@@ -10,6 +10,8 @@ import {
   Avatar,
   CardHeader,
   Divider,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useNavigate } from "react-router-dom";
@@ -83,7 +85,7 @@ const AddPetForm = () => {
   const [nameError, setNameError] = useState(false);
   const [weightError, setWeightError] = useState(false);
   const [heightError, setHeightError] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(100);
 
   // const onUploadPicture = (event: React.ChangeEvent<HTMLInputElement>) => {
   const onUploadPicture = (event: any) => {
@@ -300,6 +302,9 @@ const AddPetForm = () => {
             </Grid>
           </Grid>
         </Box>
+        <Backdrop open={progress !== 100}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Card>
     </Grid>
   );
