@@ -69,7 +69,7 @@ const GroupEditPage = () => {
     });
 
     if (response.data === "Edited") {
-      navigate(`${routes.groups}`);
+      navigate(-1);
     } else {
       setSnackMessage("Error occurred");
       handleSnackClick();

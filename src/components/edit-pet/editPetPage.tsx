@@ -73,7 +73,7 @@ const petEditPage = () => {
     });
 
     if (response.data === "Edited") {
-      navigate(routes.pets);
+      navigate(-1);
     } else {
       setSnackMessage("Error occurred");
       handleSnackClick();
