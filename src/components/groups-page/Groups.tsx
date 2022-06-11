@@ -1,31 +1,32 @@
 import * as React from "react";
 import {
   Avatar,
+  Button,
+  Card,
   Divider,
   Grid,
-  IconButton,
   ListItem,
   ListItemAvatar,
   ListItemButton,
-  ListItemSecondaryAction,
   ListItemText,
   Paper,
   TablePagination,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import useFetch from "use-http";
 import Fab from "@mui/material/Fab";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import SendIcon from "@mui/icons-material/Send";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { Group } from "../../types/group";
 import { RootState } from "../../redux/store";
 import { routes } from "../../routes";
 import Loader from "../loader/Loader";
 import groupsLogo from "../../assets/mygroups.png";
+import noGroups from "../../assets/no-groups.png";
 
 const GroupsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
@@ -47,10 +48,6 @@ const GroupsPage = () => {
     navigate(routes.createGroup);
   };
 
-  const navToEdit = (group: Group) => {
-    navigate(`/group/${group._id}/edit`);
-  };
-
   if (loading) {
     return <Loader />;
   }
@@ -66,6 +63,28 @@ const GroupsPage = () => {
     setPage(0);
   };
 
+  if (groups.length === 0) {
+    return (
+      <Grid container justifyContent="center">
+        <Card sx={{ width: 500, m: 3 }}>
+          <Grid item xs={12}>
+            <img src={noGroups} alt="You have no groups yet" width="350" />
+          </Grid>
+          <Grid item m={3}>
+            <Button
+              variant="text"
+              onClick={addGroup}
+              style={{ textTransform: "none" }}
+              startIcon={<SendIcon />}
+            >
+              Click here to create your first group!
+            </Button>
+          </Grid>
+        </Card>
+      </Grid>
+    );
+  }
+
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12} mt={2}>
@@ -74,7 +93,7 @@ const GroupsPage = () => {
       <Paper
         sx={{
           width: "100%",
-          maxWidth: 500,
+          maxWidth: 480,
           bgcolor: "background.paper",
           borderRadius: 5,
           elevation: 3,
@@ -86,7 +105,7 @@ const GroupsPage = () => {
             <Grid key={group._id}>
               <ListItem ContainerComponent="div" disablePadding>
                 <ListItemButton
-                  sx={{ height: 80, mr: 5 }}
+                  sx={{ height: 80 }}
                   alignItems="center"
                   onClick={() => navToGroup(group)}
                 >
@@ -103,18 +122,6 @@ const GroupsPage = () => {
                     secondary={`Members: ${group.members.length}`}
                   />
                 </ListItemButton>
-                <ListItemSecondaryAction>
-                  <IconButton onClick={() => navToEdit(group)}>
-                    <Tooltip title="Edit">
-                      <EditIcon />
-                    </Tooltip>
-                  </IconButton>
-                  <IconButton edge="end">
-                    <Tooltip title="Delete">
-                      <DeleteIcon />
-                    </Tooltip>
-                  </IconButton>
-                </ListItemSecondaryAction>
               </ListItem>
               <Divider />
             </Grid>

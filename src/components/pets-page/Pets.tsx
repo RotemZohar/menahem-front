@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
   Avatar,
-  CircularProgress,
   Fab,
   Grid,
   ListItem,
@@ -9,14 +8,13 @@ import {
   ListItemAvatar,
   ListItemText,
   Tooltip,
-  IconButton,
   Divider,
   Paper,
   TablePagination,
-  ListItemSecondaryAction,
+  Button,
+  Card,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import SendIcon from "@mui/icons-material/Send";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +22,7 @@ import { Pet } from "../../types/pet";
 import { RootState } from "../../redux/store";
 import { routes } from "../../routes";
 import petsLogo from "../../assets/mypets.png";
+import noPets from "../../assets/no-pets.png";
 import addIcon from "../../assets/add-pet.png";
 import Loader from "../loader/Loader";
 
@@ -47,10 +46,6 @@ const PetsPage = () => {
     navigate(routes.newpet);
   };
 
-  const navToEdit = (pet: Pet) => {
-    navigate(`/pet/${pet._id}/edit`);
-  };
-
   if (loading) {
     return <Loader />;
   }
@@ -66,6 +61,28 @@ const PetsPage = () => {
     setPage(0);
   };
 
+  if (pets.length === 0) {
+    return (
+      <Grid container justifyContent="center">
+        <Card sx={{ width: 500, m: 3 }}>
+          <Grid item xs={12}>
+            <img src={noPets} alt="You have no pets yet" width="350" />
+          </Grid>
+          <Grid item m={3}>
+            <Button
+              variant="text"
+              onClick={addPet}
+              style={{ textTransform: "none" }}
+              startIcon={<SendIcon />}
+            >
+              Click here to add your first pet!
+            </Button>
+          </Grid>
+        </Card>
+      </Grid>
+    );
+  }
+
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12} mt={2}>
@@ -74,7 +91,7 @@ const PetsPage = () => {
       <Paper
         sx={{
           width: "100%",
-          maxWidth: 500,
+          maxWidth: 480,
           bgcolor: "background.paper",
           borderRadius: 5,
           elevation: 3,
@@ -86,7 +103,7 @@ const PetsPage = () => {
             <Grid key={pet._id}>
               <ListItem ContainerComponent="div" disablePadding>
                 <ListItemButton
-                  sx={{ height: 80, mr: 5 }}
+                  sx={{ height: 80 }}
                   alignItems="center"
                   onClick={() => navToPet(pet)}
                 >
@@ -99,18 +116,6 @@ const PetsPage = () => {
                   </ListItemAvatar>
                   <ListItemText primary={pet.name} secondary={pet.breed} />
                 </ListItemButton>
-                <ListItemSecondaryAction>
-                  <IconButton onClick={() => navToEdit(pet)}>
-                    <Tooltip title="Edit">
-                      <EditIcon />
-                    </Tooltip>
-                  </IconButton>
-                  <IconButton edge="end">
-                    <Tooltip title="Delete">
-                      <DeleteIcon />
-                    </Tooltip>
-                  </IconButton>
-                </ListItemSecondaryAction>
               </ListItem>
               <Divider />
             </Grid>

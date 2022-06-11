@@ -9,7 +9,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  Tooltip,
   Box,
   ListItemIcon,
   Menu,
@@ -36,7 +35,7 @@ const GroupDetails = () => {
   const openMenu = Boolean(anchorEl);
   const [carers, setCarers] = useState<User[]>([]);
   const [pets, setPets] = useState<Pet[]>([]);
-  const { post, del, get, response } = useFetch("/group");
+  const { post, del } = useFetch("/group");
   const {
     data: details,
     loading,
@@ -74,6 +73,7 @@ const GroupDetails = () => {
         (member: User) => member._id !== userId
       );
 
+      details.members = [...details.members];
       setCarers(details.members);
     }
   };
@@ -99,7 +99,7 @@ const GroupDetails = () => {
     const data = await del(`/${groupId}/pet/${petId}`);
     if (data === "Deleted") {
       details.pets = details.pets.filter((pet: Pet) => pet._id !== petId);
-
+      details.members = [...details.members];
       setPets(details.pets);
     }
   };
