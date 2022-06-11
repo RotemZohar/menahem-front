@@ -15,18 +15,23 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import useFetch from "use-http";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../loader/Loader";
 
 const petEditPage = () => {
   const { put, get, response, loading } = useFetch("/pet");
   const { petId } = useParams();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [snackMessage, setSnackMessage] = useState("");
   const [openSnack, setSnackOpen] = React.useState(false);
+
+  const navToPet = () => {
+    navigate(`/pet/${petId}`);
+  };
 
   useEffect(() => {
     get(`/${petId}`)
