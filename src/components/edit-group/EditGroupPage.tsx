@@ -12,7 +12,8 @@ import React, { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import useFetch from "use-http";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { routes } from "../../routes";
 
 const GroupEditPage = () => {
   const { put, get, response } = useFetch("/group");
@@ -21,6 +22,7 @@ const GroupEditPage = () => {
   const [description, setDescription] = useState("");
   const [snackMessage, setSnackMessage] = useState("");
   const [openSnack, setSnackOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     get(`/${groupId}`)
@@ -61,14 +63,13 @@ const GroupEditPage = () => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    const editedDetails = await put(`/${groupId}`, {
+    await put(`/${groupId}`, {
       name,
       description,
     });
 
     if (response.data === "Edited") {
-      setSnackMessage("Details changed");
-      handleSnackClick();
+      navigate(-1);
     } else {
       setSnackMessage("Error occurred");
       handleSnackClick();
