@@ -17,12 +17,13 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import useFetch from "use-http";
-import { useNavigate, useParams } from "react-router-dom";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useSelector } from "react-redux";
+import { useNavigate, useNavigationType, useParams } from "react-router-dom";
 import Loader from "../loader/Loader";
 import { RootState } from "../../redux/store";
 import { storage } from "../../firebase";
+import { routes } from "../../routes";
 
 const petEditPage = () => {
   const { put, get, response, loading } = useFetch("/pet");
@@ -37,7 +38,6 @@ const petEditPage = () => {
   const [snackMessage, setSnackMessage] = useState("");
   const [openSnack, setSnackOpen] = React.useState(false);
   const [progress, setProgress] = useState(100);
-  // const [firebaseUrl, setFirebaseUrl] = useState("");
 
   const navToPet = () => {
     navigate(`/pet/${petId}`);
@@ -74,7 +74,8 @@ const petEditPage = () => {
 
   const editPetServer = async (firebaseImageUrl = "") => {
     console.log(firebaseImageUrl);
-    const editedDetails = await put(`/${petId}`, {
+
+    await put(`/${petId}`, {
       name,
       height,
       weight,
@@ -82,8 +83,7 @@ const petEditPage = () => {
     });
 
     if (response.data === "Edited") {
-      setSnackMessage("Details changed");
-      handleSnackClick();
+      navigate(-1);
     } else {
       setSnackMessage("Error occurred");
       handleSnackClick();

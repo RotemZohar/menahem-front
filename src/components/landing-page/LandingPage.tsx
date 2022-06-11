@@ -11,6 +11,7 @@ import { acquireToken, Token, tokens } from "../../auth/auth-utils";
 import { useHideNavbar } from "../../hooks/use-hide-navbar";
 import { setUserId } from "../../redux/slices/userSlice";
 import mainLogo from "../../assets/main-logo.png";
+import Loader from "../loader/Loader";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const LandingPage = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const { post, response } = useFetch("/auth");
+  const { post, response, loading } = useFetch("/auth");
   const dispatch = useDispatch();
 
   useHideNavbar();
@@ -57,6 +58,10 @@ const LandingPage = () => {
       await signin();
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <Grid container justifyContent="center">
