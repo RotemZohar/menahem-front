@@ -1,6 +1,14 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { Grid, List, Typography } from "@mui/material";
+import {
+  Card,
+  Divider,
+  Grid,
+  List,
+  Paper,
+  TablePagination,
+  Typography,
+} from "@mui/material";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -8,6 +16,7 @@ import Loader from "../loader/Loader";
 import { Pet, Task } from "../../types/pet";
 import TaskItem from "./taskItem";
 import noTasks from "../../assets/no-tasks.png";
+import tasksLogo from "../../assets/todays-tasks.png";
 
 const HomePage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
@@ -16,8 +25,20 @@ const HomePage = () => {
     loading: loadingTasks,
     error: tasksError,
   } = useFetch(`/user/${userId}/today-tasks`, {}, [userId]);
-
   const { put } = useFetch("/pet");
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   const toggleTodo = async (petId: string, taskId: string, status: boolean) => {
     const editStatus = await put(`/${petId}/${taskId}/changeStatus`, {
@@ -50,17 +71,39 @@ const HomePage = () => {
   }
 
   return (
-    <Box sx={{ marginLeft: "33%", marginRight: "33%" }}>
-      <Grid container direction="column">
-        <Grid item margin={1} xs={16}>
-          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {todayTasks.map((pet: Pet) =>
+    <Box>
+      <Grid container justifyContent="center">
+        <Grid item xs={12} mt={2} mb={1}>
+          <img src={tasksLogo} alt="You have no tasks for today" width="450" />
+        </Grid>
+        <Paper
+          sx={{
+            width: "100%",
+            maxWidth: 550,
+            bgcolor: "background.paper",
+            borderRadius: 5,
+            elevation: 3,
+            mb: 3,
+          }}
+        >
+          {todayTasks
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((pet: Pet) =>
               pet.tasks.map((task) => (
                 <TaskItem pet={pet} task={task} toggleTodo={toggleTodo} />
               ))
             )}
-          </List>
-        </Grid>
+          <Divider />
+          <TablePagination
+            rowsPerPageOptions={[5, 10]}
+            component="div"
+            count={todayTasks.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
       </Grid>
     </Box>
   );
