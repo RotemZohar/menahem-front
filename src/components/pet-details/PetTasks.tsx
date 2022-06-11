@@ -9,7 +9,11 @@ import {
   TablePagination,
   Paper,
   Typography,
+  Tooltip,
+  Divider,
 } from "@mui/material";
+import DoneIcon from "@mui/icons-material/Done";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
 const PetTasks = (props: { tasks: any[] }) => {
   const { tasks } = props;
@@ -52,7 +56,7 @@ const PetTasks = (props: { tasks: any[] }) => {
   }
 
   return (
-    <Paper variant="outlined">
+    <Paper variant="outlined" sx={{ maxWidth: 500 }}>
       <TableContainer>
         <Table aria-label="simple table">
           <TableHead>
@@ -81,13 +85,22 @@ const PetTasks = (props: { tasks: any[] }) => {
                   <TableCell align="center">{row.description}</TableCell>
                   <TableCell align="center">{dateFormat(row.dateTo)}</TableCell>
                   <TableCell align="center">
-                    {row.isCompleted ? "Completed" : "Not Completed"}
+                    {row.isCompleted ? (
+                      <Tooltip title="Completed">
+                        <DoneIcon color="success" />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="To Do">
+                        <PriorityHighIcon color="error" />
+                      </Tooltip>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <Divider />
       <TablePagination
         rowsPerPageOptions={[5, 10]}
         component="div"

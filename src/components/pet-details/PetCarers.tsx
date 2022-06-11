@@ -1,4 +1,13 @@
-import { IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Fab,
+  Grid,
+  IconButton,
+  TablePagination,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -26,6 +35,19 @@ const PetCarers: React.FC<PetCarersProps> = ({
   onAddUser,
 }) => {
   const [addUsers, setAddUsers] = useState(false);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   if (addUsers) {
     return (
@@ -49,18 +71,15 @@ const PetCarers: React.FC<PetCarersProps> = ({
   }
 
   return (
-    <div style={{ display: "flex", alignItems: "baseline" }}>
-      <IconButton onClick={() => setAddUsers((prev) => !prev)}>
-        <AddIcon />
-      </IconButton>
-      <Paper variant="outlined" style={{ width: "100%" }}>
-        <TableContainer component={Paper}>
+    <Box>
+      <Paper variant="outlined">
+        <TableContainer>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="center">Name</TableCell>
                 <TableCell align="center">Email</TableCell>
-                <TableCell align="center">Delete</TableCell>
+                <TableCell align="center"> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -76,7 +95,9 @@ const PetCarers: React.FC<PetCarersProps> = ({
                       id={row._id}
                       onClick={() => onDeleteUser(row._id)}
                     >
-                      <DeleteIcon />
+                      <Tooltip title="Delete">
+                        <DeleteIcon />
+                      </Tooltip>
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -84,8 +105,29 @@ const PetCarers: React.FC<PetCarersProps> = ({
             </TableBody>
           </Table>
         </TableContainer>
+        <Divider />
+        <TablePagination
+          rowsPerPageOptions={[5, 10]}
+          component="div"
+          count={carers.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
-    </div>
+      <Grid container justifyContent="center" mt={3}>
+        <Tooltip arrow title="Add Carers">
+          <Fab
+            onClick={() => setAddUsers((prev) => !prev)}
+            color="primary"
+            aria-label="add"
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+      </Grid>
+    </Box>
   );
 };
 export default PetCarers;

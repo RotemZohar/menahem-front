@@ -5,7 +5,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
-import { Box, Fab } from "@mui/material";
+import { Box, Fab, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import * as _ from "lodash";
 import { RootState } from "../../redux/store";
@@ -46,7 +46,7 @@ function convertTaskToCalendarEvent(
           name: pet.name,
           imgUrl: pet.imgUrl,
           description: task.description,
-          isCompleted: task.isCompleted
+          isCompleted: task.isCompleted,
         },
       });
     });
@@ -143,7 +143,11 @@ function CalendarPage() {
       });
   };
 
-  const handleChangeCompleteStatus = (data: { petId: string; taskId: string, isCompleted: boolean }) => {
+  const handleChangeCompleteStatus = (data: {
+    petId: string;
+    taskId: string;
+    isCompleted: boolean;
+  }) => {
     const task = petTasks
       ?.find((p) => p._id === data.petId)
       ?.tasks?.find((t) => t._id === data.taskId);
@@ -191,14 +195,22 @@ function CalendarPage() {
           eventContent={renderEventContent}
         />
       </div>
-      <Fab
-        onClick={openDialog}
-        color="primary"
-        aria-label="add"
-        style={{ position: "fixed", bottom: "2rem", right: "2rem", zIndex: 1 }}
-      >
-        <AddIcon />
-      </Fab>
+      <Tooltip arrow title="Add Task">
+        <Fab
+          onClick={openDialog}
+          color="primary"
+          aria-label="add"
+          style={{
+            position: "fixed",
+            bottom: "2rem",
+            right: "2rem",
+            zIndex: 1,
+          }}
+        >
+          <AddIcon />
+        </Fab>
+      </Tooltip>
+
       <UpdateTaskDialog
         open={dialogOpen}
         task={selectedTaskData?.task}

@@ -65,8 +65,10 @@ function Navbar() {
     <AppBar position="static">
       <Toolbar variant="dense">
         <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item onClick={() => navigate(routes.home)}>
-            <img src={logoPng} height="40" alt="logo" />
+          <Grid item>
+            <IconButton disableRipple onClick={() => navigate(routes.home)}>
+              <img src={logoPng} height="40" alt="logo" />
+            </IconButton>
           </Grid>
           <Grid item>
             <Grid container justifyContent="space-around">

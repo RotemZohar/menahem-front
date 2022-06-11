@@ -1,4 +1,12 @@
-import { Button, Grid, Popover, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  Popover,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import moment from "moment";
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
@@ -42,7 +50,7 @@ function CalendarEvent(props: {
 
   return (
     <div style={{ width: "100%" }}>
-      <Tooltip title="Press task for more details">
+      <Tooltip title="Press For Details">
         <button
           style={{
             padding: 2,
@@ -80,39 +88,61 @@ function CalendarEvent(props: {
           horizontal: "left",
         }}
       >
-        <div
-          style={{
+        <Grid
+          sx={{
+            maxWidth: 450,
+            minWidth: 300,
             padding: "1rem",
-            fontSize: "small",
             border: `3px solid ${eventInfo.event.backgroundColor}`,
           }}
         >
-          <div style={{ fontWeight: "bold" }}>
-            {moment(eventInfo.event.start).format("DD/MM/YYYY HH:mm")} -{" "}
-            {moment(eventInfo.event.end).format("DD/MM/YYYY HH:mm")}
-          </div>
-          <div style={{ marginTop: "0.5rem" }}>
-            {eventInfo.event.extendedProps.description}
-          </div>
-          <Grid
-            container
-            justifyContent="center"
-            style={{ marginTop: "2rem", display: "flex", alignItems: "center" }}
+          <Tooltip
+            arrow
+            placement="top"
+            title={
+              eventInfo.event.extendedProps.isCompleted
+                ? "Press to mark as Not Completed"
+                : "Press to mark as Completed"
+            }
           >
-            <DeleteIcon
-              style={{ marginRight: "auto" }}
-              onClick={handleDeleteTask}
-            />
             <Button
               variant="contained"
-              style={{ fontSize: "smaller" }}
               onClick={handleChangeCompleteStatus}
+              style={{
+                backgroundColor: eventInfo.event.backgroundColor,
+              }}
             >
-              { eventInfo.event.extendedProps.isCompleted ? 'Task Not Completed' : 'Task Completed!' }
+              {eventInfo.event.extendedProps.isCompleted
+                ? "Task Completed!"
+                : "Task Not Completed"}
             </Button>
-            <EditIcon style={{ marginLeft: "auto" }} onClick={handleEditTask} />
+          </Tooltip>
+          <Grid>
+            <Typography
+              variant="subtitle2"
+              style={{ fontWeight: "bold" }}
+              sx={{ mt: 2 }}
+            >
+              {moment(eventInfo.event.start).format("DD/MM/YYYY HH:mm")} -{" "}
+              {moment(eventInfo.event.end).format("DD/MM/YYYY HH:mm")}
+            </Typography>
+            <Typography variant="subtitle2" sx={{ mt: 1 }}>
+              {eventInfo.event.extendedProps.description}
+            </Typography>
           </Grid>
-        </div>
+          <Grid container justifyContent="space-between" mt={1}>
+            <IconButton onClick={handleDeleteTask}>
+              <Tooltip title="Delete">
+                <DeleteIcon style={{ marginRight: "auto" }} />
+              </Tooltip>
+            </IconButton>
+            <IconButton onClick={handleEditTask}>
+              <Tooltip title="Edit">
+                <EditIcon style={{ marginLeft: "auto" }} />
+              </Tooltip>
+            </IconButton>
+          </Grid>
+        </Grid>
       </Popover>
     </div>
   );

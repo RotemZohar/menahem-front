@@ -19,6 +19,7 @@ import {
   Grid,
   Tooltip,
   IconButton,
+  Divider,
 } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
@@ -124,6 +125,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
               <TableRow>
                 <TableCell align="center">Treatments</TableCell>
                 <TableCell align="center">Date</TableCell>
+                <TableCell align="center"> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -146,12 +148,12 @@ const PetMedical = (props: { medical: Treatment[] }) => {
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
-                        size="small"
                         aria-label="close"
-                        color="inherit"
                         onClick={() => deleteMedical(row._id)}
                       >
-                        <DeleteIcon fontSize="small" />
+                        <Tooltip title="Delete">
+                          <DeleteIcon />
+                        </Tooltip>
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -159,6 +161,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Divider />
         <TablePagination
           rowsPerPageOptions={[5, 10]}
           component="div"
@@ -185,8 +188,14 @@ const PetMedical = (props: { medical: Treatment[] }) => {
           </Fab>
         </Tooltip>
       </Grid>
-      <Dialog open={showQrOpen} onClose={handleShowQrClose}>
-        <DialogTitle>Pet medical page for guests</DialogTitle>
+      <Dialog
+        maxWidth="xs"
+        fullWidth
+        open={showQrOpen}
+        onClose={handleShowQrClose}
+      >
+        <DialogTitle>Pet Medical Page For Guests</DialogTitle>
+        <Divider />
         <DialogContent>
           <QRcode
             id="petMedicalQrGuests"
@@ -195,13 +204,22 @@ const PetMedical = (props: { medical: Treatment[] }) => {
             includeMargin
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={navPetMedicalPage}>GO</Button>
+        <Divider />
+        <DialogActions sx={{ justifyContent: "space-between" }}>
           <Button onClick={handleShowQrClose}>Close</Button>
+          <Button variant="contained" onClick={navPetMedicalPage}>
+            Go
+          </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={addTreatmentOpen} onClose={handleAddTreatmentClose}>
-        <DialogTitle>Add treatment</DialogTitle>
+      <Dialog
+        fullWidth
+        maxWidth="xs"
+        open={addTreatmentOpen}
+        onClose={handleAddTreatmentClose}
+      >
+        <DialogTitle>Add Medical Treatment</DialogTitle>
+        <Divider />
         <DialogContent>
           <TextField
             required
@@ -230,9 +248,12 @@ const PetMedical = (props: { medical: Treatment[] }) => {
             }}
           />
         </DialogContent>
-        <DialogActions>
+        <Divider />
+        <DialogActions sx={{ justifyContent: "space-between" }}>
           <Button onClick={handleAddTreatmentClose}>Cancel</Button>
-          <Button onClick={addTreatment}>Add</Button>
+          <Button variant="contained" onClick={addTreatment}>
+            Add
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
