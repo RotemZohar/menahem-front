@@ -111,8 +111,8 @@ function CalendarPage() {
     put(`/${task.petId}/task${task._id ? `/${task._id}` : ``}`, {
       title: task.title,
       description: task.description,
-      dateFrom: task.dateFrom,
-      dateTo: task.dateTo,
+      dateFrom: task.dateFrom.toISOString(),
+      dateTo: task.dateTo.toISOString(),
       isCompleted: task.isCompleted,
     })
       .then((res) => {
