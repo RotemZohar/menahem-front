@@ -253,9 +253,9 @@ const GroupDetails = () => {
           <Button onClick={handleLeaveGroupClose}>Cancel</Button>
           <Button
             variant="contained"
-            onClick={() => {
+            onClick={async () => {
               handleLeaveGroupClose();
-              deleteUserFromGroup(currentUserId);
+              await deleteUserFromGroup(currentUserId);
               navigate(-1);
             }}
           >

@@ -73,12 +73,9 @@ const EditDetailsPage = () => {
     if (password === confirmPassword) {
       passNotMatchText = "";
       return true;
-
-      // eslint-disable-next-line no-else-return
-    } else {
-      passNotMatchText = "Passwords must match";
-      return false;
     }
+    passNotMatchText = "Passwords must match";
+    return false;
   };
 
   const onSubmit = async (e: any) => {
