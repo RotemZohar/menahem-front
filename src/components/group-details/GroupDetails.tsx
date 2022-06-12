@@ -21,16 +21,21 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LogoutIcon from "@mui/icons-material/Logout";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import TabPanel from "../tab-panel/TabPanel";
 import GroupCarers from "./GroupCarers";
 import GroupPets from "./GroupPets";
 import Loader from "../loader/Loader";
 import { User } from "../../types/user";
 import { Pet } from "../../types/pet";
+import { RootState } from "../../redux/store";
 
 const GroupDetails = () => {
   const navigate = useNavigate();
   const { groupId } = useParams();
+  const currentUserId = useSelector(
+    (state: RootState) => state.userReducer._id
+  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const [carers, setCarers] = useState<User[]>([]);
@@ -173,7 +178,13 @@ const GroupDetails = () => {
                   <ListItemText>Edit Details</ListItemText>
                 </MenuItem>
                 <Divider />
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    deleteUserFromGroup(currentUserId);
+                    handleMenuClose();
+                    navigate(-1);
+                  }}
+                >
                   <ListItemIcon>
                     <LogoutIcon fontSize="small" color="error" />
                   </ListItemIcon>

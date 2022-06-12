@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import SendIcon from "@mui/icons-material/Send";
 import GroupsIcon from "@mui/icons-material/Groups";
+import { useState } from "react";
 import { Group } from "../../types/group";
 import { RootState } from "../../redux/store";
 import { routes } from "../../routes";
@@ -31,8 +32,8 @@ import noGroups from "../../assets/no-groups.png";
 const GroupsPage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const options = {};
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const { data: groups = [], loading } = useFetch(
     `/user/${userId}/groups`,
     options,
