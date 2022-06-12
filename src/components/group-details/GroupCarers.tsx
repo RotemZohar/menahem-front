@@ -25,8 +25,10 @@ import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WarningIcon from "@mui/icons-material/Warning";
+import { useSelector } from "react-redux";
 import AddUsers from "../add-users/AddUsers";
 import { User } from "../../types/user";
+import { RootState } from "../../redux/store";
 
 interface GroupCarersProps {
   carers: User[];
@@ -39,6 +41,9 @@ const GroupCarers: React.FC<GroupCarersProps> = ({
   deleteUserFromGroup,
   addUserToGroup,
 }) => {
+  const currentUserId = useSelector(
+    (state: RootState) => state.userReducer._id
+  );
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState<User[]>([]);
@@ -108,11 +113,17 @@ const GroupCarers: React.FC<GroupCarersProps> = ({
                     <TableCell align="center">{row.name}</TableCell>
                     <TableCell align="center">{row.email}</TableCell>
                     <TableCell align="center">
-                      <IconButton onClick={() => handleDeleteUserOpen(row._id)}>
-                        <Tooltip title="Delete">
-                          <DeleteIcon />
-                        </Tooltip>
-                      </IconButton>
+                      {row._id !== currentUserId ? (
+                        <IconButton
+                          onClick={() => handleDeleteUserOpen(row._id)}
+                        >
+                          <Tooltip title="Delete">
+                            <DeleteIcon />
+                          </Tooltip>
+                        </IconButton>
+                      ) : (
+                        ""
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
