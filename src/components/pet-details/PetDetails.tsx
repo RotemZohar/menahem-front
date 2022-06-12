@@ -16,12 +16,20 @@ import {
   Menu,
   MenuItem,
   MenuList,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import WarningIcon from "@mui/icons-material/Warning";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import useFetch, { CachePolicies } from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Member, Pet as petDetails } from "../../types/pet";
 import PetTasks from "./PetTasks";
 import PetCarers from "./PetCarers";
@@ -30,6 +38,7 @@ import TabPanel from "../tab-panel/TabPanel";
 import PetGroups from "./petGroups";
 import { User } from "../../types/user";
 import Loader from "../loader/Loader";
+import { RootState } from "../../redux/store";
 
 const getAge = (birthdate: Date) => {
   const today = new Date();
@@ -47,10 +56,14 @@ const PetDetails = () => {
   const { get, loading, error } = useFetch("/pet", {
     cachePolicy: CachePolicies.NO_CACHE,
   });
+  const currentUserId = useSelector(
+    (state: RootState) => state.userReducer._id
+  );
   const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const [details, setDetails] = useState<petDetails>();
+  const [leavePetModal, setLeavePetModal] = useState(false);
   const { petId } = useParams();
   const { del, put } = useFetch("/pet", {
     cachePolicy: CachePolicies.NO_CACHE,
@@ -66,6 +79,14 @@ const PetDetails = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLeavePetOpen = () => {
+    setLeavePetModal(true);
+  };
+
+  const handleLeavePetClose = () => {
+    setLeavePetModal(false);
   };
 
   useEffect(() => {
@@ -152,7 +173,12 @@ const PetDetails = () => {
                   <ListItemText>Edit Details</ListItemText>
                 </MenuItem>
                 <Divider />
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleMenuClose();
+                    handleLeavePetOpen();
+                  }}
+                >
                   <ListItemIcon>
                     <PersonRemoveIcon fontSize="small" color="error" />
                   </ListItemIcon>
@@ -198,6 +224,32 @@ const PetDetails = () => {
           </Card>
         </Grid>
       )}
+
+      <Dialog open={leavePetModal} onClose={handleLeavePetClose} maxWidth="xs">
+        <DialogTitle style={{ fontWeight: "bold" }}>
+          <WarningIcon fontSize="large" color="error" />
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action will permanently remove you from being a carer of this
+            pet. Are you sure you want to continue?
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button onClick={handleLeavePetClose}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              handleLeavePetClose();
+              onDeleteUser(currentUserId);
+              navigate(-1);
+            }}
+          >
+            Leave Pet
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
