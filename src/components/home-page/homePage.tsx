@@ -89,11 +89,7 @@ const HomePage = () => {
           }}
         >
           <CardHeader
-            title={
-              <Typography variant="button">
-                Hello, {user?.name || ""}!
-              </Typography>
-            }
+            title={<Typography>Hello, {user?.name || ""}!</Typography>}
             subheader="Let's see what we need to do today..."
           />
           <Divider />
