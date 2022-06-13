@@ -9,7 +9,9 @@ import {
   Avatar,
   Typography,
   Grid,
+  Divider,
 } from "@mui/material";
+import moment from "moment";
 import { Pet, Task } from "../../types/pet";
 
 interface TaskItemProps {
@@ -30,8 +32,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ pet, task, toggleTodo }) => {
         key={task._id}
         disablePadding
         style={{
-          textDecoration: task.isCompleted ? "line-through" : "none",
-          // backgroundColor: task.isCompleted ? "#e8f5e9" : "#ffffff",
+          backgroundColor: task.isCompleted ? "#eceff1" : "#ffffff",
+          opacity: task.isCompleted ? 0.5 : 1,
         }}
       >
         <ListItemButton onClick={onCheckedItem} alignItems="center">
@@ -72,12 +74,36 @@ const TaskItem: React.FC<TaskItemProps> = ({ pet, task, toggleTodo }) => {
                 </Typography>
               </Grid>
             }
+            sx={{
+              textDecoration: task.isCompleted ? "line-through" : "none",
+            }}
           />
-          {/* <ListItemText
-            id={task._id}
-            primary={`${task.title}`}
-            secondary={`${task.description}`}
-          /> */}
+          <Divider orientation="vertical" flexItem sx={{ m: 2 }} />
+
+          <Grid item justifyContent="flex-end" mr={2}>
+            <ListItemText
+              primary={
+                <Typography
+                  sx={{ display: "inline" }}
+                  component="span"
+                  variant="subtitle2"
+                >
+                  {`${moment(task.dateFrom).format("hh:mm a")}`}
+                </Typography>
+              }
+              secondary={
+                <Grid container direction="column">
+                  <Typography
+                    sx={{ display: "inline" }}
+                    component="span"
+                    variant="caption"
+                  >
+                    {`${moment(task.dateTo).format("hh:mm a")}`}
+                  </Typography>
+                </Grid>
+              }
+            />
+          </Grid>
         </ListItemButton>
       </ListItem>
     </Box>
