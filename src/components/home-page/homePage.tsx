@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import {
   Card,
+  CardHeader,
   Divider,
   Grid,
   List,
@@ -73,7 +74,7 @@ const HomePage = () => {
 
   return (
     <Box>
-      <Typography>Hello, {user?.name || ""}!</Typography>
+      {/* <Typography>Hello, {user?.name || ""}!</Typography> */}
       <Grid container justifyContent="center">
         <Grid item xs={12} mt={2} mb={1}>
           <img src={tasksLogo} alt="You have no tasks for today" width="450" />
@@ -88,6 +89,15 @@ const HomePage = () => {
             mb: 3,
           }}
         >
+          <CardHeader
+            title={
+              <Typography variant="button">
+                Hello, {user?.name || ""}!
+              </Typography>
+            }
+            subheader="Let's see what we need to do today..."
+          />
+          <Divider />
           {todayTasks
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((pet: Pet) =>
