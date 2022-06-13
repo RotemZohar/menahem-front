@@ -63,6 +63,7 @@ const PetTasks = (props: { tasks: any[] }) => {
             <TableRow>
               <TableCell align="center">Title</TableCell>
               <TableCell align="center">Description</TableCell>
+              <TableCell align="center">Start Time</TableCell>
               <TableCell align="center">End Time</TableCell>
               <TableCell align="center">Status</TableCell>
             </TableRow>
@@ -83,6 +84,7 @@ const PetTasks = (props: { tasks: any[] }) => {
                     {row.title}
                   </TableCell>
                   <TableCell align="center">{row.description}</TableCell>
+                  <TableCell align="center">{dateFormat(row.dateFrom)}</TableCell>
                   <TableCell align="center">{dateFormat(row.dateTo)}</TableCell>
                   <TableCell align="center">
                     {row.isCompleted ? (
