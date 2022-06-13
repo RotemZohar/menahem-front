@@ -144,7 +144,7 @@ const PetMedical = (props: { medical: Treatment[] }) => {
                       {row.treatment}
                     </TableCell>
                     <TableCell align="center">
-                      {moment(row.date).format("YYYY-MM-DD")}
+                      {moment(row.date).format("DD/MM/YYYY")}
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
