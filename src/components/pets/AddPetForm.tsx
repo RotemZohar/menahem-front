@@ -10,6 +10,8 @@ import {
   Avatar,
   CardHeader,
   Divider,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useNavigate } from "react-router-dom";
@@ -83,7 +85,7 @@ const AddPetForm = () => {
   const [nameError, setNameError] = useState(false);
   const [weightError, setWeightError] = useState(false);
   const [heightError, setHeightError] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(100);
 
   // const onUploadPicture = (event: React.ChangeEvent<HTMLInputElement>) => {
   const onUploadPicture = (event: any) => {
@@ -115,46 +117,54 @@ const AddPetForm = () => {
     }
   }, [species]);
 
-  const addPet = async () => {
-    // Upload image
-    const storageRef = ref(storage, `petsImages/${userId}/${name}`);
-    const uploadTask = uploadBytesResumable(storageRef, imageUrl);
+  const addPetServer = (firebaseImageUrl = "") => {
+    post("/", {
+      name,
+      birthDate,
+      species,
+      breed,
+      weight,
+      height,
+      image: firebaseImageUrl,
+    })
+      .then((res) => {
+        // TODO: recieve pet id & redirect to pet page
+        if (res === "Created") {
+          navigate(routes.pets);
+        } else {
+          alert("Something went wrong :(");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
-    await uploadTask.on(
-      "state_changed",
-      (snapshot: { bytesTransferred: number; totalBytes: number }) => {
-        const progressTemp = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(progressTemp);
-      },
-      (error: any) => {
-        console.log(error);
-      },
-      async () => {
-        const firebaseUrl = await getDownloadURL(uploadTask.snapshot.ref);
-        post("/", {
-          name,
-          birthDate,
-          species,
-          breed,
-          weight,
-          height,
-          image: firebaseUrl,
-        })
-          .then((res) => {
-            // TODO: recieve pet id & redirect to pet page
-            if (res === "Created") {
-              navigate(routes.pets);
-            } else {
-              alert("Something went wrong :(");
-            }
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      }
-    );
+  const addPet = async () => {
+    if (!imageUrl) {
+      addPetServer(image);
+    } else {
+      // Upload image
+      const storageRef = ref(storage, `petsImages/${userId}/${name}`);
+      const uploadTask = uploadBytesResumable(storageRef, imageUrl);
+
+      await uploadTask.on(
+        "state_changed",
+        (snapshot: { bytesTransferred: number; totalBytes: number }) => {
+          const progressTemp = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(progressTemp);
+        },
+        (error: any) => {
+          console.log(error);
+        },
+        async () => {
+          const firebaseUrl = await getDownloadURL(uploadTask.snapshot.ref);
+          addPetServer(firebaseUrl);
+        }
+      );
+    }
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -300,6 +310,9 @@ const AddPetForm = () => {
             </Grid>
           </Grid>
         </Box>
+        <Backdrop open={progress !== 100}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Card>
     </Grid>
   );

@@ -19,9 +19,11 @@ import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useSelector } from "react-redux";
 import { Member } from "../../types/pet";
 import AddUsers from "../add-users/AddUsers";
 import { User } from "../../types/user";
+import { RootState } from "../../redux/store";
 
 interface PetCarersProps {
   carers: Member[];
@@ -34,6 +36,9 @@ const PetCarers: React.FC<PetCarersProps> = ({
   onDeleteUser,
   onAddUser,
 }) => {
+  const currentUserId = useSelector(
+    (state: RootState) => state.userReducer._id
+  );
   const [addUsers, setAddUsers] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -91,14 +96,18 @@ const PetCarers: React.FC<PetCarersProps> = ({
                   <TableCell align="center">{row.name}</TableCell>
                   <TableCell align="center">{row.email}</TableCell>
                   <TableCell align="center">
-                    <IconButton
-                      id={row._id}
-                      onClick={() => onDeleteUser(row._id)}
-                    >
-                      <Tooltip title="Delete">
-                        <DeleteIcon />
-                      </Tooltip>
-                    </IconButton>
+                    {row._id !== currentUserId ? (
+                      <IconButton
+                        id={row._id}
+                        onClick={() => onDeleteUser(row._id)}
+                      >
+                        <Tooltip title="Delete">
+                          <DeleteIcon />
+                        </Tooltip>
+                      </IconButton>
+                    ) : (
+                      ""
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

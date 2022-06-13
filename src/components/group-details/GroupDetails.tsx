@@ -15,26 +15,39 @@ import {
   MenuItem,
   MenuList,
   ListItemText,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import WarningIcon from "@mui/icons-material/Warning";
 import LogoutIcon from "@mui/icons-material/Logout";
 import useFetch from "use-http";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import TabPanel from "../tab-panel/TabPanel";
 import GroupCarers from "./GroupCarers";
 import GroupPets from "./GroupPets";
 import Loader from "../loader/Loader";
 import { User } from "../../types/user";
 import { Pet } from "../../types/pet";
+import { RootState } from "../../redux/store";
 
 const GroupDetails = () => {
   const navigate = useNavigate();
   const { groupId } = useParams();
+  const currentUserId = useSelector(
+    (state: RootState) => state.userReducer._id
+  );
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const [carers, setCarers] = useState<User[]>([]);
   const [pets, setPets] = useState<Pet[]>([]);
+  const [leaveGroupModal, setLeaveGroupModal] = useState(false);
   const { post, del } = useFetch("/group");
   const {
     data: details,
@@ -60,6 +73,14 @@ const GroupDetails = () => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleLeaveGroupOpen = () => {
+    setLeaveGroupModal(true);
+  };
+
+  const handleLeaveGroupClose = () => {
+    setLeaveGroupModal(false);
   };
 
   const navToEdit = () => {
@@ -173,7 +194,12 @@ const GroupDetails = () => {
                   <ListItemText>Edit Details</ListItemText>
                 </MenuItem>
                 <Divider />
-                <MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleMenuClose();
+                    handleLeaveGroupOpen();
+                  }}
+                >
                   <ListItemIcon>
                     <LogoutIcon fontSize="small" color="error" />
                   </ListItemIcon>
@@ -207,6 +233,36 @@ const GroupDetails = () => {
           </Card>
         </Grid>
       )}
+
+      <Dialog
+        open={leaveGroupModal}
+        onClose={handleLeaveGroupClose}
+        maxWidth="xs"
+      >
+        <DialogTitle style={{ fontWeight: "bold" }}>
+          <WarningIcon fontSize="large" color="error" />
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action will permanently remove you from this group. Are you
+            sure you want to continue?
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions sx={{ justifyContent: "space-between" }}>
+          <Button onClick={handleLeaveGroupClose}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              handleLeaveGroupClose();
+              await deleteUserFromGroup(currentUserId);
+              navigate(-1);
+            }}
+          >
+            Leave Group
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
