@@ -26,9 +26,10 @@ import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
 import WarningIcon from "@mui/icons-material/Warning";
 import useFetch from "use-http";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Pet } from "../../types/pet";
 import MultipleSelect from "../multiple-select/MultipleSelect";
+import { routes } from "../../routes";
 
 interface GroupPetsProps {
   pets: Pet[];
@@ -50,6 +51,7 @@ const GroupPets: React.FC<GroupPetsProps> = ({
     isOpen: false,
     id: "",
   });
+  const navigate = useNavigate();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -119,6 +121,9 @@ const GroupPets: React.FC<GroupPetsProps> = ({
                   <TableRow
                     key={pet._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    onClick={() => {
+                      navigate(`/pet/${pet._id}`);
+                    }}
                   >
                     <TableCell align="center">{pet.name}</TableCell>
                     <TableCell align="center">{pet.species}</TableCell>
