@@ -12,6 +12,7 @@ import {
   Divider,
   Backdrop,
   CircularProgress,
+  Autocomplete,
 } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useNavigate } from "react-router-dom";
@@ -23,49 +24,13 @@ import defaultPetPic from "../../assets/pet-pic.png";
 import { routes } from "../../routes";
 import { RootState } from "../../redux/store";
 import { storage } from "../../firebase";
+import { catList } from "../../localDB/cat.json";
+import { dogList } from "../../localDB/dog.json";
+import { birdList } from "../../localDB/bird.json";
+import { reptileList } from "../../localDB/reptile.json";
+import { rodentList } from "../../localDB/rodent.json";
 
 const speciesList = ["Dog", "Cat", "Rodent", "Bird", "Reptile"];
-const dogList = [
-  "Labrador",
-  "German Shepard",
-  "Golden Retriever",
-  "French Bulldog",
-  "Yorkshire Terrier",
-  "Poodle",
-  "Siberian Husky",
-];
-const catList = [
-  "Persian Cat",
-  "British Shorthair",
-  "Siamese Cat",
-  "Sphynx Cat",
-  "Ragdoll",
-  "Turkish Angora",
-];
-const birdList = [
-  "African Grey Parrot",
-  "Amazon Parrot",
-  "Cockatiel",
-  "Cockatoo",
-  "Dove",
-  "Macaw",
-];
-const rodentList = [
-  "Syrian Hamster",
-  "Mongolian Gerbil",
-  "Chinchilla",
-  "Common Rat",
-  "Guinea Pig",
-  "Rex Rabbit",
-];
-const reptileList = [
-  "Bearded dragon",
-  "Leopard gecko",
-  "Snake",
-  "Tortoise",
-  "Turtle",
-  "Water Dragon",
-];
 
 const AddPetForm = () => {
   const navigate = useNavigate();
@@ -77,7 +42,7 @@ const AddPetForm = () => {
     moment(new Date()).format("YYYY-MM-DD")
   );
   const [species, setSpecies] = useState(speciesList[0]);
-  const [breed, setBreed] = useState(currentBreedList[0]);
+  const [breed, setBreed] = useState<string | null>(currentBreedList[0]);
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
   const [image, setImage] = useState(defaultPetPic);
@@ -86,8 +51,8 @@ const AddPetForm = () => {
   const [weightError, setWeightError] = useState(false);
   const [heightError, setHeightError] = useState(false);
   const [progress, setProgress] = useState(100);
+  const [inputValue, setInputValue] = React.useState("");
 
-  // const onUploadPicture = (event: React.ChangeEvent<HTMLInputElement>) => {
   const onUploadPicture = (event: any) => {
     if (event.target.files?.length) {
       setImageUrl(event.target.files[0]);
@@ -99,18 +64,23 @@ const AddPetForm = () => {
     switch (species) {
       case "Dog":
         setCurrentBreedList(dogList);
+        setBreed(dogList[0]);
         break;
       case "Cat":
         setCurrentBreedList(catList);
+        setBreed(catList[0]);
         break;
       case "Bird":
         setCurrentBreedList(birdList);
+        setBreed(birdList[0]);
         break;
       case "Rodent":
         setCurrentBreedList(rodentList);
+        setBreed(rodentList[0]);
         break;
       case "Reptile":
         setCurrentBreedList(reptileList);
+        setBreed(reptileList[0]);
         break;
       default:
         break;
@@ -242,20 +212,20 @@ const AddPetForm = () => {
               </TextField>
             </Grid>
             <Grid item margin={1} xs={5}>
-              <TextField
-                label="Breed"
-                select
-                fullWidth
+              <Autocomplete
                 value={breed}
-                required
-                onChange={(e) => setBreed(e.target.value)}
-              >
-                {currentBreedList.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </TextField>
+                onChange={(event: any, newValue: string | null) => {
+                  setBreed(newValue);
+                }}
+                inputValue={inputValue}
+                onInputChange={(event, newInputValue) => {
+                  setInputValue(newInputValue);
+                }}
+                options={currentBreedList}
+                renderInput={(params) => (
+                  <TextField required {...params} label="Breed" />
+                )}
+              />
             </Grid>
             <Grid item margin={1} xs={5}>
               <TextField
