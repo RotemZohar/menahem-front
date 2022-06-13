@@ -33,13 +33,13 @@ import MultipleSelect from "../multiple-select/MultipleSelect";
 interface GroupPetsProps {
   pets: Pet[];
   deletePetFromGroup: (petId: string) => void;
-  addPetToGroup: (pets: Pet[]) => void;
+  addPetsToGroup: (pets: Pet[]) => void;
 }
 
 const GroupPets: React.FC<GroupPetsProps> = ({
   pets,
   deletePetFromGroup,
-  addPetToGroup,
+  addPetsToGroup,
 }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -96,7 +96,7 @@ const GroupPets: React.FC<GroupPetsProps> = ({
       }
     });
 
-    addPetToGroup(selectedPetsWithData);
+    addPetsToGroup(selectedPetsWithData);
   };
 
   return (

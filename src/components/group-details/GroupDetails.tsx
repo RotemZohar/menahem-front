@@ -129,16 +129,28 @@ const GroupDetails = () => {
     if (petsToAdd.length === 0) {
       alert("Please add some pets!");
     } else {
-      const data = await post(`/${groupId}/Pets`, {
-        petsIds: petsToAdd,
-      });
+      const arr: Pet[] = [];
+      const newPetsToAdd = petsToAdd.reduce((prevVal, pet) => {
+        const isExists =
+          details.pets.findIndex((cp: Pet) => cp._id === pet._id) !== -1;
+        if (!isExists) {
+          prevVal.push(pet);
+        }
+        return prevVal;
+      }, arr);
 
-      petsToAdd.forEach((pet) => {
-        details.pets.push(pet);
-      });
+      if (newPetsToAdd.length) {
+        await post(`/${groupId}/Pets`, {
+          petsIds: newPetsToAdd.map((pet) => pet._id),
+        });
 
-      details.pets = [...details.pets];
-      setPets(details.pets);
+        newPetsToAdd.forEach((pet) => {
+          details.pets.push(pet);
+        });
+
+        details.pets = [...details.pets];
+        setPets(details.pets);
+      }
     }
   };
 
@@ -219,7 +231,7 @@ const GroupDetails = () => {
                 <GroupPets
                   pets={pets}
                   deletePetFromGroup={deletePetFromGroup}
-                  addPetToGroup={addPetToGroup}
+                  addPetsToGroup={addPetToGroup}
                 />
               </TabPanel>
               <TabPanel value={value} index={1}>
