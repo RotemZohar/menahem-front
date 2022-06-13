@@ -13,21 +13,8 @@ import Paper from "@mui/material/Paper";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import moment from "moment";
-import {
-  Avatar,
-  Card,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Divider,
-  Fab,
-  Grid,
-  ImageListItem,
-  ImageListItemBar,
-  Tab,
-  Tabs,
-} from "@mui/material";
-import { useState } from "react";
+import { Backdrop, Card, CardMedia, Grid, Tab, Tabs } from "@mui/material";
+import { useMemo, useState } from "react";
 import { Treatment } from "../../types/pet";
 import TabPanel from "../tab-panel/TabPanel";
 import { useHideNavbar } from "../../hooks/use-hide-navbar";
@@ -40,150 +27,166 @@ const PetMedicalPageGuests = () => {
   const [value, setValue] = useState(0);
   const { petId } = useParams();
   const options = {};
-  const {
-    data: petMedical = [],
-    loading,
-    error,
-  } = useFetch(`/auth/${petId}/medical/guests`, options, [petId]);
+  const { data, loading, error } = useFetch(
+    `/auth/${petId}/medical/guests`,
+    options,
+    [petId]
+  );
+  const [imageOpen, setImageOpen] = useState(false);
 
   useHideNavbar();
+
+  const petMedical = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+    data.medical.sort((a: any, b: any) => moment(b.date).diff(moment(a.date)));
+    return data;
+  }, [data]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  React.useEffect(() => {
-    console.log(petMedical);
-  }, [petMedical]);
 
   return (
     <Box>
       {error && error.message}
       {loading && <Loader />}
       {petMedical && petMedical.medical && (
-        <Grid container justifyContent="center">
-          <Card
-            sx={{
-              width: 600,
-              m: 3,
-            }}
-          >
-            <Grid style={{ position: "relative" }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image={petMedical.imgUrl}
-                alt={petMedical.name}
-              />
-              <Grid
-                style={{
-                  position: "absolute",
-                  top: 1,
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  width: "100%",
-                  background:
-                    "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
-                    "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-                }}
-              >
-                <Typography
-                  variant="overline"
-                  sx={{
-                    fontWeight: "bold",
-                    color: "#ffffff",
-                    fontSize: "24px",
+        <>
+          <Grid container justifyContent="center">
+            <Card
+              sx={{
+                width: 600,
+                m: 3,
+              }}
+            >
+              <Grid style={{ position: "relative" }}>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={petMedical.imgUrl}
+                  alt={petMedical.name}
+                  onClick={() => setImageOpen(true)}
+                />
+                <Grid
+                  style={{
+                    position: "absolute",
+                    top: 1,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "100%",
+                    background:
+                      "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
+                      "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
                   }}
                 >
-                  {petMedical.name}
-                </Typography>
+                  <Typography
+                    variant="overline"
+                    sx={{
+                      fontWeight: "bold",
+                      color: "#ffffff",
+                      fontSize: "24px",
+                    }}
+                  >
+                    {petMedical.name}
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
 
-            <Tabs value={value} onChange={handleChange} variant="fullWidth">
-              <Tab
-                label="Medical History"
-                icon={<MedicalServicesIcon />}
-                iconPosition="start"
-              />
-              <Tab
-                label="Owners"
-                icon={<ContactMailIcon />}
-                iconPosition="start"
-              />
-            </Tabs>
-            <TabPanel value={value} index={0}>
-              <Grid item xs={12} mb={2}>
-                <img src={medicalLogo} alt="medical history" width="500" />
-              </Grid>
-              <TableContainer>
-                <Paper variant="outlined">
-                  <Table aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="center">
-                          <Typography variant="button">Treatment</Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography variant="button">Date</Typography>
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {petMedical.medical.map((row: Treatment) => (
-                        <TableRow
-                          key={row._id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell align="center">{row.treatment}</TableCell>
+              <Tabs value={value} onChange={handleChange} variant="fullWidth">
+                <Tab
+                  label="Medical History"
+                  icon={<MedicalServicesIcon />}
+                  iconPosition="start"
+                />
+                <Tab
+                  label="Owners"
+                  icon={<ContactMailIcon />}
+                  iconPosition="start"
+                />
+              </Tabs>
+              <TabPanel value={value} index={0}>
+                <Grid item xs={12} mb={2}>
+                  <img src={medicalLogo} alt="medical history" width="500" />
+                </Grid>
+                <TableContainer>
+                  <Paper variant="outlined">
+                    <Table aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
                           <TableCell align="center">
-                            {moment(row.date).format("DD-MM-YYYY")}
+                            <Typography variant="button">Treatment</Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography variant="button">Date</Typography>
                           </TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Paper>
-              </TableContainer>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <Grid item xs={12} mb={2}>
-                <img src={carersLogo} alt="pet-carers" width="500" />
-              </Grid>
-              <TableContainer>
-                <Paper variant="outlined">
-                  <Table aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="center">
-                          <Typography variant="button">Name</Typography>
-                        </TableCell>
-                        <TableCell align="center">
-                          <Typography variant="button">Email</Typography>
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {petMedical.members.map((row: User) => (
-                        <TableRow
-                          key={row._id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell align="center">{row.name}</TableCell>
-                          <TableCell align="center">{row.email}</TableCell>
+                      </TableHead>
+                      <TableBody>
+                        {petMedical.medical.map((row: Treatment) => (
+                          <TableRow
+                            key={row._id}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell align="center">
+                              {row.treatment}
+                            </TableCell>
+                            <TableCell align="center">
+                              {moment(row.date).format("DD-MM-YYYY")}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Paper>
+                </TableContainer>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <Grid item xs={12} mb={2}>
+                  <img src={carersLogo} alt="pet-carers" width="500" />
+                </Grid>
+                <TableContainer>
+                  <Paper variant="outlined">
+                    <Table aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center">
+                            <Typography variant="button">Name</Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography variant="button">Email</Typography>
+                          </TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Paper>
-              </TableContainer>
-            </TabPanel>
-          </Card>
-        </Grid>
+                      </TableHead>
+                      <TableBody>
+                        {petMedical.members.map((row: User) => (
+                          <TableRow
+                            key={row._id}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell align="center">{row.name}</TableCell>
+                            <TableCell align="center">{row.email}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Paper>
+                </TableContainer>
+              </TabPanel>
+            </Card>
+          </Grid>
+          <Backdrop
+            open={imageOpen}
+            onClick={() => setImageOpen((prev) => !prev)}
+          >
+            <img src={petMedical.imgUrl} alt="Pet" />
+          </Backdrop>
+        </>
       )}
     </Box>
   );

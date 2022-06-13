@@ -46,7 +46,6 @@ const petEditPage = () => {
   useEffect(() => {
     get(`/${petId}`)
       .then((pet) => {
-        console.log(pet);
         setName(pet.name);
         setHeight(pet.height);
         setWeight(pet.weight);
@@ -73,8 +72,6 @@ const petEditPage = () => {
   };
 
   const editPetServer = async (firebaseImageUrl = "") => {
-    console.log(firebaseImageUrl);
-
     await put(`/${petId}`, {
       name,
       height,
