@@ -189,7 +189,11 @@ const PetMedicalPageGuests = () => {
             open={imageOpen}
             onClick={() => setImageOpen((prev) => !prev)}
           >
-            <img src={petMedical.imgUrl} alt="Pet" />
+            <img
+              src={petMedical.imgUrl}
+              alt="Pet"
+              style={{ maxWidth: "60%", maxHeight: "90%", aspectRatio: "auto" }}
+            />
           </Backdrop>
         </>
       )}
