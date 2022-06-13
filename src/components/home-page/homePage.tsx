@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import {
   Card,
+  CardHeader,
   Divider,
   Grid,
   List,
@@ -26,6 +27,7 @@ const HomePage = () => {
     error: tasksError,
   } = useFetch(`/user/${userId}/today-tasks`, {}, [userId]);
   const { put } = useFetch("/pet");
+  const { data: user } = useFetch<{ name: string }>(`/user/${userId}`, {}, []);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -86,6 +88,11 @@ const HomePage = () => {
             mb: 3,
           }}
         >
+          <CardHeader
+            title={<Typography>Hello, {user?.name || ""}!</Typography>}
+            subheader="Let's see what we need to do today..."
+          />
+          <Divider />
           {todayTasks
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((pet: Pet) =>
