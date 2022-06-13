@@ -67,7 +67,12 @@ const HomePage = () => {
   if (todayTasks.length === 0) {
     return (
       <Grid item xs={12} mt={2}>
-        <img src={noTasks} alt="You have no tasks for today" width="450" />
+        <img
+          src={noTasks}
+          style={{ maxWidth: "100%" }}
+          alt="You have no tasks for today"
+          width="450"
+        />
       </Grid>
     );
   }
@@ -76,7 +81,12 @@ const HomePage = () => {
     <Box>
       <Grid container justifyContent="center">
         <Grid item xs={12} mt={2} mb={1}>
-          <img src={tasksLogo} alt="You have no tasks for today" width="450" />
+          <img
+            src={tasksLogo}
+            style={{ maxWidth: "100%" }}
+            alt="You have no tasks for today"
+            width="450"
+          />
         </Grid>
         <Paper
           sx={{

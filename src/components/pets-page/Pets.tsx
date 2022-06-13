@@ -66,7 +66,12 @@ const PetsPage = () => {
       <Grid container justifyContent="center">
         <Card sx={{ width: 500, m: 3 }}>
           <Grid item xs={12}>
-            <img src={noPets} alt="You have no pets yet" width="350" />
+            <img
+              style={{ maxWidth: "100%" }}
+              src={noPets}
+              alt="You have no pets yet"
+              width="350"
+            />
           </Grid>
           <Grid item m={3}>
             <Button
@@ -86,7 +91,12 @@ const PetsPage = () => {
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12} mt={2}>
-        <img src={petsLogo} alt="my pets" width="300" />
+        <img
+          src={petsLogo}
+          alt="my pets"
+          style={{ maxWidth: "100%" }}
+          width="300"
+        />
       </Grid>
       <Paper
         sx={{

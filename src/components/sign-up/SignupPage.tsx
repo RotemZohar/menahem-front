@@ -54,7 +54,12 @@ const SignUpPage = () => {
       <Card sx={{ minWidth: 300, width: 700, m: 4 }}>
         <Grid container direction="column" justifyContent="center" margin={2}>
           <Grid item>
-            <img src={signupLogo} alt="logo" width="400" />
+            <img
+              src={signupLogo}
+              style={{ maxWidth: "100%" }}
+              alt="logo"
+              width="400"
+            />
           </Grid>
           <Grid item>
             <Box component="form" onSubmit={onSubmit}>

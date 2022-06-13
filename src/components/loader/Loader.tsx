@@ -15,7 +15,7 @@ function Loader() {
 
   return (
     <div style={{ marginTop: "15%" }}>
-      <img src={loadingSrc} alt="Loading" />
+      <img src={loadingSrc} alt="Loading" style={{ maxWidth: "100%" }} />
     </div>
   );
 }

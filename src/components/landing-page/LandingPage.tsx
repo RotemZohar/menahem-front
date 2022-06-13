@@ -68,7 +68,12 @@ const LandingPage = () => {
       <Card sx={{ minWidth: 300, width: 700, m: 4 }}>
         <Grid container direction="column" justifyContent="center" margin={2}>
           <Grid item>
-            <img src={mainLogo} alt="logo" width="450" />
+            <img
+              style={{ maxWidth: "100%" }}
+              src={mainLogo}
+              alt="logo"
+              width="450"
+            />
           </Grid>
           <Grid item>
             <Box component="form" onSubmit={handleSubmit}>

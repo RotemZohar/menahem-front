@@ -111,7 +111,12 @@ const PetMedicalPageGuests = () => {
               </Tabs>
               <TabPanel value={value} index={0}>
                 <Grid item xs={12} mb={2}>
-                  <img src={medicalLogo} alt="medical history" width="500" />
+                  <img
+                    src={medicalLogo}
+                    alt="medical history"
+                    width="500"
+                    style={{ maxWidth: "100%" }}
+                  />
                 </Grid>
                 <TableContainer>
                   <Paper variant="outlined">
@@ -149,7 +154,12 @@ const PetMedicalPageGuests = () => {
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <Grid item xs={12} mb={2}>
-                  <img src={carersLogo} alt="pet-carers" width="500" />
+                  <img
+                    src={carersLogo}
+                    alt="pet-carers"
+                    width="500"
+                    style={{ maxWidth: "100%" }}
+                  />
                 </Grid>
                 <TableContainer>
                   <Paper variant="outlined">

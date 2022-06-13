@@ -69,7 +69,12 @@ const GroupsPage = () => {
       <Grid container justifyContent="center">
         <Card sx={{ width: 500, m: 3 }}>
           <Grid item xs={12}>
-            <img src={noGroups} alt="You have no groups yet" width="350" />
+            <img
+              src={noGroups}
+              style={{ maxWidth: "100%" }}
+              alt="You have no groups yet"
+              width="350"
+            />
           </Grid>
           <Grid item m={3}>
             <Button
@@ -89,7 +94,12 @@ const GroupsPage = () => {
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12} mt={2}>
-        <img src={groupsLogo} alt="my groups" width="380" />
+        <img
+          src={groupsLogo}
+          style={{ maxWidth: "100%" }}
+          alt="my groups"
+          width="380"
+        />
       </Grid>
       <Paper
         sx={{
