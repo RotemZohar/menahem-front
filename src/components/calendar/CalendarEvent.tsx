@@ -96,27 +96,17 @@ function CalendarEvent(props: {
             border: `3px solid ${eventInfo.event.backgroundColor}`,
           }}
         >
-          <Tooltip
-            arrow
-            placement="top"
-            title={
-              eventInfo.event.extendedProps.isCompleted
-                ? "Press to mark as Not Completed"
-                : "Press to mark as Completed"
-            }
+          <Button
+            variant="contained"
+            onClick={handleChangeCompleteStatus}
+            style={{
+              backgroundColor: eventInfo.event.backgroundColor,
+            }}
           >
-            <Button
-              variant="contained"
-              onClick={handleChangeCompleteStatus}
-              style={{
-                backgroundColor: eventInfo.event.backgroundColor,
-              }}
-            >
-              {eventInfo.event.extendedProps.isCompleted
-                ? "Task Completed!"
-                : "Task Not Completed"}
-            </Button>
-          </Tooltip>
+            {eventInfo.event.extendedProps.isCompleted
+              ? "Mark as Not Completed"
+              : "Mark as Completed"}
+          </Button>
           <Grid>
             <Typography
               variant="subtitle2"
