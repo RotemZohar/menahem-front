@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { RootState } from "../../redux/store";
 import Loader from "../loader/Loader";
 import { Pet, Task } from "../../types/pet";
@@ -28,8 +29,18 @@ const HomePage = () => {
   } = useFetch(`/user/${userId}/today-tasks`, {}, [userId]);
   const { put } = useFetch("/pet");
   const { data: user } = useFetch<{ name: string }>(`/user/${userId}`, {}, []);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [tasksAmount, setTasksAmount] = useState(0);
+
+  useEffect(() => {
+    let counter = 0;
+    todayTasks.forEach((pet: Pet) => {
+      counter += pet.tasks.length;
+    });
+
+    setTasksAmount(counter);
+  }, [todayTasks]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -77,6 +88,15 @@ const HomePage = () => {
     );
   }
 
+  const countTasks = () => {
+    let counter = 0;
+    todayTasks.forEach((pet: Pet) => {
+      counter += pet.tasks.length;
+    });
+
+    setTasksAmount(counter);
+  };
+
   return (
     <Box>
       <Grid container justifyContent="center">
@@ -114,7 +134,7 @@ const HomePage = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10]}
             component="div"
-            count={todayTasks.length}
+            count={tasksAmount}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
