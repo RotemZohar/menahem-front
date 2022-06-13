@@ -48,10 +48,13 @@ const PetMedicalPageGuests = () => {
     setValue(newValue);
   };
 
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <Box>
       {error && error.message}
-      {loading && <Loader />}
       {petMedical && petMedical.medical && (
         <>
           <Grid container justifyContent="center">
@@ -170,7 +173,9 @@ const PetMedicalPageGuests = () => {
                             }}
                           >
                             <TableCell align="center">{row.name}</TableCell>
-                            <TableCell align="center">{row.email}</TableCell>
+                            <TableCell align="center">
+                              <a href={`mailto:${row.email}`}>{row.email}</a>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
