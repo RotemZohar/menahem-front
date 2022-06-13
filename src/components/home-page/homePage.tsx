@@ -74,7 +74,6 @@ const HomePage = () => {
 
   return (
     <Box>
-      {/* <Typography>Hello, {user?.name || ""}!</Typography> */}
       <Grid container justifyContent="center">
         <Grid item xs={12} mt={2} mb={1}>
           <img src={tasksLogo} alt="You have no tasks for today" width="450" />
