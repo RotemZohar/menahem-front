@@ -12,12 +12,14 @@ import {
   Box,
   Divider,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { Group } from "../../types/pet";
 
 const PetGroups = (props: { groups: Group[] }) => {
   const { groups } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const navigate = useNavigate();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -62,6 +64,10 @@ const PetGroups = (props: { groups: Group[] }) => {
                         border: 0,
                       },
                     }}
+                    onClick={() => {
+                      navigate(`/group/${group._id}`);
+                    }}
+                    style={{ cursor: "pointer" }}
                   >
                     <TableCell align="center" component="th" scope="row">
                       {group.name}

@@ -124,6 +124,7 @@ const GroupPets: React.FC<GroupPetsProps> = ({
                     onClick={() => {
                       navigate(`/pet/${pet._id}`);
                     }}
+                    style={{ cursor: "pointer" }}
                   >
                     <TableCell align="center">{pet.name}</TableCell>
                     <TableCell align="center">{pet.species}</TableCell>
