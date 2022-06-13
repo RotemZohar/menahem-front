@@ -22,7 +22,7 @@ interface AddUsersProps {
 
 function AddUsers({ onAddUser, selectedUsers, onDeleteUser }: AddUsersProps) {
   const [searchValue, setSearchValue] = useState("");
-  const { get, data } = useFetch<User[]>("/user");
+  const { get, data } = useFetch<User[]>("/user/search");
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();
