@@ -34,6 +34,8 @@ const SignUpPage = () => {
     e.preventDefault();
     if (!email || !password || !name) {
       alert("Please insert all fields!");
+    } else if (!isStrong) {
+      alert("Password is not strong enough");
     } else {
       post("/signup", { email, password, name })
         .then((res) => {
