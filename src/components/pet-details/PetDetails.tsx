@@ -122,10 +122,13 @@ const PetDetails = () => {
     navigate(`/pet/${petId}/edit`);
   };
 
+  if (loading) {
+    <Loader />;
+  }
+
   return (
     <>
       {error && error.message}
-      {loading && <Loader />}
       {details && (
         <Grid container justifyContent="center">
           <Card sx={{ minWidth: 600, minHeight: 400, m: 3 }}>

@@ -30,6 +30,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Pet } from "../../types/pet";
 import MultipleSelect from "../multiple-select/MultipleSelect";
 import { routes } from "../../routes";
+import Loader from "../loader/Loader";
 
 interface GroupPetsProps {
   pets: Pet[];
@@ -79,6 +80,10 @@ const GroupPets: React.FC<GroupPetsProps> = ({
   const handleDeletePetClose = () => {
     setDeletePetModal({ isOpen: false, id: "" });
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   if (!pets) {
     return (

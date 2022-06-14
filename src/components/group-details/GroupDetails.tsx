@@ -154,10 +154,13 @@ const GroupDetails = () => {
     }
   };
 
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <Box>
       {error && error.message}
-      {loading && <Loader />}
       {details && (
         <Grid container justifyContent="center">
           <Card
