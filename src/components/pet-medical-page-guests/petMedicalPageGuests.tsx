@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useFetch from "use-http";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,8 +13,22 @@ import Paper from "@mui/material/Paper";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import moment from "moment";
-import { Backdrop, Card, CardMedia, Grid, Tab, Tabs } from "@mui/material";
+import {
+  Backdrop,
+  Card,
+  CardMedia,
+  Grid,
+  SpeedDial,
+  SpeedDialAction,
+  Tab,
+  Tabs,
+} from "@mui/material";
 import { useMemo, useState } from "react";
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+
+import LoginIcon from "@mui/icons-material/Login";
 import { Treatment } from "../../types/pet";
 import TabPanel from "../tab-panel/TabPanel";
 import { useHideNavbar } from "../../hooks/use-hide-navbar";
@@ -22,6 +36,7 @@ import { User } from "../../types/user";
 import Loader from "../loader/Loader";
 import medicalLogo from "../../assets/med-history.png";
 import carersLogo from "../../assets/pet-carer.png";
+import { routes } from "../../routes";
 
 const PetMedicalPageGuests = () => {
   const [value, setValue] = useState(0);
@@ -33,6 +48,7 @@ const PetMedicalPageGuests = () => {
     [petId]
   );
   const [imageOpen, setImageOpen] = useState(false);
+  const navigate = useNavigate();
 
   useHideNavbar();
 
@@ -205,6 +221,26 @@ const PetMedicalPageGuests = () => {
               style={{ maxWidth: "60%", maxHeight: "90%", aspectRatio: "auto" }}
             />
           </Backdrop>
+          <SpeedDial
+            ariaLabel="SpeedDial basic example"
+            sx={{ position: "fixed", bottom: 16, right: 16 }}
+            icon={<SpeedDialIcon />}
+          >
+            <SpeedDialAction
+              key="login"
+              icon={<LoginIcon />}
+              tooltipTitle="Login"
+              tooltipOpen
+              onClick={() => navigate(routes.signin)}
+            />
+            <SpeedDialAction
+              key="signup"
+              tooltipTitle="Signup"
+              icon={<PersonAddAltIcon />}
+              tooltipOpen
+              onClick={() => navigate(routes.signup)}
+            />
+          </SpeedDial>
         </>
       )}
     </Box>
