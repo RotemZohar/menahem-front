@@ -80,8 +80,10 @@ const EditDetailsPage = () => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    if (checkPasswordsMatch() === true) {
-      const editedDetails = await put(`/${userId}/edit`, {
+    if (!isStrong) {
+      alert("Password is not strong enough");
+    } else if (checkPasswordsMatch() === true) {
+      await put(`/${userId}/edit`, {
         name,
         password,
       });
