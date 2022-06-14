@@ -88,7 +88,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ pet, task, toggleTodo }) => {
                   component="span"
                   variant="subtitle2"
                 >
-                  {`${moment(task.dateFrom).format("hh:mm a")}`}
+                  {`${moment(task.dateFrom).format("HH:mm")}`}
                 </Typography>
               }
               secondary={
@@ -98,7 +98,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ pet, task, toggleTodo }) => {
                     component="span"
                     variant="caption"
                   >
-                    {`${moment(task.dateTo).format("hh:mm a")}`}
+                    {`${moment(task.dateTo).format("HH:mm")}`}
                   </Typography>
                 </Grid>
               }

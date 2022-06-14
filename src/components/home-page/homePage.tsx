@@ -1,18 +1,16 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import {
-  Card,
   CardHeader,
   Divider,
   Grid,
-  List,
   Paper,
   TablePagination,
   Typography,
 } from "@mui/material";
 import useFetch from "use-http";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { RootState } from "../../redux/store";
 import Loader from "../loader/Loader";
 import { Pet, Task } from "../../types/pet";
@@ -23,24 +21,30 @@ import tasksLogo from "../../assets/todays-tasks.png";
 const HomePage = () => {
   const userId = useSelector((state: RootState) => state.userReducer._id);
   const {
-    data: todayTasks = [],
+    data: todayTasksByPet = [],
     loading: loadingTasks,
     error: tasksError,
-  } = useFetch(`/user/${userId}/today-tasks`, {}, [userId]);
+  } = useFetch<any[]>(`/user/${userId}/today-tasks`, {}, [userId]);
   const { put } = useFetch("/pet");
   const { data: user } = useFetch<{ name: string }>(`/user/${userId}`, {}, []);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [tasksAmount, setTasksAmount] = useState(0);
 
-  useEffect(() => {
-    let counter = 0;
-    todayTasks.forEach((pet: Pet) => {
-      counter += pet.tasks.length;
-    });
+  const todayTasks = useMemo(
+    () =>
+      todayTasksByPet
+        .map((pet) =>
+          pet.tasks.map((task: any) => ({
+            ...task,
+            pet,
+          }))
+        )
+        .flat()
+        .sort((a, b) => a.dateFrom.localeCompare(b.dateFrom)),
+    [todayTasksByPet]
+  );
 
-    setTasksAmount(counter);
-  }, [todayTasks]);
+  const tasksAmount = todayTasks.length;
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -59,7 +63,7 @@ const HomePage = () => {
     });
 
     if (editStatus === "Changed") {
-      const currentPet = todayTasks.find((pet: Pet) => pet._id === petId);
+      const currentPet = todayTasksByPet.find((pet: Pet) => pet._id === petId);
       const currentTask = currentPet.tasks.find(
         (task: Task) => task._id === taskId
       );
@@ -75,7 +79,7 @@ const HomePage = () => {
     return <Typography sx={{ fontSize: "26px" }}>Error occured</Typography>;
   }
 
-  if (todayTasks.length === 0) {
+  if (todayTasksByPet.length === 0) {
     return (
       <Grid item xs={12} mt={2}>
         <img
@@ -87,15 +91,6 @@ const HomePage = () => {
       </Grid>
     );
   }
-
-  const countTasks = () => {
-    let counter = 0;
-    todayTasks.forEach((pet: Pet) => {
-      counter += pet.tasks.length;
-    });
-
-    setTasksAmount(counter);
-  };
 
   return (
     <Box>
@@ -125,11 +120,9 @@ const HomePage = () => {
           <Divider />
           {todayTasks
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((pet: Pet) =>
-              pet.tasks.map((task) => (
-                <TaskItem pet={pet} task={task} toggleTodo={toggleTodo} />
-              ))
-            )}
+            .map((task: any) => (
+              <TaskItem pet={task.pet} task={task} toggleTodo={toggleTodo} />
+            ))}
           <Divider />
           <TablePagination
             rowsPerPageOptions={[5, 10]}
